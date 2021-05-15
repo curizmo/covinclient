@@ -1,0 +1,472 @@
+.patient-link {
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #3182FB;
+  &:hover {
+    color: #3182FB;
+  }
+  &--small {
+    @extend .patient-link;
+    font-size: .9rem;
+    font-weight: 400;
+    color: #01518D;
+    &:hover {
+      color: #01518D;
+    }
+  }
+}
+
+.form-control.note-field {
+  height: 300px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  input {
+    width: 33%;
+  }
+}
+
+.dashboard-container {
+  background: #ffffff;
+  box-shadow: 0 4px .6rem #aeb4c033;
+  outline: none !important;
+  overflow-y: hidden;
+  overflow-x: scroll;
+
+  .header {
+    padding: 1rem;
+  }
+
+  .pagination-container {
+    height: 3rem;
+    margin: 1rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+
+  .pagination {
+    margin: 1.3rem;
+    display: flex;
+    list-style: none;
+    outline: none;
+    float: right;
+  }
+
+  .pagination > .active > a {
+    background-color: #47ccde;
+    border-color: #47ccde;
+    color: #fff;
+  }
+  .pagination > li > a {
+    border: 1px solid #d5dae1;
+    padding: 0.3rem 0.7rem;
+    outline: none;
+    margin: 0 0.1rem;
+    cursor: pointer;
+  }
+  .pagination > .selected > a,
+  .pagination > .selected > span,
+  .pagination > .selected > a:hover,
+  .pagination > .selected > span:hover,
+  .pagination > .selected > a:focus,
+  .pagination > .selected > span:focus {
+    background-color: #fff;
+    border-color: #47ccde;
+    color: #47ccde;
+    outline: none;
+  }
+  .pagination > .active > a,
+  .pagination > .active > span,
+  .pagination > .active > a:hover,
+  .pagination > .active > span:hover,
+  .pagination > .active > a:focus,
+  .pagination > .active > span:focus {
+    background-color: #47ccde;
+    border-color: #47ccde;
+    color: #fff;
+    outline: none;
+  }
+
+  .pagination > li > a,
+  .pagination > li > span {
+    color: #000;
+    font-size: 0.8rem;
+
+    &.active,
+    &:hover {
+      background: #47ccde;
+      border-color: #47ccde;
+      color: #ffffff;
+    }
+  }
+
+  .pagination > li:first-child > a,
+  .pagination > li:first-child > span,
+  .pagination > li:last-child > a,
+  .pagination > li:last-child > span {
+    border-radius: unset;
+    color: #47ccde;
+
+    &.active,
+    &:hover {
+      background: #47ccde;
+      border-color: #47ccde;
+      color: #ffffff;
+    }
+  }
+
+  div {
+    outline: none !important;
+  }
+
+  button {
+    background: white;
+    border: none !important;
+    border-radius: 0px;
+    color: #22345f;
+    font-family: Helvetica;
+    font-size: 0.9rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0em;
+    text-align: left;
+    outline: none !important;
+
+    &.active,
+    &:hover {
+      background: #22345f !important;
+      color: #ffffff !important;
+    }
+    &:focus {
+      box-shadow: none !important;
+    }
+  }
+}
+
+.search-container {
+  width: 64%;
+  position: relative;
+}
+
+.date-search-container {
+  height: 2rem;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute; 
+  top: .625rem;
+  left: .625rem;
+  color: #657396;
+  margin: 0.1rem;
+  height: 1rem;
+}
+
+.search-input {
+  padding-left: 2.5rem;
+  font-size: 0.9rem;
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+.filter-container {
+  display: flex;
+  margin: 0 2.5rem 0 0.6rem;
+  justify-content: space-between;
+  width: 47%;
+}
+
+.view-filter-container {
+  padding-top: 0.3rem;
+}
+
+.load-more-container {
+  display: flex;
+}
+
+.btn-load-more {
+  flex-grow: 1;
+}
+.date-picker-input{
+  position: relative;
+}
+
+.date-picker {
+  position: absolute;
+  left: 15rem;
+  top: 0;
+  height: calc(1.5em + 0.75rem + 2px) !important;
+  width: 2rem;
+  background-color: #00bebe;
+  padding: 0.25rem;
+  border-left: none;
+  border-radius: 0 0.25rem 0.25rem 0;
+  text-align: center;
+}
+.date-picker {
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.DateRangePickerInput {
+  width: 15rem !important;
+  font-size: 0.9rem !important;
+  margin-left: 3px;
+  display: flex !important;
+  justify-content: space-between !important;
+  height: calc(1.5em + 0.75rem + 2px) !important;
+  border: 1px solid #ced4da !important;
+  border-right: none !important;
+  border-radius: 0.25rem !important;
+}
+
+.DateInput_input {
+  font-size: 0.9rem !important;
+  font-weight: 400 !important;
+  line-height: 0.9rem !important;
+  width: 100% !important;
+  text-align: center !important;
+  padding: 5px 5px 3px !important;
+}
+
+.DateInput_1 {
+  padding: 1px 4px !important;
+}
+
+.DateRangePickerInput_arrow_svg {
+  height: 1rem !important;
+  margin: 0.5rem 0 !important;
+}
+
+.DayPicker_weekHeader_ul {
+  font-size: 1rem !important;
+  color: #00bebe;
+}
+
+.CalendarDay__default {
+  border: none !important;
+}
+
+.DayPicker__horizontal {
+  position: absolute !important;
+  right: -18rem !important;
+}
+
+@media (max-width: 1024px) {
+  .header {
+    width: 100%;
+    top: 3rem;
+    z-index: 1020;
+  }
+
+  .date-bar {
+    background-color: #e5e5e5;
+    width: 100%;
+    height: 10%;
+    margin: 0;
+    padding: 0.2rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .schedule-btn {
+    background: white;
+    border: 1px solid #d5dae1;
+    border-radius: 0px;
+    color: #22345f !important;
+    font-family: Helvetica;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5rem;
+    letter-spacing: 0em;
+    text-align: left;
+    width: 33.3%;
+    text-align: center;
+
+    &.active,
+    &:hover {
+      background: #22345f !important;
+      color: #ffffff !important;
+    }
+    &:focus {
+      box-shadow: none !important;
+    }
+  }
+
+  .patient-schedule-btn {
+    background: white;
+    border: 1px solid #d5dae1 !important;
+    border-radius: 0px;
+    color: #22345f !important;
+    font-family: Helvetica;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.5rem;
+    letter-spacing: 0em;
+    text-align: left;
+    width: 50%;
+    text-align: center;
+
+    &.active,
+    &:hover {
+      background: #22345f !important;
+      color: #ffffff !important;
+    }
+    &:focus {
+      box-shadow: none !important;
+    }
+  }
+
+  .appointment-info-card {
+    width: 100%;
+    margin-left: 0;
+    border: none;
+    border-radius: 0;
+  }
+
+  .card-info-body {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+  }
+
+  .card-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-name {
+    font-size: 1.2rem;
+  }
+
+  .card-text {
+    font-size: 0.9rem;
+  }
+
+  .card-div {
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .opaque {
+    opacity: 0.4 !important;
+  }
+
+  .card-btn-text {
+    font-size: 0.9rem;
+    color: #22335e;
+  }
+
+  .appointment-info-div {
+    width: 79%;
+  }
+
+  .card-time-info {
+    width: 20%;
+    margin-right: 0.8rem;
+  }
+
+  .enter-exam-room-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ecf3fa;
+    border-radius: 5rem;
+    padding: 0.3rem 3rem;
+    margin-top: 2%;
+  }
+
+  .exam-room-info-button {
+    width: 48%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ecf3fa;
+    border-radius: 5rem;
+    padding: 0.3rem;
+    margin: 2% 1% 0 0;
+  }
+
+  .patient-call-button {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .date-search-container {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    padding: 0 2rem;
+  }
+
+  .search-container {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  .search-icon {
+    position: absolute;
+    left: 4px;
+    top: 0.3rem;
+    margin: 0.1rem;
+    height: 1.3rem;
+  }
+
+  .search-input {
+    padding-left: 2.2rem;
+    font-size: 0.8rem;
+  }
+
+  .filter-container {
+    display: block;
+    width: 100%;
+    margin: 0;
+  }
+
+  .filter-date {
+    width: 10rem;
+    font-size: 0.8rem;
+    margin-left: 3px;
+  }
+
+  .DayPickerNavigation_svg__vertical {
+    height: 0.9rem !important;
+    fill: #000 !important;
+  }
+
+  .DayPickerNavigation_button__verticalDefault {
+    padding: 0.25rem !important;
+    text-align: center;
+    height: 60% !important;
+  }
+
+  .DayPickerNavigation__verticalDefault {
+    height: auto !important;
+  }
+
+  .date-picker {
+    position: absolute;
+    left: 17.2rem;
+    top: 0;
+  }
+}
+
+.table-header th {
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.chevron {
+  margin-left: 5px;
+}

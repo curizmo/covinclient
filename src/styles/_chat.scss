@@ -1,0 +1,29 @@
+.chat-card {
+  height: 350px;
+}
+
+.chat-container {
+  width: 100%;
+  .card-header {
+    background-color: #f7f7f7;
+  }
+
+  .notification-badge {
+    width: 25px;
+    height: 25px;
+    background: #ee6c4d;
+    border-radius: 50%;
+    position: absolute;
+    top: -15%;
+    right: 0%;
+  }
+}
+
+.chat-window{
+  height: 300px;
+}
+@media (max-width: 540px) {
+  .chat-container {
+    width: 85%;
+  }
+}

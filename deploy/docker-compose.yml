@@ -1,0 +1,11 @@
+web-app:
+  build: .
+  ports:
+    - "8000:8000"
+  command: yarn start
+
+web-app-dev:
+  build: .
+  ports:
+    - "3000:8000"
+  command: yarn dev

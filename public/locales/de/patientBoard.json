@@ -1,0 +1,29 @@
+﻿{
+  "addQuestion": {
+    "askAQuestion": "Fragen Sie einen Arzt",
+    "askADoctor": "Fragen Sie einen Arzt",
+    "newQuestion": "Neue Frage",
+    "areyouphysician": "Bist du ein Arzt?"
+  },
+  "stickyHeader": {
+    "questionSubmitted": "Wir haben Ihre Frage eingereicht",
+    "checkBackLater": "Bitte versuchen Sie es später erneut.",
+    "triedToSubmit": "Wir haben versucht, Ihre Frage einzureichen",
+    "somethingWentWrong": "Entschuldigung, etwas ist schief gelaufen. Bitte versuchen Sie es später noch einmal"
+  },
+  "questionBoard": { "answersFromFrontline": "Antworten von der Front:" },
+  "answers": { "seeNew": "Neue Antworten anzeigen" },
+  "banner": {
+    "text": "Echtzeitinformationen zu COVID-19 von verifizierten Ärzten an vorderster Front",
+    "subText": "Wir sind ein kostenloses, gemeinnütziges Open Source-Projekt, das ursprünglich von Project Covin gegründet wurde",
+    "cannotAnswer": "Können Sie keine Antwort finden?",
+    "aboutUs": "Über uns",
+    "faq": "FAQs"
+  },
+  "searchBar": {
+    "haveAQuestion": "Eine Frage haben? Schreibe hier um zu suchen",
+    "noResultsFound": "Keine Ergebnisse gefunden.",
+    "selectAskAQuestion": "Wählen Sie Frage stellen, um fortzufahren"
+  },
+  "footer": "[DE] Powered by Project Covin.<0/>AskCo19.com does not provide medical advice,<1/>diagnosis or treatment. See <2>additional information.</2>"
+}

@@ -1,0 +1,36 @@
+.card-status {
+  padding: 1rem;
+  width: 100%;
+
+  .card-title {
+    font-weight: bold;
+  }
+
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  @media only screen and (min-width: 768px) {
+    min-width: 15rem;
+    max-width: 20rem;
+
+    &.card-status-fluid {
+      width: auto;
+      max-width: none;
+    }
+  }
+}
+
+.card-div {
+  font-size: 14px;
+  .card-value {
+    font-weight: 600;
+  }
+}
+.card {
+  box-shadow: 0 4px 10px rgba(101, 115, 150, .1);
+}

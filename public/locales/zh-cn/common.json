@@ -1,0 +1,40 @@
+{
+  "showMore": "[zh-cn] Show more",
+  "showLess": "[zh-cn] Show less",
+  "answeredBy": "[zh-cn] Answered By <0>{{firstAnsweredBy}}</0> on <1>{{firstAnsweredOn}}</1>",
+  "lastEditedBy": "[zh-cn] Last Edited by <0>{{lastAnsweredBy}}</0> on <1>{{lastAnsweredOn}}</1>",
+  "somethingWentWrong": "[zh-cn] Something went wrong",
+  "recentlyVisited": "[zh-cn] Recently visited",
+  "areYouAPractitioner": "[zh-cn] Are you a practitioner?",
+  "howItWorks": {
+    "title": "[zh-cn] Are you a patient?",
+    "appointments": {
+      "header": "[zh-cn] Today's appointments",
+      "description": "",
+      "button": "[zh-cn] More"
+    },
+    "bookAnAppointment": {
+      "header": "[zh-cn] Book an appointment",
+      "description": "[zh-cn] Talk to a doctor online anytime, anywhere with a few clicks.",
+      "button": "[zh-cn] More"
+    },
+    "shop": {
+      "header": "[zh-cn] Shop",
+      "description": "[zh-cn] Need medicine or health products? Make a purchase directly from our website.",
+      "button": "[zh-cn] Coming Soon"
+    },
+    "learn": {
+      "header": "[zh-cn] Ask a doctor",
+      "description": "[zh-cn] Learn health & well-being tips from frontline physicians.",
+      "button": "[zh-cn] More"
+    }
+  },
+  "sideBar": {
+    "qna": "Ask Covin",
+    "physicianAIInterface": "Physician-AI-Interface"
+  },
+  "overview": {
+    "haveAQuestion": "Have a Question?"
+  },
+  "phoenixOpinion": "Covin's opinion"
+}

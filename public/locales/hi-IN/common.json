@@ -1,0 +1,40 @@
+{
+  "showMore": "[hi-IN] Show more",
+  "showLess": "[hi-IN] Show less",
+  "answeredBy": "[hi-IN] Answered By <0>{{firstAnsweredBy}}</0> on <1>{{firstAnsweredOn}}</1>",
+  "lastEditedBy": "[hi-IN] Last Edited by <0>{{lastAnsweredBy}}</0> on <1>{{lastAnsweredOn}}</1>",
+  "somethingWentWrong": "[hi-IN] Something went wrong",
+  "recentlyVisited": "[hi-IN] Recently visited",
+  "areYouAPractitioner": "[hi-IN] Are you a practitioner?",
+  "howItWorks": {
+    "title": "[hi-IN] Are you a patient?",
+    "appointments": {
+      "header": "[hi-IN] Today's appointments",
+      "description": "",
+      "button": "[hi-IN] More"
+    },
+    "bookAnAppointment": {
+      "header": "[hi-IN] Book an appointment",
+      "description": "[hi-IN] Talk to a doctor online anytime, anywhere with a few clicks.",
+      "button": "[hi-IN] More"
+    },
+    "shop": {
+      "header": "[hi-IN] Shop",
+      "description": "[hi-IN] Need medicine or health products? Make a purchase directly from our website.",
+      "button": "[hi-IN] Coming Soon"
+    },
+    "learn": {
+      "header": "[hi-IN] Ask a doctor",
+      "description": "[hi-IN] Learn health & well-being tips from frontline physicians.",
+      "button": "[hi-IN] More"
+    }
+  },
+  "sideBar": {
+    "qna": "Ask Covin",
+    "physicianAIInterface": "Physician-AI-Interface"
+  },
+  "overview": {
+    "haveAQuestion": "Have a Question?"
+  },
+  "phoenixOpinion": "Covin's opinion"
+}

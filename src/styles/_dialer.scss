@@ -1,0 +1,77 @@
+.dial-window {
+  position: fixed;
+  bottom: 43%;
+  right: 10%;
+  left: 20%;
+  background-color: white;
+  width: 16.8rem;
+  padding: 1.3rem;
+  margin: 1.8rem auto;
+  height: 20rem;
+  text-align: center;
+  border-radius: 15px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  z-index: 2100;
+}
+
+.dial-window-container {
+  width: 90%;
+  margin: auto;
+  font-weight: bold;
+  display: flex;
+}
+
+.dial-row {
+  margin: 0 auto;
+  width: 17.5rem;
+  clear: both;
+  text-align: center;
+  font-family: 'Exo';
+}
+
+.dial-digit {
+  float: left;
+  padding: 0.3rem 1.7rem;
+  width: 1.8rem;
+  margin: 0.3rem;
+  font-size: 2rem;
+  cursor: pointer;
+  border-radius: 50%;
+  background-color: #f6f6f6;
+  color: #00bebe;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 768px) {
+  .dial-window {
+    top: 15%;
+    right: 15%;
+    left: 15%;
+    width: 13rem;
+    padding: 1.3rem;
+    margin: 1.8rem auto;
+    height: 16.2rem;
+  }
+
+  .dial-window-container {
+    width: 100%;
+    margin: auto;
+    font-weight: bold;
+  }
+
+  .dial-row {
+    margin: 0 auto;
+    width: 12.5rem;
+    clear: both;
+    text-align: center;
+    font-family: 'Exo';
+  }
+
+  .dial-digit {
+    float: left;
+    padding: 0.2rem 1.3rem;
+    width: 1.3rem;
+    margin: 0.3rem;
+    font-size: 1.5rem;
+  }
+}

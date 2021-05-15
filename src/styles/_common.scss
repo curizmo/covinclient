@@ -1,0 +1,160 @@
+.spinner {
+  background-color: rgba(256, 256, 256, 0.7);
+  z-index: 2000;
+}
+
+.text-warning {
+  color: #afac3c !important;
+}
+
+.highlighted-text {
+  background-color: #ffe599 !important;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
+
+.text-success {
+  color: #1baf00 !important;
+}
+
+.text-danger {
+  color: #fff2f1;
+}
+
+.page-title {
+  margin-bottom: .75rem;
+  font: bold 21px / 1.5 Helvetica;
+  letter-spacing: .1px;
+  text-align: left;
+  color: #22345f;
+}
+
+.action-disabled {
+  color: grey;
+  cursor: not-allowed;
+}
+
+.meta-mask {
+  padding: 5px 5px 5px 0;
+  width: 32px;
+}
+
+.status-indicator {
+  border-radius: 50%;
+  &.size-12 {
+    width: 12px;
+    height: 12px;    
+  }
+  &.size-14 {
+    width: 14px;
+    height: 14px;    
+  }
+  &.size-16 {
+    width: 16px;
+    height: 16px;    
+  }
+}
+
+.bg-high-risk {
+  background-color: $high-risk;
+}
+.bg-moderate-risk {
+  background-color: $moderate-risk;
+}
+.bg-low-risk {
+  background-color: $low-risk;
+}
+.phone-icon {
+  &-24 {
+    width: 24px;
+    height: 24px;
+  }
+}
+.container {
+  padding: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 4px 10px rgba(#657396, .1);
+  background-color: white;
+}
+.top-view {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(#657396, .4);
+  &.show-more {
+    border-radius: 5px;
+    box-shadow: 0 5px 10px -5px rgba(#657396, .1);
+    border: none;
+  }
+}
+.info-item {
+  color: #22335e;
+  line-height: 1.125rem;
+  .info-label {
+    margin-bottom: 0;
+    font-size: 12px;
+    opacity: .5;
+  }
+  .info-value {
+    font-size: 16px;
+    a {
+      display: flex;
+      align-items: center;
+    }
+    img {
+      width: 1rem;
+      height: 1rem;
+      margin-right: .5rem;
+    }
+  }
+}
+
+.min-width-10 {
+  min-width: 10%;
+}
+.min-width-20 {
+  min-width: 20%;
+}
+
+@media (max-width: 768px) {
+  .top-view {
+    flex-direction: column;
+    align-items: baseline;
+  }
+}
+
+@media (min-width: 768px) {
+  .h-md-50 {
+    height: 50vh;
+  }
+  .h-md-44 {
+    height: 44vh;
+  }
+  .container {
+    margin-bottom: 60px;
+    padding: 2rem 3rem;
+  }
+  .info-item {
+    max-width: 33%;
+  }
+}
+
+@media (min-width: 992px) {
+  .h-lg-80 {
+    height: 80vh;
+  }
+  .container {
+    padding: 3rem 6rem;
+  }
+}
+@media (min-width: 768px){
+  .pl-md-7, .px-md-7 {
+    padding-left: 5.5rem !important;
+  }
+  .pr-md-7, .px-md-7 {
+    padding-right: 5.5rem !important;
+  }
+}

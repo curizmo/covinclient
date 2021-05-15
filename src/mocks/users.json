@@ -1,0 +1,38 @@
+[
+  {
+    "NTOUserID": "b05da651-d1c7-496f-8c6b-07f69a1f5708",
+    "FirstName": "Physician",
+    "LastName": "Nto",
+    "Country": "Canada",
+    "EMail": "ntophysician@gmail.com",
+    "AuthID": "b05da651-d1c7-496f-8c6b-07f69a1f5708",
+    "isPractitioner": true
+  },
+  {
+    "NTOUserID": "54e5224f-3a47-4044-ae8e-7b36df2ef16d",
+    "FirstName": "Dr Weidong",
+    "LastName": "Yu",
+    "Country": "Canada",
+    "EMail": "sethuraj@hotmail.com",
+    "AuthID": "822e219f-d347-4863-970a-6659252f4e6c",
+    "isPractitioner": true
+  },
+  {
+    "NTOUserID": "3ecdff09-2cbf-4581-a19c-bab955a5f92f",
+    "FirstName": "Patient ",
+    "LastName": "Nto",
+    "Country": "Canada",
+    "EMail": "ntopatient@gmail.com ",
+    "AuthID": "3ecdff09-2cbf-4581-a19c-bab955a5f92f",
+    "isPractitioner": false
+  },
+  {
+    "NTOUserID": "d9c10fdf-c6ef-4001-a9c0-d9bdbbb7ce1e",
+    "FirstName": "Jay",
+    "LastName": "Nair",
+    "Country": "USA",
+    "EMail": "jay.sethuraj@gmail.com",
+    "AuthID": "69d17f2e-ed12-4f75-b8aa-21d7440e0bf6",
+    "isPractitioner": false
+  }
+]

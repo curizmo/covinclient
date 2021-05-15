@@ -1,0 +1,29 @@
+// custom variables partial to override default bootstrap variables
+@import 'custom_variables';
+
+// default bootstrap styles
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
+
+@import 'common';
+
+// custom styles partials
+@import 'appointments';
+@import 'buttons';
+@import 'card';
+@import 'chat';
+@import 'callWindow';
+@import 'dashboard';
+@import 'dialer';
+@import 'header';
+@import 'misc';
+@import 'modal';
+@import 'newAppointment';
+@import 'referral';
+@import 'patientTasks';
+@import 'practitionerEnrollment';
+@import 'search';
+@import 'spin';
+@import 'table';
+@import 'telehealth';
+@import 'utilities';
+@import 'form';

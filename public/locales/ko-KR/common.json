@@ -1,0 +1,41 @@
+{
+  "showMore": "[ko-KR] Show more",
+  "showLess": "[ko-KR] Show less",
+  "answeredBy": "[ko-KR] Answered By <0>{{firstAnsweredBy}}</0> on <1>{{firstAnsweredOn}}</1>",
+  "lastEditedBy": "[ko-KR] Last Edited by <0>{{lastAnsweredBy}}</0> on <1>{{lastAnsweredOn}}</1>",
+  "somethingWentWrong": "[ko-KR] Something went wrong",
+  "recentlyVisited": "[ko-KR] Recently visited",
+  "areYouAPractitioner": "[ko-KR] Are you a practitioner?",
+  "howItWorks": {
+    "title": "[ko-KR] Are you a patient?",
+    "appointments": {
+      "header": "[ko-KR] Today's appointments",
+      "description": "",
+      "button": "[ko-KR] More"
+    },
+    "bookAnAppointment": {
+      "header": "[ko-KR] Book an appointment",
+      "description": "[ko-KR] Talk to a doctor online anytime, anywhere with a few clicks.",
+      "button": "[ko-KR] More"
+    },
+    "shop": {
+      "header": "[ko-KR] Shop",
+      "description": "[ko-KR] Need medicine or health products? Make a purchase directly from our website.",
+      "button": "[ko-KR] Coming Soon"
+    },
+    "learn": {
+      "header": "[ko-KR] Ask a doctor",
+      "description": "[ko-KR] Learn health & well-being tips from frontline physicians.",
+      "button": "[ko-KR] More"
+    }
+  },
+  "sideBar": {
+    "qna": "Ask Covin",
+    "physicianAIInterface": "Physician-AI-Interface"
+
+  },
+  "overview": {
+    "haveAQuestion": "Have a Question?"
+  },
+  "phoenixOpinion": "Covin's opinion"
+}

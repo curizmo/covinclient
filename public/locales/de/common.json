@@ -1,0 +1,40 @@
+{
+  "showMore": "[DE] Show more",
+  "showLess": "[DE] Show less",
+  "answeredBy": "[DE] Answered By <0>{{firstAnsweredBy}}</0> on <1>{{firstAnsweredOn}}</1>",
+  "lastEditedBy": "[DE] Last Edited by <0>{{lastAnsweredBy}}</0> on <1>{{lastAnsweredOn}}</1>",
+  "somethingWentWrong": "[DE] Something went wrong",
+  "recentlyVisited": "[DE] Recently visited",
+  "areYouAPractitioner": "[DE] Are you a practitioner?",
+  "howItWorks": {
+    "title": "[DE] Are you a patient?",
+    "appointments": {
+      "header": "[DE] Today's appointments",
+      "description": "",
+      "button": "[DE] More"
+    },
+    "bookAnAppointment": {
+      "header": "[DE] Book an appointment",
+      "description": "[DE] Talk to a doctor online anytime, anywhere with a few clicks.",
+      "button": "[DE] More"
+    },
+    "shop": {
+      "header": "[DE] Shop",
+      "description": "[DE] Need medicine or health products? Make a purchase directly from our website.",
+      "button": "[DE] Coming Soon"
+    },
+    "learn": {
+      "header": "[DE] Ask a doctor",
+      "description": "[DE] Learn health & well-being tips from frontline physicians.",
+      "button": "[DE] More"
+    }
+  },
+  "sideBar": {
+    "qna": "Ask Covin",
+    "physicianAIInterface": "Physician-AI-Interface"
+  },
+  "overview": {
+    "haveAQuestion": "Have a Question?"
+  },
+  "phoenixOpinion": "Covin's opinion"
+}

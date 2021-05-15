@@ -1,0 +1,232 @@
+import styled from 'styled-components';
+
+export const ContentWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+export const TopContainer = styled.div`
+  padding: 1rem 1.875rem;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+`;
+
+export const SearchDrpWrap = styled.div`
+  position: relative;
+`;
+
+export const SearchBox = styled.input`
+  width: 100%;
+  height: 2.8125rem;
+  border: 1px solid #e0e3ea;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 0px #e0e3ea;
+  border-radius: 3px;
+  font-size: 1.125rem;
+  line-height: 1.25rem;
+  display: flex;
+  align-items: center;
+  color: #22335e;
+  padding: 1.25rem;
+  ::placeholder {
+    opacity: 0.45;
+  }
+`;
+
+export const DropDownWrap = styled.div`
+  position: absolute;
+  z-index: 1;
+  background: #ffffff;
+  border: 1px solid #e0e3ea;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 0px #e0e3ea;
+  border-radius: 3px;
+  padding: 1rem 1.25rem 0 1.25rem;
+  width: 100%;
+`;
+export const EachItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+`;
+export const Name = styled.span`
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+  color: #22335e;
+`;
+export const Icon = styled.div`
+  cursor: pointer;
+`;
+
+export const PrescriptionWrap = styled.div`
+  margin: 8px 0;
+  position: relative;
+`;
+
+export const MedName = styled.div`
+  background: #f6f8fa;
+  border: 1px solid #e0e3ea;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  display: flex;
+  border-radius: 3px;
+  align-items: center;
+  padding: 0.5rem 1.25rem;
+  color: #22335e;
+`;
+export const MedDose = styled.textarea`
+  background: #ffffff;
+  border: 1px solid #e0e3ea;
+  box-sizing: border-box;
+  border-radius: 3px;
+  width: 100%;
+  font-size: 1rem;
+  line-height: 1.125rem;
+  color: #22335e;
+  height: 45px;
+  overflow: hidden;
+  padding: 0.8125rem 1.25rem;
+  ::placeholder {
+    opacity: 0.5;
+  }
+`;
+
+export const MedIcon = styled.img`
+  margin-right: 0.625rem;
+`;
+
+export const CloseIcon = styled.img`
+  width: 1.125rem;
+  height: 1.125rem;
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  cursor: pointer;
+`;
+
+export const TopRow = styled.div``;
+
+export const BottomRow = styled.div``;
+
+export const Note = styled.textarea`
+  background: #ffffff;
+  border: 1px solid #e0e3ea;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 0px #e0e3ea;
+  border-radius: 3px;
+  width: 100%;
+  height: 5.625rem;
+  padding: 0.75rem;
+  ::placeholder {
+    opacity: 0.5;
+  }
+  @media (max-width: 768px) {
+    margin-top: 4.5rem;
+  }
+`;
+export const SendToPatientBtn = styled.button`
+  background: #54b8b2;
+  border: 1px solid #54b8b2;
+  box-shadow: 0px 3px 0px #008484;
+  border-radius: 3px;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  width: 100%;
+  height: 2.8125rem;
+  letter-spacing: 0.2em;
+  color: #ffffff;
+  margin-top: 0.9375rem;
+`;
+
+export const ActionIcon = styled.img`
+  width: 2.5rem;
+  height: 1.875rem;
+`;
+
+export const LastRow = styled.div`
+  display: flex;
+  padding: 1rem 1.875rem;
+  background: #f8fbfe;
+  border-bottom: 1px solid rgba(101, 115, 150, 0.2);
+  &:last-child {
+    border-bottom: none;
+  }
+  @media (max-width: 768px) {
+    background: #f8fbfe;
+    padding: 0.5rem 0.5rem;
+    border-bottom: none;
+    margin-bottom: 0.5em;
+  }
+  cursor: pointer;
+`;
+
+export const PastPrescriptionImageIcon = styled.img`
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5em;
+`;
+
+export const PastPrescriptionText = styled.div`
+  font-style: normal;
+  font-weight: bold;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  color: #22335e;
+`;
+
+export const PastOrderText = styled.div`
+  padding: 1rem;
+  background: #f2f7fd;
+  font-weight: bold;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  color: #22335e;
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 768px) {
+    font-weight: bold;
+    font-size: 0.9375rem;
+    line-height: 20px;
+    color: #22335e;
+    padding: 1em 0em;
+    display: block;
+  }
+`;
+
+export const PastPrescriptionDate = styled.div`
+  font-style: normal;
+  font-weight: normal;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  color: #22335e;
+  opacity: 0.5;
+`;
+
+export const PastPrescriptionConsultant = styled.div`
+  font-style: normal;
+  font-weight: normal;
+  font-size: 1.125rem;
+  line-height: 1.25rem;
+  color: #22335e;
+`;
+export const DesktopViewPastPrescription = styled.div`
+  display: block;
+`;
+
+export const IconSmall = styled.div`
+  margin-right: 0.5rem;
+  display: inline;
+`;
+
+export const ImgButton = styled.button`
+  border: none;
+  background: none;
+`;

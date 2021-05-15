@@ -1,0 +1,15 @@
+.display-flex-direction {
+  display: flex;
+}
+
+.desktop-view-vitals-wrp {
+  /* height: 9rem; */
+  /* flex-wrap: wrap; */
+}
+
+.desktop-view-individual-vitals-wrap {
+  height: 7rem;
+  background: #f2f5f8;
+  padding: 0.5rem;
+  margin: 1rem 0.2rem 0.3125rem;
+}

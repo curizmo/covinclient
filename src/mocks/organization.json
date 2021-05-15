@@ -1,0 +1,32 @@
+[
+    {
+        "organizationID": "efaea4bb-eb82-486a-a59b-ab9b059f22a4",
+        "organizationName": "Wellspring Clinic for Holistic Medicine",
+        "address1": "916 West King Edward Avenue",
+        "address2": null,
+        "city": "Vancouver",
+        "state": "BC",
+        "zip": "V5Z 2E2",
+        "phone": "8777377876",
+        "timeStamp": null,
+        "createdDate": "2020-06-03T20:31:17.883",
+        "createdBy": "jays",
+        "lastModifiedDate": "2020-06-03T20:31:17.883",
+        "lastModifiedBy": "jays"
+    },
+    {
+        "organizationID": "df5a8966-c34a-4d1b-95f6-b86001860d29",
+        "organizationName": "EvergreenHealth Primary Care - Redmond",
+        "address1": "8980 161st Avenue Northeast",
+        "address2": "#400",
+        "city": "Redmond",
+        "state": "WA",
+        "zip": "98052",
+        "phone": "4258992272",
+        "timeStamp": null,
+        "createdDate": "2020-06-08T20:21:53.593",
+        "createdBy": "ntoadmin",
+        "lastModifiedDate": "2020-06-08T20:21:53.593",
+        "lastModifiedBy": "ntoadmin"
+    }
+]

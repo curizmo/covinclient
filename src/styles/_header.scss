@@ -1,0 +1,61 @@
+.sticky-top {
+  z-index: 1021;
+}
+
+header {
+  height: 4.3rem;
+
+  .logo {
+    width: 4.1rem;
+  }
+
+  .menu-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .btn:focus {
+    box-shadow: none;
+  }
+
+  input {
+    max-width: 10rem;
+    margin-right: 0.25rem;
+  }
+
+  .top-menu-list {
+    flex-wrap: nowrap !important;
+  }
+  
+  .nav-link {
+    box-sizing: border-box;
+    position: relative;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 14px;
+    line-height: 1.875rem;
+    color: #657396;
+    &:not(:last-child) {
+      margin-right: 1.6rem;
+    }
+    &.active {
+      color: #22335e;
+      border-bottom: 3px solid #22335e;
+    }
+  }
+  .dropdown-menu {
+    .nav-link {
+      padding: 0 4px;
+      &.active {
+        color: white;
+        background-color: rgba(#22335e, .9);
+        border-bottom: none;
+      }
+    }
+  }
+}

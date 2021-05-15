@@ -1,0 +1,167 @@
+.telehealth-container {
+  display: flex;
+  width: 100% !important;
+  height: 100vh;
+  overflow: hidden;
+  overflow-y: hidden;
+}
+
+.caller-section-wrapper {
+  background: #ecf3fa;
+  width: 60%;
+}
+
+.call-section {
+  width: 100%;
+  margin: 3% 5% 2% 8.5%;
+}
+
+.note-section-wrapper {
+  width: 40%;
+}
+
+.note-section {
+  width: 100%;
+  margin: 6% 5% 2% 8.5%;
+}
+
+.exam-info-titles {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  width: 85%;
+}
+
+.exam-details-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem;
+}
+
+.exam-detail {
+  display: flex;
+  flex-direction: column;
+  margin: 0 2rem;
+}
+
+.exam-detail span {
+  font-size: 0.8rem;
+}
+
+.note-buttons-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.phone-call-card {
+  background: linear-gradient(to right, #2a2a2aba, #494949cc),
+    url('../assets/images/call-interface-bg.png') no-repeat top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  object-fit: cover;
+}
+
+.call-buttons-wrapper {
+  width: 60%;
+  margin: 15% auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.call-text {
+  color: #ffffff;
+}
+
+.call-text-wrapper {
+  width: 40%;
+  margin: auto;
+  padding: 2rem;
+}
+
+.call-encounter-notes {
+  margin-top: 30%;
+}
+
+@media (max-width: 1024px) {
+  .jitsi-embed {
+    height: 100%;
+    height: 400px;
+    width: 83%;
+  }
+
+  .telehealth-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+
+  .caller-section-wrapper {
+    width: 110vw;
+    height: 50%;
+  }
+
+  .note-section-wrapper {
+    width: 100%;
+    height: 50%;
+    margin-bottom: 8%;
+  }
+
+  .call-section {
+    width: 100%;
+    margin: 0 2% 2% 4%;
+  }
+
+  .btn-wrapper {
+    width: 80%;
+    margin-left: 0.4rem;
+  }
+
+  .call-btn-small {
+    margin-bottom: 3%;
+  }
+
+  .encounter-text {
+    width: 85%;
+  }
+
+  .note-buttons-container {
+    width: 85%;
+  }
+
+  .phoenix-btn {
+    width: 8rem;
+  }
+
+  .exam-details-container {
+    display: none;
+  }
+
+  .exam-info-titles {
+    margin: 4% 0;
+  }
+  .phone-call-card {
+    width: 83% !important;
+    background-size: 40rem;
+  }
+
+  .call-buttons-wrapper {
+    width: 80%;
+  }
+
+  .call-text {
+    color: #ffffff;
+    font-size: 1.5rem;
+  }
+
+  .call-text-wrapper {
+    width: 100%;
+  }
+
+  .call-encounter-notes {
+    margin-top: 10%;
+  }
+}

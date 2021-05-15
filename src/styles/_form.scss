@@ -1,0 +1,19 @@
+form {
+  label {
+    font-size: 13px;
+  }
+}
+.form-control {
+  border: 1px solid #E0E3EA;
+  box-shadow: 0 2px 0 #E0E3EA;
+  border-radius: 3px;
+  color: #22335E;
+  &::placeholder {
+    color: #22335E;
+    opacity: .4;
+  }
+}
+
+.form-group {
+  margin-bottom: 2rem;
+}

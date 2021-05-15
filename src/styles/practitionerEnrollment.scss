@@ -1,0 +1,215 @@
+.header-wrapper {
+  width: 100%;
+  height: 5rem;
+  background: #22345f;
+  margin: 0;
+}
+
+.header-content {
+  position: absolute;
+  width: 16%;
+  height: 2.5%;
+  left: 5%;
+  top: 8%;
+  font-weight: bold;
+  font-size: 1.3rem;
+  line-height: 1.8rem;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+}
+
+.enrollment-form-wrapper {
+  background: #ecf3fa;
+  padding: 2.5rem 0 5rem 0;
+  box-sizing: border-box;
+}
+
+.enrollment-form-container {
+  top: 7.5%;
+  bottom: 10%;
+  left: 0;
+  right: 0;
+  display: block;
+  margin: 0 auto;
+  width: 75%;
+  height: 100%;
+  background: #ffffff;
+  box-shadow: 0rem 0.3rem 0.6rem rgba(174, 180, 192, 0.2);
+  box-sizing: border-box;
+  padding: 2.5rem 0;
+  color: #22345f;
+  box-sizing: border-box;
+  font-weight: 600;
+  font-size: 0.9rem;
+  line-height: 1.4rem;
+  word-spacing: 0.1rem;
+}
+
+.wrapper-row {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.enrollment-form {
+  width: 100%;
+  margin: 0 4.5%;
+}
+
+.input-style {
+  height: 3rem;
+}
+
+.input-style::placeholder {
+  opacity: 0.5;
+}
+
+.styled-select {
+  appearance: none;
+  background-image: url('../assets/images/svg-icons/dropdown-arrow.svg');
+  background-position: calc(100% - 1.3rem) calc(1rem + 2px),
+    calc(100% - 0.9rem) calc(1rem + 2px), calc(100% - 0.5rem) 0.5rem;
+  background-repeat: no-repeat;
+}
+
+.form-inputs:after,
+.form-uploads:after {
+  content: ' ';
+  display: block;
+  border: 1px solid #d5dae1;
+  margin: 2rem 0;
+}
+
+.uploads-wrapper {
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.enrollment-submit {
+  width: 39%;
+  height: 3.2rem;
+  color: #ffffff !important;
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0 auto;
+}
+
+.cancel-link {
+  font-size: 1rem;
+  margin: 1rem auto;
+}
+
+.upload-column {
+  text-align: center;
+}
+
+.file-upload {
+  background: #f8fafd;
+  border: 1px dashed #d5dae1;
+  box-sizing: border-box;
+  height: 4rem;
+  border-radius: 0.2rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.file-wrapper {
+  padding: 0.2rem;
+  margin: 0.2rem;
+  clear: both;
+  width: 10%;
+  border-radius: 0.5rem;
+  background: #00bebe;
+  color: #ffffff;
+}
+
+.required-indication-bar {
+  width: 80%;
+  height: 1.2rem;
+  margin: 0 4rem 1rem 0;
+  float: right;
+}
+.required-indicator {
+  float: right !important;
+  margin-bottom: 1.5rem;
+  font-size: 0.8rem;
+  font-weight: normal;
+  line-height: 1.2rem;
+}
+.required-indicator::before {
+  content: '*';
+  color: red;
+  margin-right: 0.3rem;
+}
+
+@media only screen and (max-width: 760px) {
+  .header-content {
+    width: 80%;
+    left: 5%;
+    top: 10%;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+  }
+
+  .enrollment-form-container {
+    width: 80%;
+    height: 100%;
+    padding: 2.5rem;
+    color: #22345f;
+    box-sizing: border-box;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  .enrollment-form {
+    margin: 0 2%;
+  }
+
+  .input-style {
+    font-size: 0.7rem;
+  }
+
+  .required-indication-bar {
+    width: 80%;
+    height: 1.2rem;
+    margin: 0 1rem 1rem 0;
+    float: right;
+  }
+
+  .enrollment-submit {
+    width: 60%;
+  }
+}
+
+@media only screen and (min-width: 764px) and (max-width: 1024px) {
+  .header-content {
+    width: 80%;
+    top: 5rem;
+  }
+
+  .enrollment-form-container {
+    width: 80%;
+    padding: 2.5rem;
+  }
+
+  .enrollment-form {
+    margin: 0 0.5%;
+  }
+
+  .input-style {
+    font-size: 0.7rem;
+  }
+
+  .required-indication-bar {
+    width: 80%;
+    margin: 0 1rem 1rem 0;
+  }
+
+  .enrollment-submit {
+    width: 60%;
+  }
+}

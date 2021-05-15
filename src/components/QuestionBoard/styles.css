@@ -1,0 +1,237 @@
+.container {
+  /* max-width: 80%; */
+  /* padding-top: 100px; */
+  margin: auto;
+}
+.ui.input > input {
+  background-color: #f7fafc;
+}
+
+::-webkit-input-placeholder {
+  font-style: italic;
+}
+:-moz-placeholder {
+  font-style: italic;
+}
+::-moz-placeholder {
+  font-style: italic;
+}
+:-ms-input-placeholder {
+  font-style: italic;
+}
+
+.searchBar {
+  display: flex;
+  justify-content: center;
+}
+
+.searchBar .input {
+  width: 100%;
+  max-width: 700px;
+}
+
+.ui.search .prompt {
+  border-radius: 30px;
+}
+
+.qCard {
+  padding: 3rem;
+  border: none;
+  box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.075);
+  border-color: transparent;
+  background: #fff;
+  margin: 10px 0px;
+}
+.ui.card,
+.ui.cards > .card {
+  box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.075);
+  border-bottom-color: transparent;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  margin: 10px 0px;
+}
+.qTitle,
+.answeredByName {
+  /* height: 30px; */
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: bold;
+}
+.qTag {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  max-width: 200px;
+}
+.qTag .label {
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.qLeftCard {
+  min-height: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.qLeftCard .line {
+  width: 80%;
+  height: 1px;
+  background: rgba(0, 110, 170, 0.1);
+  /* margin: 15px auto; */
+}
+.qTitle > span,
+.answeredByName > span {
+  display: inline-flex;
+  width: 50px;
+  font-weight: 300;
+  font-size: 20px;
+  color: #006eaa;
+}
+
+.answer-title {
+  display: grid;
+  grid-auto-flow: column;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.answeredByIcon {
+  height: 32px;
+  width: 32px;
+}
+.qAnswer {
+  font-size: 18px;
+  line-height: 1.5em;
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+}
+
+.answer-image {
+  margin-top: 20px;
+}
+
+.qPanelBottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+}
+.buttonGroupCustom {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.qPanelBottom-buttons-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+.qPanelBottom-buttons-wrapper .button {
+  margin-bottom: 3px;
+}
+
+.physician-view-container {
+  min-height: 94vh;
+  position: relative;
+  padding-bottom: 205px;
+}
+
+@media (max-width: 1401px) {
+  .mailForm_mobile {
+    display: block;
+  }
+  .mailForm {
+    display: none;
+  }
+}
+
+@media (min-width: 1400px) {
+  .mailForm_mobile {
+    display: none;
+  }
+  .mailForm {
+    max-width: 400px;
+    margin-top: 200px !important;
+    margin-left: 10px !important;
+  }
+}
+
+.answer-metadata {
+  margin: 10px 0px;
+}
+.answer-metadata .bold {
+  font-weight: bold;
+}
+
+.form-buttons {
+  padding: 8px;
+}
+.form-buttons.green {
+  color: #21ba45;
+  border: 1px solid #21ba45;
+}
+.form-buttons.red {
+  color: #db2828;
+  border: 1px solid #db2828;
+}
+.form-buttons.blue {
+  color: #2185d0;
+  border: 1px solid #2185d0;
+}
+
+.qCard textarea {
+  min-height: 60px;
+  margin: 5px 0px;
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 10px;
+  width: 100%;
+}
+
+.message {
+  font-weight: bold;
+  padding: 20px;
+  margin: 5px 0px;
+}
+.message.green {
+  color: #2c662d;
+  background: #fcfff5;
+  border: 1px solid #a3c293;
+}
+.message.yellow {
+  background-color: #fff8db;
+  color: #b58105;
+  border: 1px solid #b58105;
+}
+.message.red {
+  background-color: #fff6f6;
+  color: #9f3a38;
+  border: 1px solid #9f3a38;
+}
+.qCard .report-issue {
+  background-color: #db2828;
+  border-color: #db2828;
+  color: #fff;
+  padding: 5px 8px;
+  font-size: 0.85714286rem;
+  display: inline-block;
+  width: 7rem;
+}
+
+.question-label {
+  color: #fff;
+  background: #2185d0 !important;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.menu-btn {
+  background: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.95);
+  border-radius: 0.3rem;
+  padding: 10px;
+  margin: 5px;
+}

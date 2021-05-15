@@ -1,0 +1,82 @@
+.call-window {
+  position: absolute;
+  bottom: 0.6rem;
+  right: 25%;
+  left: 25%;
+  width: 60%;
+  padding: 0.3rem 0.5rem;
+  background-color: #dfdfdf;
+  border-radius: 0.3rem;
+  z-index: 2100;
+  box-sizing: border-box;
+}
+
+.call-window-container {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.dial-btn-small {
+  margin: 0.3rem 0.7rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  border-radius: 0.2rem;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 760px) {
+  .call-window {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    padding: 0.4rem 0;
+    background-color: #dfdfdf;
+  }
+
+  .call-window-container {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    font-weight: bold;
+    font-size: 0.7rem;
+  }
+
+  .dial-btn-small {
+    margin: 0.3rem 0.5rem 0 0.5rem;
+    padding: 0.3rem 0.3rem;
+    font-size: 0.6rem;
+    border-radius: 0.2rem;
+    font-weight: bold;
+  }
+}
+
+@media only screen and (min-width: 764px) and (max-width: 1024px) {
+  .call-window {
+    position: fixed;
+    left: 35%;
+    width: 60%;
+  }
+
+  .call-window-container {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+  }
+
+  .dial-btn-small {
+    font-size: 0.6rem;
+  }
+}

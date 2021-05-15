@@ -1,0 +1,59 @@
+// Color system
+$brand-pink: #e49ba3;
+$brand-dark-blue: #22345f;
+$brand-light-blue: #edf4fc;
+$brand-green: #54b8b2;
+$brand-yellow: #eec953;
+$brand-light-yellow: #eaca81;
+
+$primary: $brand-dark-blue !default;
+$secondary: $brand-green !default;
+$success: #83e645 !default;
+$info: $brand-light-yellow !default;
+$warning: $brand-yellow !default;
+$danger: #ee6c4d !default;
+$light: #F2F7FD !default;
+$dark: #22345f !default;
+
+$high-risk: #EB2F2F !default;
+$moderate-risk: #E5881B !default;
+$low-risk: #657396 !default;
+
+// Customize the light and dark text colors for use in our color contrast function.
+$color-contrast-dark: $brand-dark-blue !default;
+
+$body-color: $brand-dark-blue !default;
+
+// Typography
+$font-family-sans-serif: 'Helvetica', sans-serif;
+
+// Spacing
+//
+// Control the default styling of most Bootstrap elements by modifying these
+// variables. Mostly focused on spacing.
+// You can add more entries to the $spacers map, should you need more variation.
+
+$spacer: 1rem !default;
+$spacers: () !default;
+$spacers: map-merge(
+  (
+    0: 0,
+    1: (
+      $spacer * 0.25,
+    ),
+    2: (
+      $spacer * 0.5,
+    ),
+    3: $spacer,
+    4: (
+      $spacer * 1.5,
+    ),
+    5: (
+      $spacer * 3,
+    ),
+    6: (
+      $spacer * 4.5,
+    ),
+  ),
+  $spacers
+);

@@ -1,0 +1,88 @@
+.btn-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 0.25rem;
+  padding: 0 1rem;
+  height: 3rem;
+  margin: 0.25rem;
+  font-size: 0.75rem;
+  border-radius: 10px;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-right: 0.75rem;
+  }
+
+  &:hover {
+    text-decoration: none;
+    color: darken($color: $primary, $amount: 10);
+    background-color: darken($color: $light, $amount: 10);
+  }
+}
+
+.referral-buttons {
+  min-width: 105px;
+}
+
+.green {
+  color: #00BEBE;
+}
+
+.btn-secondary {
+  color: white;
+}
+.btn {
+  &.btn-covin,
+  &.btn-cancel {
+    padding: 0 2rem;
+    height: 2.35rem;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: center;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 20px;
+  }
+  &.btn-covin {
+    border: 1px solid #54B8B2;
+    border-radius: 3px;
+    box-shadow: 0 3px 0 #008484;
+    background-color: #54B8B2;
+    color: #fff;
+    &.dark {
+      border-color: #657396;
+      box-shadow: 0 3px 0 #657396;
+      background-color: #22335E;
+    }
+  }
+  &.btn-cancel {
+    border: none;
+    box-shadow: none;
+    background: none;
+    color: #22335E;
+  }
+}
+
+button.transparent-button {
+  border: none !important;
+  background: none !important;
+  &:active,
+  &:focus {
+    box-shadow: none !important;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .btn-small {
+    margin: .3rem .5rem;
+    padding: .3rem .65rem;
+    font-size: .65rem;
+    border-radius: .2rem;
+  }
+}

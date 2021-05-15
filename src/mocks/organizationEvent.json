@@ -1,0 +1,25 @@
+[
+    {
+        "organizationID": "efaea4bb-eb82-486a-a59b-ab9b059f22a4",
+        "organizationName": "Wellspring Clinic for Holistic Medicine",
+        "organizationEventID": "767488f8-fe63-4700-b145-09d6cb78e512",
+        "organizationEventName": "Online Consultation ($300)",
+        "availableFrom": "12:00:00",
+        "availableTo": "19:30:00",
+        "durationInMinutes": 30,
+        "bufferAfterEventInMinutes": 30,
+        "autoConfirm": true,
+        "sunday": false,
+        "monday": true,
+        "tuesday": true,
+        "wednesday": true,
+        "thursday": true,
+        "friday": true,
+        "saturday": false,
+        "futureRollingDays": 120,
+        "eventFee": 300.00,
+        "currencyCode": "CAD",
+        "activeFrom": "2020-06-01T00:00:00",
+        "activeTo": null
+    }
+]

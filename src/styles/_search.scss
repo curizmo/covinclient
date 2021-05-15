@@ -1,0 +1,36 @@
+.search-container {
+  position: relative;
+
+  input {
+    width: 100%;
+  }
+
+  .search-results {
+    position: absolute;
+    top: 100%;
+    z-index: 9;
+    background-color: white;
+    height: 500%;
+    max-height: 100vh;
+    overflow: scroll;
+  }
+}
+
+.search-input.form-control {
+  height: 2.625rem;
+  padding-left: 34px;
+  outline: none;
+  border: 1px solid #d6dde8;
+  border-radius: 3px;
+  font-size: 1rem;
+  line-height: 1.25rem;
+  color: #1f3259;
+  @media (max-width: 768px) {
+    margin-top: 0.75rem;
+    border: none;
+    text-align: center;
+    ::placeholder {
+      opacity: 0.2;
+    }
+  }
+}

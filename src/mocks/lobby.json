@@ -1,0 +1,49 @@
+{
+  "shop": [
+    {
+      "name": "Adaptogen",
+      "price": "99",
+      "details": "Adaptogen-X: increase energy levels and improve resistance to physical and mental stress",
+      "imageSrc": "https://tcmrp.com/wp-content/uploads/2020/03/Adaptogen-X-1.jpg",
+      "linkTo": "https://tcmrp.com/payments/adaptogen-x/"
+    },
+    {
+      "name": "10 Days Wellspring Vision Program",
+      "price": "6000",
+      "details": "10 Days Wellspring Vision Program",
+      "imageSrc": "https://tcmrp.com/wp-content/uploads/2018/01/Wellspring-Clinic-for-Holistic-Medicine-Shop-Wellspring-Vision-Improvement-Program-1.png",
+      "linkTo": "https://tcmrp.com/payments/wellspring-vision-improvement-program/"
+    },
+    {
+      "name": "Blackberry and Vegetable Cookies",
+      "price": "99",
+      "details": "Blackberry and Vegetable Cookies",
+      "imageSrc": "https://tcmrp.com/wp-content/uploads/2020/04/20190131140017-600x600.jpg",
+      "linkTo": "https://tcmrp.com/payments/blackberry-and-vegetable-cookies/"
+    }
+  ],
+  "doctor": [
+    {
+      "name": "Dr Weidong Yu",
+      "specialization": "TC MDR",
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci, labore? Quo mollitia itaque ipsum esse eius nisi minus, alias explicabo quia doloremque, natus magni sunt impedit debitis nesciunt sit eveniet?,"
+    }
+  ],
+  "faq": [
+    {
+      "question": "Why I start treating rp?",
+      "answer": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas maiores quidem doloremque ipsum deserunt, ",
+      "resource": "https://www.youtube.com/embed/G4zdrE_3mcY"
+    },
+    {
+      "question": "Why I start treating mnp?",
+      "answer": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas maiores quidem doloremque ipsum deserunt, ",
+      "resource": ""
+    },
+    {
+      "question": "Why I start treating mp?",
+      "answer": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas maiores quidem doloremque ipsum deserunt, ",
+      "resource": ""
+    }
+  ]
+}
