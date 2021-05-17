@@ -198,35 +198,25 @@ button:focus {
   outline-color: var(--gray-color);
   box-shadow: none;
 }
+
 .buttons {
   margin-bottom: 2rem;
 }
-.buttons #next {
+.buttons #next,
+.buttons #continue,
+.buttons .sendCode {
   background-color: #00bebe;
-  width: 100%;
-  font-family: Helvetica;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px;
-  letter-spacing: 0px;
   text-align: center;
+  font: 400 16px / 1.5 Helvetica;
   color: white;
+}
+.buttons #next {
+  width: 100%;
   margin-bottom: 2rem;
 }
 .buttons #continue {
-  background-color: #00bebe;
   width: 95%;
-  font-family: Helvetica;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px;
-  letter-spacing: 0px;
-  text-align: center;
-  color: white;
-  margin: 0 auto;
-  margin-left: 40px;
+  margin: 0 auto 0 40px;
 }
 #GoogleExchange {
   width: 100%;
@@ -294,7 +284,9 @@ input {
   margin-bottom: 1rem;
 }
 
-#createAccount {
+#createAccount,
+#forgotPassword,
+.tiny {
   font-family: Helvetica Neue;
   font-size: 16px;
   font-style: normal;
@@ -333,8 +325,13 @@ input {
   color: #22335e;
 }
 
-.signup-screen ul {
+.signup-screen ul,
+.login-section ul {
   list-style-type: none;
+}
+
+#emailVerificationControl ul {
+  padding-left: 0;
 }
 
 .signup-screen .attrEntry a {
