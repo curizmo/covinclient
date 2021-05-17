@@ -177,6 +177,6 @@ export async function fetchPatientsWithRiskData(practitionerId) {
 
 export const usePatientsRiskData = (practitionerId) => {
   return useQuery(['patientsRiskData', practitionerId], () =>
-    fetchPatientsWithRiskData(practitionerId),
+    practitionerId ? fetchPatientsWithRiskData(practitionerId) : [],
   );
 };

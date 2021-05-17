@@ -60,8 +60,13 @@ function* setPatientInOrganization(patientId, organizationID) {
 }
 
 function* postBooking({ payload }) {
-  const { bookingData, eventId, onBookingSuccess, userData, finishBooking } =
-    payload;
+  const {
+    bookingData,
+    eventId,
+    onBookingSuccess,
+    userData,
+    finishBooking,
+  } = payload;
   const patientID = yield call(checkPatient, {
     ...userData,
     PractitionerId: bookingData.practitionerId,
@@ -112,13 +117,13 @@ function* fetchPatientByPatientId({ payload: { patientId } }) {
 }
 
 function* updatePatientEncounter({
-  payload: { patientId, riskLevel, prescriptionList, note },
+  payload: { patientId, riskLevel, prescriptionList, note, labs },
 }) {
   try {
     yield put(showSpinner());
     yield call(
       createEncounter,
-      { riskLevel, prescriptionList, note },
+      { riskLevel, prescriptionList, note, labs },
       patientId,
     );
     yield put(setIsEncounterUpdated());

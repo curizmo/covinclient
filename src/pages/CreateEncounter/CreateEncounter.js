@@ -13,7 +13,12 @@ import {
   GraphicalReadings,
 } from 'components/CreateEncounter';
 
-import { fetchPatient, updateEncounter } from 'actions';
+import {
+  fetchPatient,
+  hideSpinner,
+  showSpinner,
+  updateEncounter,
+} from 'actions';
 import { getPatient, getIsEncounterUpdated, getUser } from 'selectors';
 import { routes } from 'routers';
 import notesIcon from 'assets/images/svg-icons/notesIcon.svg';
@@ -23,10 +28,7 @@ import notesSelectedIcon from 'assets/images/svg-icons/notes-selected.svg';
 import lineGraphSelectedIcon from 'assets/images/svg-icons/reading-selected.svg';
 import prescriptionSelectedIcon from 'assets/images/svg-icons/orders-selected.svg';
 
-import {
-  createEncounter,
-  fetchPatientEncountersByPractitionerUserId,
-} from 'services/patient';
+import { fetchPatientEncountersByPractitionerUserId } from 'services/patient';
 import { fetchPatientMedicationByPractitionerUserId } from 'services/patientMedication';
 
 const PATIENT_DETAILS_TABS = {
@@ -49,6 +51,7 @@ function CreateEncounter() {
   const { register, handleSubmit } = useForm({ mode: 'onBlur' });
   const [note, setNote] = useState('');
   const [prescriptionList, setPrescriptionList] = useState([]);
+  const [labsList, setLabsList] = useState([]);
   const [pastNotes, setPastNotes] = useState([]);
   const [pastPrescriptions, setPastPrescriptions] = useState([]);
 
@@ -77,6 +80,7 @@ function CreateEncounter() {
       updateEncounter({
         patientId,
         riskLevel,
+        labs: labsList,
         prescriptionList: JSON.stringify(prescriptionList),
         note,
       }),
@@ -100,6 +104,7 @@ function CreateEncounter() {
 
   const fetchPatientEncounters = async (patientId) => {
     try {
+      dispatch(showSpinner());
       const response = await fetchPatientEncountersByPractitionerUserId(
         patientId,
         user.NTOUserID,
@@ -108,6 +113,8 @@ function CreateEncounter() {
       setPastNotes(response.data);
     } catch (err) {
       // TODO: Handle error
+    } finally {
+      dispatch(hideSpinner());
     }
   };
 
@@ -126,25 +133,6 @@ function CreateEncounter() {
 
   const handleNoteChange = (e) => {
     setNote(e.target.value);
-  };
-
-  const handleSendToPatient = async () => {
-    try {
-      await createEncounter(
-        {
-          riskLevel,
-          prescriptionList: JSON.stringify(prescriptionList),
-          note,
-          sendToPatient: true,
-        },
-        patientId,
-      );
-
-      setNote('');
-      setPrescriptionList([]);
-    } catch (err) {
-      // TODO: Handle error
-    }
   };
 
   return (
@@ -181,8 +169,9 @@ function CreateEncounter() {
                 data={patientData}
                 prescriptionList={prescriptionList}
                 setPrescriptionList={setPrescriptionList}
-                handleSendToPatient={handleSendToPatient}
                 pastPrescriptions={pastPrescriptions}
+                labsList={labsList}
+                setLabsList={setLabsList}
               />
             </Col>
           </Row>
