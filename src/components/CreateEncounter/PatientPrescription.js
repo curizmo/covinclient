@@ -394,22 +394,52 @@ export const PatientPrescription = ({
           </PastOrderText>
           {showMore && pastPrescriptions?.length
             ? pastPrescriptions.map((prescription) => {
-                if (!prescription?.prescriptions?.length) {
+                if (
+                  !(
+                    prescription?.prescriptions?.length ||
+                    prescription?.labs?.length
+                  )
+                ) {
                   return null;
                 }
 
                 return (
-                  <LastRow key={prescription.organizationEventBookingId}>
-                    <PastPrescriptionImageIcon src={calenderIcon} alt="cal" />
-                    <PastPrescriptionText>
-                      <PastPrescriptionDate>
-                        {prescription.eventStartTime}
-                      </PastPrescriptionDate>
-                      <PastPrescriptionConsultant>
-                        {prescription?.prescriptions?.length} Prescriptions
-                      </PastPrescriptionConsultant>
-                    </PastPrescriptionText>
-                  </LastRow>
+                  <>
+                    {prescription?.prescriptions?.length ? (
+                      <LastRow
+                        key={`${prescription.organizationEventBookingId}-prescription`}>
+                        <PastPrescriptionImageIcon
+                          src={calenderIcon}
+                          alt="cal"
+                        />
+                        <PastPrescriptionText>
+                          <PastPrescriptionDate>
+                            {prescription.eventStartTime}
+                          </PastPrescriptionDate>
+                          <PastPrescriptionConsultant>
+                            {prescription.prescriptions.length} Prescription
+                          </PastPrescriptionConsultant>
+                        </PastPrescriptionText>
+                      </LastRow>
+                    ) : null}
+                    {prescription?.labs?.length ? (
+                      <LastRow
+                        key={`${prescription.organizationEventBookingId}-lab`}>
+                        <PastPrescriptionImageIcon
+                          src={calenderIcon}
+                          alt="cal"
+                        />
+                        <PastPrescriptionText>
+                          <PastPrescriptionDate>
+                            {prescription.eventStartTime}
+                          </PastPrescriptionDate>
+                          <PastPrescriptionConsultant>
+                            {prescription.labs.length} Lab
+                          </PastPrescriptionConsultant>
+                        </PastPrescriptionText>
+                      </LastRow>
+                    ) : null}
+                  </>
                 );
               })
             : null}
