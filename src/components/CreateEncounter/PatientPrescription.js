@@ -119,31 +119,15 @@ export const PatientPrescription = ({
   );
 
   const checkAvailability = (name) => {
-    if (prescriptionList.length > 0) {
-      let obj = prescriptionList.find(
-        (item) => item?.name?.toLowerCase() === name?.toLowerCase(),
-      );
-      if (obj) {
-        return true;
-      }
-      return false;
-    } else {
-      return false;
-    }
+    return prescriptionList?.some(
+      (item) => item?.name?.toLowerCase() === name?.toLowerCase(),
+    );
   };
 
   const checkLabsAvailability = (name) => {
-    if (labsList.length > 0) {
-      let obj = labsList.find(
-        (item) => item?.name?.toLowerCase() === name?.toLowerCase(),
-      );
-      if (obj) {
-        return true;
-      }
-      return false;
-    } else {
-      return false;
-    }
+    return labsList?.some(
+      (item) => item?.name?.toLowerCase() === name?.toLowerCase(),
+    );
   };
 
   const onAddClick = (name) => {
@@ -153,13 +137,11 @@ export const PatientPrescription = ({
   };
 
   const onRemoveClick = (name) => {
-    prescriptionList.splice(
-      prescriptionList.findIndex(
-        (el) => el?.name?.toLowerCase() === name?.toLowerCase(),
-      ),
-      1,
+    const newPrescriptionList = prescriptionList.filter(
+      (prescription) => prescription?.name?.toLowerCase !== name?.toLowerCase,
     );
-    setPrescriptionList([...prescriptionList]);
+
+    setPrescriptionList(newPrescriptionList);
   };
 
   const onLabsAddClick = (name) => {
@@ -169,13 +151,11 @@ export const PatientPrescription = ({
   };
 
   const onLabsRemoveClick = (name) => {
-    labsList.splice(
-      labsList.findIndex(
-        (el) => el?.name?.toLowerCase() === name?.toLowerCase(),
-      ),
-      1,
+    const newLabsList = labsList.filter(
+      (lab) => lab?.name?.toLowerCase !== name?.toLowerCase,
     );
-    setLabsList([...labsList]);
+
+    setLabsList(newLabsList);
   };
 
   const onIconClick = (name) => {
@@ -195,13 +175,17 @@ export const PatientPrescription = ({
   };
 
   const removeMed = (i) => {
-    prescriptionList.splice(i, 1);
-    setPrescriptionList([...prescriptionList]);
+    const newPrescriptionList = prescriptionList.filter(
+      (prescription, index) => i !== index,
+    );
+
+    setPrescriptionList(newPrescriptionList);
   };
 
   const removeLab = (i) => {
-    labsList.splice(i, 1);
-    setLabsList([...labsList]);
+    const newLabsList = labsList.filter((prescription, index) => i !== index);
+
+    setPrescriptionList(newLabsList);
   };
 
   const handleFrequencyChange = (e, index) => {
@@ -238,8 +222,10 @@ export const PatientPrescription = ({
   };
 
   const handleLabsSearchChange = (e) => {
-    setLabsSearchValue(e?.target?.value);
-    delayedHandleLabsSearchChange(e?.target?.value);
+    const value = e?.target?.value;
+
+    setLabsSearchValue(value);
+    delayedHandleLabsSearchChange(value);
   };
 
   const delayedHandleLabsSearchChange = useCallback(
