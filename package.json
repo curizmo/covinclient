@@ -109,7 +109,7 @@
   "lint-staged": {
     "src/**/*.{js,jsx}": [
       "eslint --fix",
-      "yarn format",
+      "prettier --write",
       "git add"
     ]
   },

@@ -110,10 +110,6 @@ export const CloseIcon = styled.img`
   cursor: pointer;
 `;
 
-export const TopRow = styled.div``;
-
-export const BottomRow = styled.div``;
-
 export const Note = styled.textarea`
   background: #ffffff;
   border: 1px solid #e0e3ea;
@@ -129,19 +125,6 @@ export const Note = styled.textarea`
   @media (max-width: 768px) {
     margin-top: 4.5rem;
   }
-`;
-export const SendToPatientBtn = styled.button`
-  background: #54b8b2;
-  border: 1px solid #54b8b2;
-  box-shadow: 0px 3px 0px #008484;
-  border-radius: 3px;
-  font-size: 0.8125rem;
-  line-height: 1.25rem;
-  width: 100%;
-  height: 2.8125rem;
-  letter-spacing: 0.2em;
-  color: #ffffff;
-  margin-top: 0.9375rem;
 `;
 
 export const ActionIcon = styled.img`
@@ -229,4 +212,32 @@ export const IconSmall = styled.div`
 export const ImgButton = styled.button`
   border: none;
   background: none;
+`;
+
+export const HeaderReaderWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f2f7fd;
+  padding: 1rem 1.5rem;
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+export const ReadingFontStyle = styled.div`
+  font-weight: bold;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  color: #22335e;
+`;
+
+export const ReadingIconStyleRepresentation = styled.div`
+  display: flex;
+`;
+
+export const IconRepresentation = styled.div`
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.5rem;
 `;
