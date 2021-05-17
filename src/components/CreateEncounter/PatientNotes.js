@@ -61,7 +61,7 @@ export const PatientNotes = ({ note, handleNoteChange, pastNotes }) => {
                 const value = `${note.eventStartTime}\n${note.notes}`;
 
                 return (
-                  <LastRow key={note.organizationEventBookingId}>
+                  <LastRow key={note.encounterId}>
                     <Note value={value} disabled />
                   </LastRow>
                 );
