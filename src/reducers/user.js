@@ -1,4 +1,4 @@
-import { SET_USER, SET_USER_APPOINTMENTS } from '../actions/user';
+import { SET_USER, SET_USER_APPOINTMENTS, CLEAR_USER } from '../actions/user';
 
 const initialState = {
   data: {},
@@ -11,6 +11,8 @@ const user = (state = initialState, { type, payload }) => {
       return { ...state, data: payload };
     case SET_USER_APPOINTMENTS:
       return { ...state, appointments: payload };
+    case CLEAR_USER:
+      return { ...initialState };
     default:
       return state;
   }

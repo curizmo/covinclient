@@ -43,9 +43,6 @@ export const MobileDropdownMenu = ({ menuItems, getIsActive }) => {
 };
 
 MobileDropdownMenu.propTypes = {
-  menuItems: PropTypes.shape({
-    name: PropTypes.string,
-    goTo: PropTypes.string,
-  }),
+  menuItems: PropTypes.array,
   currentTab: PropTypes.string,
 };

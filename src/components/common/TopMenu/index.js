@@ -13,6 +13,7 @@ const TopMenu = () => {
   const isMobile = useCheckIsMobile();
   const [currentTab, setCurrentTab] = useState('');
   const location = useLocation();
+  const [isShowMenu, setIsShowMenu] = useState(false);
 
   const menuItems = [
     {
@@ -50,17 +51,24 @@ const TopMenu = () => {
 
   useEffect(() => {
     setCurrentTab(location.pathname);
-  }, [location]);
+    setIsShowMenu(
+      ![routes.nonPhysician.path, routes.login.path].includes(
+        location.pathname,
+      ),
+    );
+  }, [location.pathname]);
 
   return (
     <header className="sticky-top d-flex justify-content-between align-items-center bg-white shadow-sm w-100 pl-0 pr-3 px-md-7">
       {isMobile ? (
         <>
           <div className="d-flex top-menu-list">
-            <MobileDropdownMenu
-              menuItems={menuItems}
-              getIsActive={getIsActive}
-            />
+            {isShowMenu && (
+              <MobileDropdownMenu
+                menuItems={menuItems}
+                getIsActive={getIsActive}
+              />
+            )}
             <LogoButton />
           </div>
           <UserDropdownMenu />
@@ -68,18 +76,20 @@ const TopMenu = () => {
       ) : (
         <>
           <LogoButton />
-          <Nav className="align-items-center top-menu-list h-100">
-            {menuItems.map((item) => (
-              <Link
-                className={`nav-link h-100 ${
-                  getIsActive(item.goTo) ? 'active' : ''
-                }`}
-                key={item.name}
-                to={item.goTo}>
-                {item.name}
-              </Link>
-            ))}
-          </Nav>
+          {isShowMenu && (
+            <Nav className="align-items-center top-menu-list h-100">
+              {menuItems.map((item) => (
+                <Link
+                  className={`nav-link h-100 ${
+                    getIsActive(item.goTo) ? 'active' : ''
+                  }`}
+                  key={item.name}
+                  to={item.goTo}>
+                  {item.name}
+                </Link>
+              ))}
+            </Nav>
+          )}
           <UserDropdownMenu />
         </>
       )}
