@@ -80,8 +80,16 @@ function CreateEncounter() {
       updateEncounter({
         patientId,
         riskLevel,
-        labs: labsList,
-        prescriptionList: JSON.stringify(prescriptionList),
+        labs: JSON.stringify(
+          prescriptionList.filter(
+            (prescription) => prescription.label === 'lab',
+          ),
+        ),
+        prescriptionList: JSON.stringify(
+          prescriptionList.filter(
+            (prescription) => prescription.label === 'prescription',
+          ),
+        ),
         note,
       }),
     );

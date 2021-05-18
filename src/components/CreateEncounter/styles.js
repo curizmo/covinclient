@@ -213,31 +213,3 @@ export const ImgButton = styled.button`
   border: none;
   background: none;
 `;
-
-export const HeaderReaderWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #f2f7fd;
-  padding: 1rem 1.5rem;
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-export const ReadingFontStyle = styled.div`
-  font-weight: bold;
-  font-size: 0.9375rem;
-  line-height: 1.25rem;
-  color: #22335e;
-`;
-
-export const ReadingIconStyleRepresentation = styled.div`
-  display: flex;
-`;
-
-export const IconRepresentation = styled.div`
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-right: 0.5rem;
-`;

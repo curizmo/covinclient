@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import * as PropTypes from 'prop-types';
 import { debounce } from 'lodash';
-import { ImLab } from 'react-icons/im';
 
 import HeadersComponent from '../common/HeadersComponent/HeadersComponent';
 
@@ -38,10 +37,6 @@ import {
   CloseIcon,
   IconSmall,
   ImgButton,
-  HeaderReaderWrap,
-  ReadingFontStyle,
-  ReadingIconStyleRepresentation,
-  IconRepresentation,
 } from './styles';
 
 import { getMedications } from 'services/medication';
@@ -51,46 +46,41 @@ export const PatientPrescription = ({
   prescriptionList,
   setPrescriptionList,
   pastPrescriptions,
-  labsList,
-  setLabsList,
 }) => {
   const [searchValue, setSearchValue] = useState('');
-  const [labsSearchValue, setLabsSearchValue] = useState('');
   const [dropdownList, setDropdownList] = useState([]);
   const [medicineList, setMedicineList] = useState([]);
-  const [labsOptions, setLabsOptions] = useState([]);
-  const [labsDropdownList, setLabsDropdownList] = useState([]);
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
-    fetchMedicines();
-    fetchLabs();
+    fetchMedicinesAndLabs();
   }, []);
 
-  const fetchMedicines = async () => {
+  const fetchMedicinesAndLabs = async () => {
     try {
-      const response = await getMedications();
+      const [medicationResponse, labResponse] = await Promise.all([
+        getMedications(),
+        getLabs(),
+      ]);
 
-      let medications = response.data.medications.map((medication) => {
+      let medications = medicationResponse.data.medications.map(
+        (medication) => {
+          return {
+            name: medication.medicationDesc,
+            frequency: '',
+            label: 'prescription',
+          };
+        },
+      );
+
+      let labs = labResponse.data.labs.map((lab) => {
         return {
-          name: medication.medicationDesc,
-          frequency: '',
+          ...lab,
+          label: 'lab',
         };
       });
 
-      setMedicineList(medications);
-    } catch {
-      // TODO: Handle error
-    }
-  };
-
-  const fetchLabs = async () => {
-    try {
-      const response = await getLabs();
-
-      const { labs } = response.data;
-
-      setLabsOptions(labs);
+      setMedicineList([...medications, ...labs]);
     } catch {
       // TODO: Handle error
     }
@@ -124,14 +114,11 @@ export const PatientPrescription = ({
     );
   };
 
-  const checkLabsAvailability = (name) => {
-    return labsList?.some(
-      (item) => item?.name?.toLowerCase() === name?.toLowerCase(),
-    );
-  };
-
-  const onAddClick = (name) => {
-    setPrescriptionList((prev) => [...prev, { name, frequency: '' }]);
+  const onAddClick = (item) => {
+    setPrescriptionList((prev) => [
+      ...prev,
+      { name: item.name, frequency: '', label: item.label },
+    ]);
     setDropdownList([]);
     setSearchValue('');
   };
@@ -144,33 +131,11 @@ export const PatientPrescription = ({
     setPrescriptionList(newPrescriptionList);
   };
 
-  const onLabsAddClick = (name) => {
-    setLabsList((prev) => [...prev, { name }]);
-    setLabsDropdownList([]);
-    setLabsSearchValue('');
-  };
-
-  const onLabsRemoveClick = (name) => {
-    const newLabsList = labsList.filter(
-      (lab) => lab?.name?.toLowerCase !== name?.toLowerCase,
-    );
-
-    setLabsList(newLabsList);
-  };
-
-  const onIconClick = (name) => {
-    if (!checkAvailability(name)) {
-      onAddClick(name);
+  const onIconClick = (item) => {
+    if (!checkAvailability(item.name)) {
+      onAddClick(item);
     } else {
-      onRemoveClick(name);
-    }
-  };
-
-  const onLabsIconClick = (name) => {
-    if (!checkLabsAvailability(name)) {
-      onLabsAddClick(name);
-    } else {
-      onLabsRemoveClick(name);
+      onRemoveClick(item.name);
     }
   };
 
@@ -180,12 +145,6 @@ export const PatientPrescription = ({
     );
 
     setPrescriptionList(newPrescriptionList);
-  };
-
-  const removeLab = (i) => {
-    const newLabsList = labsList.filter((prescription, index) => i !== index);
-
-    setPrescriptionList(newLabsList);
   };
 
   const handleFrequencyChange = (e, index) => {
@@ -209,36 +168,12 @@ export const PatientPrescription = ({
     setShowMore(!showMore);
   };
 
-  const handleLabsSearch = (text) => {
-    if (text) {
-      let value = labsOptions?.filter((item) =>
-        item.name.toLowerCase().includes(text.toLowerCase()),
-      );
-
-      setLabsDropdownList(value);
-    } else {
-      setLabsDropdownList([]);
-    }
-  };
-
-  const handleLabsSearchChange = (e) => {
-    const value = e?.target?.value;
-
-    setLabsSearchValue(value);
-    delayedHandleLabsSearchChange(value);
-  };
-
-  const delayedHandleLabsSearchChange = useCallback(
-    debounce(handleLabsSearch, 1000),
-    [labsOptions],
-  );
-
   return (
     <>
       <HeadersComponent
         image={prescriptionIcon}
         alt={'prescription-icon'}
-        text={'Prescription'}
+        text={'Prescription & Labs'}
       />
       <ContentWrap>
         <TopContainer>
@@ -258,7 +193,7 @@ export const PatientPrescription = ({
                     return (
                       <EachItem key={item.name}>
                         <Name>{item.name}</Name>
-                        <Icon onClick={() => onIconClick(item.name)}>
+                        <Icon onClick={() => onIconClick(item)}>
                           {checkAvailability(item.name) ? (
                             <ActionIcon src={minusIcon} alt="minus" />
                           ) : (
@@ -280,10 +215,12 @@ export const PatientPrescription = ({
                         <MedIcon src={med} alt="med" />
                         {item.name}
                       </MedName>
-                      <MedDose
-                        placeholder="Add dosage"
-                        onChange={(e) => handleFrequencyChange(e, index)}
-                      />
+                      {item.label === 'prescription' ? (
+                        <MedDose
+                          placeholder="Add dosage"
+                          onChange={(e) => handleFrequencyChange(e, index)}
+                        />
+                      ) : null}
                       <CloseIcon
                         src={closeIcon}
                         alt="close"
@@ -296,68 +233,6 @@ export const PatientPrescription = ({
             )}
           </div>
         </TopContainer>
-      </ContentWrap>
-      <ContentWrap>
-        <HeaderReaderWrap>
-          <ReadingIconStyleRepresentation>
-            <IconRepresentation>
-              <ImLab />
-            </IconRepresentation>
-            <ReadingFontStyle>Labs</ReadingFontStyle>
-          </ReadingIconStyleRepresentation>
-        </HeaderReaderWrap>
-        <TopContainer>
-          <SearchDrpWrap>
-            <SearchBox
-              type="text"
-              name="search"
-              value={labsSearchValue}
-              autoComplete="off"
-              placeholder="Type lab"
-              onChange={handleLabsSearchChange}
-            />
-            {labsDropdownList?.length > 0 && (
-              <DropDownWrap>
-                {labsDropdownList.map((item) => {
-                  return (
-                    <EachItem key={item.name}>
-                      <Name>{item.name}</Name>
-                      <Icon onClick={() => onLabsIconClick(item.name)}>
-                        {checkLabsAvailability(item.name) ? (
-                          <ActionIcon src={minusIcon} alt="minus" />
-                        ) : (
-                          <ActionIcon src={plusIcon} alt="plus" />
-                        )}
-                      </Icon>
-                    </EachItem>
-                  );
-                })}
-              </DropDownWrap>
-            )}
-          </SearchDrpWrap>
-          {labsList?.length > 0 && (
-            <>
-              {labsList?.map((item, index) => {
-                return (
-                  <PrescriptionWrap key={item.name}>
-                    <MedName>
-                      <MedIcon src={med} alt="med" />
-                      {item.name}
-                    </MedName>
-                    <CloseIcon
-                      src={closeIcon}
-                      alt="close"
-                      onClick={() => removeLab(index)}
-                    />
-                  </PrescriptionWrap>
-                );
-              })}
-            </>
-          )}
-        </TopContainer>
-      </ContentWrap>
-
-      <ContentWrap>
         <DesktopViewPastPrescription>
           <PastOrderText>
             <div>
