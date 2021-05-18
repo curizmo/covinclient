@@ -1,6 +1,11 @@
 export const SET_USER = 'SET_USER';
+export const CLEAR_USER = 'CLEAR_USER';
 export const USER_REQUESTED = 'USER_REQUESTED';
 export const SET_USER_APPOINTMENTS = 'SET_USER_APPOINTMENTS';
+
+export const clearUser = () => ({
+  type: CLEAR_USER,
+});
 
 export const setUser = (payload) => ({
   type: SET_USER,

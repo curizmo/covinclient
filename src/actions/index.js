@@ -4,6 +4,7 @@ export * from './auth';
 export * from './cart';
 export * from './focusedQuestion';
 export * from './login';
+export * from './message';
 export * from './organization';
 export * from './organizations';
 export * from './patient';
