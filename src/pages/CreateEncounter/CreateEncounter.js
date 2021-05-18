@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useHistory } from 'react-router';
@@ -13,12 +13,7 @@ import {
   GraphicalReadings,
 } from 'components/CreateEncounter';
 
-import {
-  fetchPatient,
-  hideSpinner,
-  showSpinner,
-  updateEncounter,
-} from 'actions';
+import { fetchPatient, hideSpinner, showSpinner } from 'actions';
 import { getPatient, getIsEncounterUpdated, getUser } from 'selectors';
 import { routes } from 'routers';
 import notesIcon from 'assets/images/svg-icons/notesIcon.svg';
@@ -28,8 +23,13 @@ import notesSelectedIcon from 'assets/images/svg-icons/notes-selected.svg';
 import lineGraphSelectedIcon from 'assets/images/svg-icons/reading-selected.svg';
 import prescriptionSelectedIcon from 'assets/images/svg-icons/orders-selected.svg';
 
-import { fetchPatientEncountersByPractitionerUserId } from 'services/patient';
+import {
+  createEncounter,
+  fetchPatientEncountersByPractitionerUserId,
+} from 'services/patient';
 import { fetchPatientMedicationByPractitionerUserId } from 'services/patientMedication';
+import { debounce } from 'lodash';
+import { createOrUpdateEncounter } from 'services/appointment';
 
 const PATIENT_DETAILS_TABS = {
   READINGS: 'Readings',
@@ -43,9 +43,7 @@ function CreateEncounter() {
   const { patientId } = useParams();
   const patientData = useSelector(getPatient);
   const user = useSelector(getUser);
-
   const isEncounterUpdated = useSelector(getIsEncounterUpdated);
-
   const [selectedTab, setSelectedTab] = useState(PATIENT_DETAILS_TABS.READINGS);
   const [riskLevel, setRiskLevel] = useState('');
   const { register, handleSubmit } = useForm({ mode: 'onBlur' });
@@ -54,6 +52,9 @@ function CreateEncounter() {
   const [labsList, setLabsList] = useState([]);
   const [pastNotes, setPastNotes] = useState([]);
   const [pastPrescriptions, setPastPrescriptions] = useState([]);
+  const [appointmentId, setAppointmentId] = useState('');
+  const [isNoteSaved, setIsNoteSaved] = useState(false);
+  const [isNoteLoading, setIsNoteLoading] = useState(false);
 
   const tabMenu = [
     {
@@ -140,8 +141,67 @@ function CreateEncounter() {
   };
 
   const handleNoteChange = (e) => {
-    setNote(e.target.value);
+    const value = e.target.value;
+    setNote(value);
+    setIsNoteLoading(true);
+    setIsNoteSaved(false);
+    delayedHandleNoteChange(value);
   };
+
+  const createNewEncounter = async (note) => {
+    try {
+      const response = await createEncounter(
+        {
+          patientId,
+          riskLevel,
+          labs: JSON.stringify(
+            prescriptionList.filter(
+              (prescription) => prescription.label === 'lab',
+            ),
+          ),
+          prescriptionList: JSON.stringify(
+            prescriptionList.filter(
+              (prescription) => prescription.label === 'prescription',
+            ),
+          ),
+          note,
+        },
+        patientId,
+      );
+
+      const { organizationEventBookingId } = response.data;
+      setAppointmentId(organizationEventBookingId);
+      setIsNoteSaved(true);
+    } catch (err) {
+      // TODO: Handle error
+    }
+  };
+
+  const updateEncounter = async (note) => {
+    try {
+      const encounter = {
+        note,
+      };
+
+      await createOrUpdateEncounter(appointmentId, {
+        data: { ...encounter },
+      });
+      setIsNoteSaved(true);
+    } catch (err) {
+      // TODO: Handle error
+    }
+  };
+
+  const delayedHandleNoteChange = useCallback(
+    debounce((note) => {
+      if (!appointmentId) {
+        createNewEncounter(note);
+      } else {
+        updateEncounter(note);
+      }
+    }, 1000),
+    [appointmentId, prescriptionList, riskLevel, patientId],
+  );
 
   return (
     <DashboardLayout>
@@ -170,6 +230,8 @@ function CreateEncounter() {
                 note={note}
                 handleNoteChange={handleNoteChange}
                 pastNotes={pastNotes}
+                isNoteLoading={isNoteLoading}
+                isNoteSaved={isNoteSaved}
               />
             </Col>
             <Col md={{ size: 4 }}>

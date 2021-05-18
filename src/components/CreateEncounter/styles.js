@@ -213,3 +213,8 @@ export const ImgButton = styled.button`
   border: none;
   background: none;
 `;
+
+export const LoadingIcon = styled.div`
+  bottom: 1.25rem !important;
+  right: 2.5rem !important;
+`;
