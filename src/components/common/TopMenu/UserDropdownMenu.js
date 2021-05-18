@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Dropdown, DropdownMenu, DropdownToggle, Button } from 'reactstrap';
 
 import { useAuthProvider } from 'hooks/useAuthProvider';
-import userIcon from 'assets/images/profile-user.svg';
+import userIcon from 'assets/images/svg-icons/profile-user.svg';
 
 export const UserDropdownMenu = () => {
   const [isOpen, setIsOpen] = useState(false);

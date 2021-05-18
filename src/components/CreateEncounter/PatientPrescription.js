@@ -10,7 +10,7 @@ import closeIcon from '../../assets/images/blue-close.svg';
 import minusIcon from '../../assets/images/minus.svg';
 import calenderIcon from '../../assets/images/calenderIcon.svg';
 import plusIcon from '../../assets/images/plus-icon.png';
-import prescriptionIcon from '../../assets/images/prescriptionIcon.svg';
+import prescriptionIcon from '../../assets/images/svg-icons/prescriptionIcon.svg';
 import showMoreIcon from 'assets/images/svg-icons/showMore.svg';
 import showLessIcon from 'assets/images/svg-icons/showLess.svg';
 

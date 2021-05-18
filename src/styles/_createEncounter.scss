@@ -2,11 +2,6 @@
   display: flex;
 }
 
-.desktop-view-vitals-wrp {
-  /* height: 9rem; */
-  /* flex-wrap: wrap; */
-}
-
 .desktop-view-labels-with-current-stats {
   flex-direction: column;
   justify-content: space-between;
@@ -26,4 +21,10 @@
 
 .degree {
   margin-top: 4px;
+}
+  
+@media screen and (max-width: 1150px) and (min-width: 768px) {
+  .desktop-view-vitals-wrp {
+    flex-wrap: wrap;
+  }
 }

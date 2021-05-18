@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Button } from 'reactstrap';
 
-import { GraphicalRepresentation } from '../GraphicalRepresentation';
+import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
 import { handleCallAppointment } from 'utils';
-import mobileIcon from 'assets/images/icon_mobile.png';
+import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
 import './index.css';
 
 const Wrapper = styled.section`
@@ -85,6 +85,10 @@ const desktopViewLabelsForPatientsWithCurrentStats = css`
 const DesktopPatientTable = (props) => {
   const { selectedCaseData } = props;
   const dispatch = useDispatch();
+  const onCall = useCallback(
+    (patientId) => () => handleCallAppointment(dispatch, patientId),
+    [dispatch],
+  );
 
   return (
     <Wrapper>
@@ -103,10 +107,7 @@ const DesktopPatientTable = (props) => {
                   <Value>
                     <Button
                       className="d-flex"
-                      onClick={handleCallAppointment(
-                        dispatch,
-                        patient.patientId,
-                      )}>
+                      onClick={onCall(patient.patientId)}>
                       <img
                         src={mobileIcon}
                         alt="phone"
