@@ -361,7 +361,7 @@ function CreateEncounter() {
           />
           <MedInfoWrap>
             <Column>
-              <GraphicalReadings data={PatientDetailFormat} />
+              <GraphicalReadings data={patientData} />
             </Column>
             <Column>
               <PatientNotes
@@ -438,15 +438,10 @@ function CreateEncounter() {
                         desktopViewLabelsForPatientsWithCurrentStats
                       }
                       preferenceList={{
-                        //  showAxisX: false,
                         axisXLines: true,
                         showXAxisFonts: false,
                         showTooltip: true,
-                        // dashedYAxis: true,
-                        // showYAxisFonts: false,
-                        // yAxisDomainFactor: 1.2,
                         xScalePaddingOuter: 5,
-                        // maxRangeMultiplier: 1,
                         yAxisFontSize: 12,
                       }}
                     />
