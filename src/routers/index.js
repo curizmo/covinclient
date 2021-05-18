@@ -12,6 +12,7 @@ const Prescriptions = lazy(() => import('../pages/Prescriptions'));
 const Labs = lazy(() => import('../pages/Labs'));
 const Directory = lazy(() => import('../pages/Directory'));
 const Profile = lazy(() => import('../pages/Profile'));
+const TeleHealth = lazy(() => import('../pages/TeleHealth'));
 
 export const routes = {
   nonPhysician: {
@@ -20,6 +21,11 @@ export const routes = {
     isPrivate: true,
     isNotPhysician: true,
     component: NonPhysician,
+  },
+  teleHealth: {
+    path: '/tele-health',
+    isPrivate: true,
+    component: TeleHealth,
   },
   patients: {
     path: '/patients',
