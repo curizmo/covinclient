@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -85,6 +85,10 @@ const desktopViewLabelsForPatientsWithCurrentStats = css`
 const DesktopPatientTable = (props) => {
   const { selectedCaseData } = props;
   const dispatch = useDispatch();
+  const onCall = useCallback(
+    (patientId) => () => handleCallAppointment(dispatch, patientId),
+    [dispatch],
+  );
 
   return (
     <Wrapper>
@@ -103,10 +107,7 @@ const DesktopPatientTable = (props) => {
                   <Value>
                     <Button
                       className="d-flex"
-                      onClick={handleCallAppointment(
-                        dispatch,
-                        patient.patientId,
-                      )}>
+                      onClick={onCall(patient.patientId)}>
                       <img
                         src={mobileIcon}
                         alt="phone"

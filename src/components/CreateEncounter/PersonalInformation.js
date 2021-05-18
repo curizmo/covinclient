@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled, { css } from 'styled-components';
-import { useHistory } from 'react-router';
 
 import { CommunicationButtons } from 'components/CreateEncounter';
 import arrowIcon from 'assets/images/svg-icons/arrow-left.svg';
 import collapseIcon from 'assets/images/svg-icons/showMore.svg';
 import expandIcon from 'assets/images/svg-icons/showLess.svg';
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
+import {
+  GENDER_SHORTHAND,
+  PATIENT_CURRENT_STATUS,
+  RISK,
+} from '../../constants';
+import { getFormatedDate, handleCallAppointment } from 'utils';
 
 const PersonalInfoWrap = styled.div`
   position: relative;
@@ -15,6 +20,7 @@ const PersonalInfoWrap = styled.div`
 const TopView = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
   padding: 1.25rem 1.5rem;
   @media (max-width: 768px) {
@@ -24,8 +30,7 @@ const TopView = styled.div`
 `;
 
 const HiddenView = styled.div`
-  //   height: ${(props) => (!props.showMore ? '20rem' : '0')};
-  display: ${(props) => (!props.showMore ? 'flex' : 'none')};
+  display: ${(props) => (props.showMore ? 'flex' : 'none')};
   z-index: 5;
   position: absolute;
   background: #fff;
@@ -39,9 +44,9 @@ const HiddenView = styled.div`
 const Status = styled.div`
   border-radius: 50%;
   background-color: ${(props) =>
-    props.risk === 'high'
+    props.risk === 'High'
       ? '#eb2f2f'
-      : props.risk === 'moderate'
+      : props.risk === 'Moderate'
       ? '#e5881b'
       : '#657396'};
   width: 1rem;
@@ -194,42 +199,42 @@ const MobAgeAndGender = styled.div`
 
 export const PersonalInformation = ({
   data,
-  //setRiskLevel,
-  //riskLevel,
+  setRiskLevel,
+  riskLevel,
+  onSave,
   dispatch,
 }) => {
-  const [showMore, setShowMore] = useState(true);
-  const [riskLevel, setRiskLevel] = useState('');
+  const [isShowMore, setIsShowMore] = useState(false);
+  const radioMenu = Object.values(RISK);
+  const toggleShowMore = () => setIsShowMore((state) => !state);
+  const onCall = useCallback(
+    () => handleCallAppointment(dispatch, data?.patientId),
+    [dispatch, data],
+  );
 
-  const radioMenu = ['high', 'moderate', 'low'];
-  const history = useHistory();
   useEffect(() => {
     setRiskLevel(data?.riskLevel?.toLowerCase());
   }, []);
 
-  const onSaveClick = () => {
-    history.goBack();
-  };
-
   return (
     <PersonalInfoWrap>
       <TopView>
-        <BackButton onClick={() => onSaveClick()}>
-          <img src={arrowIcon} alt="arrrow" />
+        <BackButton onClick={onSave}>
+          <img src={arrowIcon} alt="arrow" />
           Back
         </BackButton>
         <PatientNameWrap>
           <Status risk={riskLevel} />
-          <Name>{data?.name}</Name>
+          <Name>{data?.fullName}</Name>
           <ShowLessMore
-            src={showMore ? collapseIcon : expandIcon}
-            onClick={() => setShowMore(!showMore)}
+            src={isShowMore ? expandIcon : collapseIcon}
+            onClick={toggleShowMore}
           />
         </PatientNameWrap>
         <MobAgeAndGender>
           <Info extraCss={extraCss} width="auto">
             <Label margin="0.3rem">Gender:</Label>
-            <Value>{data?.gender}</Value>
+            <Value>{GENDER_SHORTHAND[data?.gender]}</Value>
           </Info>
           <Info extraCss={extraCss} width="auto">
             <Label margin="0.3rem">Age:</Label>
@@ -255,10 +260,10 @@ export const PersonalInformation = ({
             );
           })}
         </RiskLevelWrap>
-        <CommunicationButtons dispatch={dispatch} patientId={data.patientId} />
-        <Button onClick={() => onSaveClick()}>SAVE AND CLOSE</Button>
+        <CommunicationButtons onCall={onCall} />
+        <Button onClick={onSave}>SAVE AND CLOSE</Button>
       </TopView>
-      <HiddenView showMore={showMore}>
+      <HiddenView showMore={isShowMore}>
         <Info>
           <Label>Gender:</Label>
           <Value>{data?.gender}</Value>
@@ -278,16 +283,14 @@ export const PersonalInformation = ({
         <Info width="12%">
           <Label>Mobile:</Label>
           <Value>
-            <a
-              style={{ textDecoration: 'None', color: 'inherit' }}
-              href={`tel:${data?.mob}`}>
-              <img src={mobileIcon} alt="mobile" /> {data?.mob}
-            </a>
+            <button className="transparent-button d-flex p-0" onClick={onCall}>
+              <img src={mobileIcon} alt="mobile" /> {data?.phone}
+            </button>
           </Value>
         </Info>
         <Info width="12%">
           <Label>Current Status:</Label>
-          <Value>{data?.currentStatus || '-'}</Value>
+          <Value>{data?.currentStatus ?? PATIENT_CURRENT_STATUS.ACTIVE}</Value>
         </Info>
         <Info width="12%">
           <Label>Address:</Label>
@@ -295,7 +298,7 @@ export const PersonalInformation = ({
         </Info>
         <Info width="12%">
           <Label>Patient Since:</Label>
-          <Value>{data?.patientSince || '-'}</Value>
+          <Value>{getFormatedDate(data.createdDate) || '-'}</Value>
         </Info>
         <Info width="12%">
           <Label>Known Allergies:</Label>
@@ -309,7 +312,7 @@ export const PersonalInformation = ({
         </Info>
         <Info width="15%">
           <Label>Pre-Existing Conditions:</Label>
-          {data?.preExisting.length > 0 ? (
+          {data?.preExisting?.length > 0 ? (
             <>
               <Value>{data?.preExisting?.join(', ')}</Value>
             </>
@@ -319,9 +322,9 @@ export const PersonalInformation = ({
         </Info>
         <Info width="12%">
           <Label>Family History:</Label>
-          {data?.familyHistory.length > 0 ? (
+          {data?.familyHistory?.length > 0 ? (
             <>
-              <Value>{data?.familyHistory.join(', ')}</Value>
+              <Value>{data.familyHistory.join(', ')}</Value>
             </>
           ) : (
             <Value>-</Value>

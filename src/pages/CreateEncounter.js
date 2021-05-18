@@ -11,10 +11,15 @@ import {
   GraphicalReadings,
 } from 'components/CreateEncounter';
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
-import { fetchPatient, hideSpinner, showSpinner } from 'actions';
+import {
+  fetchPatient,
+  hideSpinner,
+  showSpinner,
+  updateEncounter,
+} from 'actions';
 import { fetchPatientEncountersByPractitionerUserId } from 'services/patient';
 import { fetchPatientMedicationByPractitionerUserId } from 'services/patientMedication';
-import { getIsEncounterUpdated, getUser } from 'selectors';
+import { getPatient, getIsEncounterUpdated, getUser } from 'selectors';
 import { routes } from 'routers';
 import { getRandomKey } from 'utils';
 import notesIcon from 'assets/images/svg-icons/notesIcon.svg';
@@ -53,7 +58,7 @@ const PatientDetailFormat = {
   familyHistory: [' Coronary artery disease'],
   preExisting: ['Diabetes', ' Coronary artery disease'],
   address: 'abc road, new delhi',
-  riskLevel: 'high',
+  riskLevel: 'High',
   lastUpdated: '03/05/2021 ,6.05am',
   patientParameterStatus: 'Completed',
   //{Initiated-when user initiates covid screening,
@@ -262,36 +267,34 @@ function CreateEncounter() {
   const dispatch = useDispatch();
   const history = useHistory();
   const { patientId } = useParams();
-  // @toDo implement api
-  // const patientData = useSelector(getPatient);
+  const patientData = useSelector(getPatient);
   const user = useSelector(getUser);
 
   const isEncounterUpdated = useSelector(getIsEncounterUpdated);
 
   const [selectedTab, setSelectedTab] = useState(PATIENT_DETAILS_TABS.READINGS);
-  // @toDo implement
-  // const [riskLevel, setRiskLevel] = useState('');
-  // const { register, handleSubmit } = useForm({ mode: 'onBlur' });
-  // const [note, setNote] = useState('');
-  // const [prescriptionList, setPrescriptionList] = useState([]);
-  // const [labsList, setLabsList] = useState([]);
+  const [riskLevel, setRiskLevel] = useState('');
+  const [note, setNote] = useState('');
+  const [prescriptionList, setPrescriptionList] = useState([]);
+  const [labsList, setLabsList] = useState([]);
   const [pastNotes, setPastNotes] = useState([]);
   const [pastPrescriptions, setPastPrescriptions] = useState([]);
-  // @toDo remove console
-  console.log(pastNotes, pastPrescriptions);
 
-  // @toDo implement
-  // const handleSave = () => {
-  //   dispatch(
-  //     updateEncounter({
-  //       patientId,
-  //       riskLevel,
-  //       labs: labsList,
-  //       prescriptionList: JSON.stringify(prescriptionList),
-  //       note,
-  //     }),
-  //   );
-  // };
+  const handleSave = () => {
+    dispatch(
+      updateEncounter({
+        patientId,
+        riskLevel,
+        labs: labsList,
+        prescriptionList: JSON.stringify(prescriptionList),
+        note,
+      }),
+    );
+  };
+
+  useEffect(() => {
+    setRiskLevel(patientData?.status);
+  }, [patientData]);
 
   useEffect(() => {
     fetchPatientEncounters(patientId, user.NTOUserID);
@@ -337,10 +340,9 @@ function CreateEncounter() {
     }
   };
 
-  // @toDo implement api
-  // const handleNoteChange = (e) => {
-  //   setNote(e.target.value);
-  // };
+  const handleNoteChange = (e) => {
+    setNote(e.target.value);
+  };
 
   return (
     <DashboardLayout>
@@ -353,17 +355,32 @@ function CreateEncounter() {
           </DateAndTimeWrap>
         </InfoWrapper>
         <PatientDetailsWrapper>
-          <PersonalInformation data={PatientDetailFormat} />
+          <PersonalInformation
+            dispatch={dispatch}
+            data={patientData}
+            onSave={handleSave}
+            riskLevel={riskLevel}
+            setRiskLevel={setRiskLevel}
+          />
           <MedInfoWrap>
             <Column>
               <GraphicalReadings data={PatientDetailFormat} />
             </Column>
             <Column>
-              <PatientNotes />
+              <PatientNotes
+                note={note}
+                handleNoteChange={handleNoteChange}
+                pastNotes={pastNotes}
+              />
             </Column>
             <Column>
               <PatientPrescription
-                data={PatientDetailFormat?.patientPastOrders}
+                data={patientData}
+                prescriptionList={prescriptionList}
+                setPrescriptionList={setPrescriptionList}
+                pastPrescriptions={pastPrescriptions}
+                labsList={labsList}
+                setLabsList={setLabsList}
               />
             </Column>
           </MedInfoWrap>
@@ -399,7 +416,6 @@ function CreateEncounter() {
                       </InitiateCovidScreening>
                     </InitiateCovidScreenWrap>
                   )}
-
                   {PatientDetailFormat?.patientParameterStatus ===
                     'Pending' && (
                     <InitiateCovidScreenWrap>
