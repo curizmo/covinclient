@@ -61,9 +61,6 @@ const PatientDetailFormat = {
   riskLevel: 'High',
   lastUpdated: '03/05/2021 ,6.05am',
   patientParameterStatus: 'Completed',
-  //{Initiated-when user initiates covid screening,
-  // Pending-when patient hasnt completed his vitals fill up,
-  // Completed- All the information is availaible}
   patientPastOrders: [
     { date: '05/05/2021', consultation: '6 Prescription' },
     { date: '05/05/2021', consultation: '1 Lab Test' },
@@ -407,6 +404,9 @@ function CreateEncounter() {
             <ContentWrap>
               {selectedTab === 'readings' && (
                 <>
+                  {/* Initiated-when user initiates covid screening,
+                    Pending-when patient hasnt completed his vitals fill up,
+                    Completed- All the information is availaible} */}
                   {PatientDetailFormat.patientParameterStatus ===
                     'Initiated' && (
                     <InitiateCovidScreenWrap>
@@ -453,10 +453,21 @@ function CreateEncounter() {
                   )}
                 </>
               )}
-              {selectedTab === 'notes' && <PatientNotes />}
+              {selectedTab === 'notes' && (
+                <PatientNotes
+                  note={note}
+                  handleNoteChange={handleNoteChange}
+                  pastNotes={pastNotes}
+                />
+              )}
               {selectedTab === 'orders' && (
                 <PatientPrescription
-                  data={PatientDetailFormat?.patientPastOrders}
+                  data={patientData}
+                  prescriptionList={prescriptionList}
+                  setPrescriptionList={setPrescriptionList}
+                  pastPrescriptions={pastPrescriptions}
+                  labsList={labsList}
+                  setLabsList={setLabsList}
                 />
               )}
             </ContentWrap>
