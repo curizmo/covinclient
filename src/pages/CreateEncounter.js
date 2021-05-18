@@ -45,101 +45,6 @@ import {
 import { getDate } from 'global';
 import { DashboardLayout } from 'components/common/Layout';
 
-const PatientDetailFormat = {
-  name: 'Latika Dhar',
-  mob: 8868911234,
-  gender: 'F',
-  age: 56,
-  weight: 60,
-  height: 156, //In cm
-  currentStatus: 'Active',
-  patientSince: '12/04/2021',
-  knownAllergies: ['Shell fish'],
-  familyHistory: [' Coronary artery disease'],
-  preExisting: ['Diabetes', ' Coronary artery disease'],
-  address: 'abc road, new delhi',
-  riskLevel: 'High',
-  lastUpdated: '03/05/2021 ,6.05am',
-  patientParameterStatus: 'Completed',
-  patientPastOrders: [
-    { date: '05/05/2021', consultation: '6 Prescription' },
-    { date: '05/05/2021', consultation: '1 Lab Test' },
-  ],
-
-  bodyParameterCheck: {
-    temperature: {
-      current: [{ label: 'Temp', value: 104 }],
-      unit: 'F',
-      data: [
-        { label: 'May 1', value: 97 },
-        { label: 'May 2', value: 98 },
-        { label: 'May 3', value: 97 },
-        { label: 'May 4', value: 102 },
-        { label: 'May 5', value: 100 },
-        { label: 'May 6', value: 101.9 },
-        { label: 'May 7', value: 102 },
-        { label: 'May 8', value: 102 },
-        { label: 'May 9', value: 102 },
-      ],
-    },
-    spO2: {
-      current: [{ label: 'SpO2', value: '81' }],
-      unit: '%',
-      data: [
-        { label: 'May 1', value: 80 },
-        { label: 'May 2', value: 80 },
-        { label: 'May 3', value: 78 },
-        { label: 'May 4', value: 76 },
-        { label: 'May 5', value: 78 },
-        { label: 'May 6', value: 81 },
-      ],
-    },
-    'Pulse Rate': {
-      current: [{ label: 'Pulse Rate', value: '68' }],
-      unit: 'bpm',
-      data: [
-        { label: 'May 3', value: 81 },
-        { label: 'May 4', value: 70 },
-        { label: 'May 5', value: 72 },
-        { label: 'May 6', value: 71 },
-        { label: 'May 7', value: 65 },
-        { label: 'May 8', value: 68 },
-      ],
-    },
-    'Blood Pressure': {
-      current: [
-        { label: 'Low Blood Pressure', value: 65 },
-        { label: 'High Blood Pressure', value: 80 },
-      ],
-      data: [
-        { label: 'May 3', low: 23, high: 14 },
-        { label: 'May 4', low: 25, high: 18 },
-        { label: 'May 5', low: 26, high: 16 },
-        { label: 'May 6', low: 81, high: 12 },
-        { label: 'May 7', low: 12, high: 27 },
-        { label: 'May 8', low: 15, high: 11 },
-      ],
-
-      info: [],
-      labels: [
-        { label: 'low', value: 'low' },
-        { label: 'high', value: 'high' },
-      ],
-    },
-    'Respiratory Rate': {
-      current: [{ label: 'Respiratory Rate', value: '20' }],
-      data: [
-        { label: 'May 3', value: 16 },
-        { label: 'May 4', value: 18 },
-        { label: 'May 5', value: 18 },
-        { label: 'May 6', value: 21 },
-        { label: 'May 7', value: 14 },
-        { label: 'May 8', value: 20 },
-      ],
-    },
-  },
-};
-
 const PATIENT_DETAILS_TABS = {
   READINGS: 'Readings',
   NOTES: 'Notes',
@@ -276,6 +181,7 @@ function CreateEncounter() {
   const [labsList, setLabsList] = useState([]);
   const [pastNotes, setPastNotes] = useState([]);
   const [pastPrescriptions, setPastPrescriptions] = useState([]);
+  const [vitalsCompletionStatus, setVitalsCompletionStatus] = useState('');
 
   const handleSave = () => {
     dispatch(
@@ -291,6 +197,10 @@ function CreateEncounter() {
 
   useEffect(() => {
     setRiskLevel(patientData?.status);
+    // @toDo receive patientParameterStatus
+    setVitalsCompletionStatus(
+      patientData?.patientParameterStatus ?? 'Completed',
+    );
   }, [patientData]);
 
   useEffect(() => {
@@ -402,13 +312,12 @@ function CreateEncounter() {
               })}
             </TabWrap>
             <ContentWrap>
-              {selectedTab === 'readings' && (
+              {selectedTab === PATIENT_DETAILS_TABS.READINGS && (
                 <>
                   {/* Initiated-when user initiates covid screening,
                     Pending-when patient hasnt completed his vitals fill up,
                     Completed- All the information is availaible} */}
-                  {PatientDetailFormat.patientParameterStatus ===
-                    'Initiated' && (
+                  {vitalsCompletionStatus === 'Initiated' && (
                     <InitiateCovidScreenWrap>
                       <NoRecordStyling>No Record Availaible</NoRecordStyling>
                       <InitiateCovidScreening>
@@ -416,8 +325,7 @@ function CreateEncounter() {
                       </InitiateCovidScreening>
                     </InitiateCovidScreenWrap>
                   )}
-                  {PatientDetailFormat?.patientParameterStatus ===
-                    'Pending' && (
+                  {vitalsCompletionStatus === 'Pending' && (
                     <InitiateCovidScreenWrap>
                       <NoRecordStyling>No Record Availaible</NoRecordStyling>
                       <PendingMsg>
@@ -429,10 +337,9 @@ function CreateEncounter() {
                       <ResendWrap>Resend</ResendWrap>
                     </InitiateCovidScreenWrap>
                   )}
-                  {PatientDetailFormat?.patientParameterStatus ===
-                    'Completed' && (
+                  {vitalsCompletionStatus === 'Completed' && (
                     <GraphicalRepresentation
-                      data={PatientDetailFormat}
+                      data={patientData}
                       spacingAroundComponent={spacingAroundComponent}
                       desktopViewLabelsForPatientsWithCurrentStats={
                         desktopViewLabelsForPatientsWithCurrentStats
@@ -448,14 +355,14 @@ function CreateEncounter() {
                   )}
                 </>
               )}
-              {selectedTab === 'notes' && (
+              {selectedTab === PATIENT_DETAILS_TABS.NOTES && (
                 <PatientNotes
                   note={note}
                   handleNoteChange={handleNoteChange}
                   pastNotes={pastNotes}
                 />
               )}
-              {selectedTab === 'orders' && (
+              {selectedTab === PATIENT_DETAILS_TABS.PRESCRIPTION && (
                 <PatientPrescription
                   data={patientData}
                   prescriptionList={prescriptionList}
