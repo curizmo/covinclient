@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Button } from 'reactstrap';
 
-import { GraphicalRepresentation } from '../GraphicalRepresentation';
+import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
 import { handleCallAppointment } from 'utils';
-import mobileIcon from 'assets/images/icon_mobile.png';
+import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
 import './index.css';
 
 const Wrapper = styled.section`

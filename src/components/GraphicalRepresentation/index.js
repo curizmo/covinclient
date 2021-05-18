@@ -1,8 +1,9 @@
 import React from 'react';
-import { CMLine } from '../../third-party/senze-graphs/dist';
+import { CMLine } from 'third-party/senze-graphs/dist';
 import styled from 'styled-components';
-import rangeCheck from '../../utils/rangeCheck';
-import './index.css';
+
+import { rangeCheck } from 'utils/rangeCheck';
+import { scales } from '../../constants';
 
 const DesktopViewPatientVitalFieldName = styled.div`
   text-transform: capitalize;
@@ -35,6 +36,10 @@ const GraphicalRepresentation = (props) => {
     <>
       {Object.entries(data.vitals).map((bodyParams, i) => {
         const colors = rangeCheck(bodyParams);
+        const minValueDomainYaxis =
+          scales[bodyParams?.[0]]?.['minValueDomainYaxis'];
+        const maxValueDomainYaxis =
+          scales[bodyParams?.[0]]?.['maxValueDomainYaxis'];
 
         return (
           <SpacingAroundComponents
@@ -80,6 +85,8 @@ const GraphicalRepresentation = (props) => {
                 data={bodyParams[1]}
                 preferences={{
                   graphColors: colors,
+                  minValueDomainYaxis,
+                  maxValueDomainYaxis,
                   showTooltip: false,
                   ...preferenceList,
                 }}

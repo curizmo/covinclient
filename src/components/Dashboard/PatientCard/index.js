@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import './index.css';
-import rangeCheck from '../../../utils/rangeCheck';
-import { CMLine } from '../../../third-party/senze-graphs/dist';
 import { useHistory } from 'react-router';
-import mobileIcon from '../../../assets/images/icon_mobile.png';
+
+import { rangeCheck } from 'utils';
+import { CMLine } from 'third-party/senze-graphs/dist';
+import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
+import './index.css';
 
 const State = styled.div`
   border-radius: 50%;

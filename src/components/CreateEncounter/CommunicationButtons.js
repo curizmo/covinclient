@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import callIcon from 'assets/images/svg-icons/phone.svg';
 import videoIcon from 'assets/images/svg-icons/video.svg';
@@ -19,7 +20,7 @@ const CallButton = styled.button`
   border: 1.5px solid #c5cde1;
   box-shadow: 0px 3px 3px rgba(159, 167, 186, 0.2);
   border-radius: 65px;
-  height: 2.5rem;
+  height: 2.8125rem;
   width: 65px;
   display: flex;
   justify-content: center;
@@ -53,12 +54,9 @@ const CallButton = styled.button`
 `;
 
 const CallIcon = styled.img`
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1rem;
+  height: 1rem;
   margin-top: ${(props) => props.margin};
-  :hover {
-    color: #22335e;
-  }
 `;
 
 export const CommunicationButtons = ({ dispatch, patientId }) => {
@@ -79,4 +77,9 @@ export const CommunicationButtons = ({ dispatch, patientId }) => {
       </CallButton>
     </CommunicationWrap>
   );
+};
+
+CommunicationButtons.propTypes = {
+  dispatch: PropTypes.func,
+  patientId: PropTypes.string,
 };
