@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { Fragment, useCallback, useState, useEffect } from 'react';
 import * as PropTypes from 'prop-types';
 import { debounce } from 'lodash';
 
@@ -48,6 +48,7 @@ import {
   updatePatientMedication,
 } from 'services/patientMedication';
 import { createPatientLab, deletePatientLab } from 'services/patientLabs';
+import { getRandomKey } from 'utils';
 
 export const PatientPrescription = ({
   prescriptionList,
@@ -351,7 +352,7 @@ export const PatientPrescription = ({
                 }
 
                 return (
-                  <>
+                  <Fragment key={getRandomKey()}>
                     {prescription?.prescriptions?.length ? (
                       <LastRow
                         key={`${prescription.organizationEventBookingId}-prescription`}>
@@ -386,7 +387,7 @@ export const PatientPrescription = ({
                         </PastPrescriptionText>
                       </LastRow>
                     ) : null}
-                  </>
+                  </Fragment>
                 );
               })
             : null}
