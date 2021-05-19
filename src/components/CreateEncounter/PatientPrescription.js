@@ -5,6 +5,8 @@ import { ImLab } from 'react-icons/im';
 
 import HeadersComponent from '../common/HeadersComponent/HeadersComponent';
 
+import { Button } from 'reactstrap';
+
 import med from '../../assets/images/grey-med.svg';
 import closeIcon from '../../assets/images/blue-close.svg';
 import minusIcon from '../../assets/images/minus.svg';
@@ -46,8 +48,10 @@ import {
 
 import { getMedications } from 'services/medication';
 import { getLabs } from 'services/labs';
+import SendToPatientPreviewModal from './SendToPatientPreviewModal';
 
 export const PatientPrescription = ({
+  patientData,
   prescriptionList,
   setPrescriptionList,
   pastPrescriptions,
@@ -61,6 +65,7 @@ export const PatientPrescription = ({
   const [labsOptions, setLabsOptions] = useState([]);
   const [labsDropdownList, setLabsDropdownList] = useState([]);
   const [showMore, setShowMore] = useState(false);
+  const [showPreviewWindow, setShowPreviewWindow] = useState(false);
 
   useEffect(() => {
     fetchMedicines();
@@ -233,6 +238,10 @@ export const PatientPrescription = ({
     [labsOptions],
   );
 
+  const handlePreview = useCallback(() => {
+    setShowPreviewWindow(true);
+  });
+
   return (
     <>
       <HeadersComponent
@@ -354,7 +363,17 @@ export const PatientPrescription = ({
               })}
             </>
           )}
+          <Button className="mt-3" onClick={handlePreview}>
+            Preview And Send To Patient
+          </Button>
         </TopContainer>
+        <SendToPatientPreviewModal
+          patientData={patientData}
+          prescriptionList={prescriptionList}
+          labsList={labsList}
+          show={showPreviewWindow}
+          setShowPreviewWindow={setShowPreviewWindow}
+        />
       </ContentWrap>
 
       <ContentWrap>
