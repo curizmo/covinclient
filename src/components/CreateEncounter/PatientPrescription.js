@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { Fragment, useCallback, useState, useEffect } from 'react';
 import * as PropTypes from 'prop-types';
 import { debounce } from 'lodash';
 
@@ -352,7 +352,7 @@ export const PatientPrescription = ({
                 }
 
                 return (
-                  <div key={getRandomKey()}>
+                  <Fragment key={getRandomKey()}>
                     {prescription?.prescriptions?.length ? (
                       <LastRow
                         key={`${prescription.organizationEventBookingId}-prescription`}>
@@ -387,7 +387,7 @@ export const PatientPrescription = ({
                         </PastPrescriptionText>
                       </LastRow>
                     ) : null}
-                  </div>
+                  </Fragment>
                 );
               })
             : null}
