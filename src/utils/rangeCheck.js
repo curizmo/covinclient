@@ -5,12 +5,12 @@ const mapColors = (vitalCheck, list) => {
   const { current } = list[1];
   let color = [];
   function between(x, valueRange) {
-    const { min, max } = valueRange;
+    const { min, max } = valueRange || {};
     return x >= min && x <= max;
   }
 
   current.map((currentValue) => {
-    if (list[0] === 'bloodPressure') {
+    if (list[0] === 'Blood Pressure') {
       vitalInfoStats = vitalCheck[currentValue?.label];
     }
     if (between(currentValue?.value, vitalInfoStats?.Elevated)) {
@@ -18,11 +18,11 @@ const mapColors = (vitalCheck, list) => {
     } else if (between(currentValue?.value, vitalInfoStats?.Normal)) {
       color.push('#5EB16A');
     } else if (
-      vitalInfoStats.High?.max >= currentValue?.value ||
+      vitalInfoStats?.High?.max >= currentValue?.value ||
       between(currentValue?.value, vitalInfoStats?.High)
     ) {
       color.push('#eb2f2f');
-    } else if (vitalInfoStats.Normal?.min >= currentValue?.value) {
+    } else if (vitalInfoStats?.Normal?.min >= currentValue?.value) {
       color.push('#5EB16A');
     }
     return null;
