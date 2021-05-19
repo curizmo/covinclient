@@ -7,6 +7,7 @@ import { Button } from 'reactstrap';
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
 import { handleCallAppointment } from 'utils';
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
+import { GENDER_SHORTHAND } from '../../constants';
 import './index.css';
 
 const Wrapper = styled.section`
@@ -104,23 +105,21 @@ const DesktopPatientTable = (props) => {
                   {patient.fullName}
                 </Link>
                 <Info className="min-width-20 mr-2">
-                  <Value>
-                    <Button
-                      className="d-flex"
-                      onClick={onCall(patient.patientId)}>
-                      <img
-                        src={mobileIcon}
-                        alt="phone"
-                        className="mr-2"
-                        size="0.8em"
-                      />
-                      {patient.phone}
-                    </Button>
-                  </Value>
+                  <Button
+                    className="d-flex"
+                    onClick={onCall(patient.patientId)}>
+                    <img
+                      src={mobileIcon}
+                      alt="phone"
+                      className="mr-2"
+                      size="0.8em"
+                    />
+                    <Value>{patient.phone}</Value>
+                  </Button>
                 </Info>
                 <Info className="min-width-10 mr-2">
                   <Label>Gender:</Label>
-                  <Value>{patient.gender}</Value>
+                  <Value>{GENDER_SHORTHAND[patient.gender]}</Value>
                 </Info>
                 <Info className="min-width-10 mr-2">
                   <Label>Age:</Label>

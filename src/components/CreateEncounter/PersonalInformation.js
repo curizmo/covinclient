@@ -268,7 +268,7 @@ export const PersonalInformation = ({
       <HiddenView showMore={isShowMore}>
         <Info>
           <Label>Gender:</Label>
-          <Value>{data?.gender}</Value>
+          <Value>{GENDER_SHORTHAND[data?.gender]}</Value>
         </Info>
         <Info>
           <Label>Age:</Label>

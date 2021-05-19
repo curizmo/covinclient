@@ -231,7 +231,7 @@ const Patients = () => {
                       </Button>
                     )}
                   </td>
-                  <td>{patient.gender}</td>
+                  <td>{GENDER_SHORTHAND[patient.gender]}</td>
                   <td>{patient.age}</td>
                   <td>{patient.address}</td>
                   <td>{getISODate(patient.lastModifiedDate)}</td>

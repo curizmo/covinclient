@@ -119,6 +119,10 @@
   min-width: 20%;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+}
+
 @media (max-width: 768px) {
   .top-view {
     flex-direction: column;
