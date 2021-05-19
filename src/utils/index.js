@@ -3,6 +3,8 @@ import { PATH_PARAMS } from '../constants';
 
 export * from './dateTime';
 export * from './patient';
+export * from './random';
+export * from './rangeCheck';
 
 let tabIndex = 0;
 

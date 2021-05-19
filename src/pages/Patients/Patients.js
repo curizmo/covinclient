@@ -150,6 +150,11 @@ const Patients = () => {
     setDisplayAssignTaskModal(false);
   };
 
+  const onCall = useCallback(
+    (patientId) => () => handleCallAppointment(dispatch, patientId),
+    [dispatch],
+  );
+
   const WebView = () => (
     <div className="webview">
       <div className="mb-3 d-flex justify-content-between">
@@ -215,10 +220,7 @@ const Patients = () => {
                     {patient.phone && (
                       <Button
                         className="d-flex"
-                        onClick={handleCallAppointment(
-                          dispatch,
-                          patient.patientId,
-                        )}>
+                        onClick={onCall(patient.patientId)}>
                         <img
                           src={phoneSvg}
                           alt="phone"
@@ -302,7 +304,7 @@ const Patients = () => {
                           </div>
                           <Button
                             className="transparent-button"
-                            onClick={handleCallAppointment(patient)}>
+                            onClick={onCall(patient.patientId)}>
                             <img
                               src={phoneSvg}
                               alt="phone"

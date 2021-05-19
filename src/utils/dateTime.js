@@ -146,6 +146,8 @@ export const getAppointmentDate = (appointmentDate, format = 'dd-mm-yyyy') => {
   const yyyy = date.getFullYear();
 
   switch (format) {
+    case 'dd/mm/yyyy':
+      return `${dd}/${mm}/${yyyy}`;
     case 'dd-mm-yyyy':
       return `${dd}-${mm}-${yyyy}`;
     case 'yyyy-mm-dd':
@@ -173,6 +175,14 @@ export const getDateWithTimezoneOffset = (date) => {
  */
 export const getISODate = (date) => {
   return getAppointmentDate(date, 'yyyy-mm-dd');
+};
+
+/**
+ * @param {Date} date
+ * @return {string} - example: 06/17/2020
+ */
+export const getFormatedDate = (date) => {
+  return getAppointmentDate(date, 'dd/mm/yyyy');
 };
 
 /**

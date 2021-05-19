@@ -1,4 +1,6 @@
 .header-wrapper {
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 5rem;
   background: #22345f;
@@ -7,10 +9,8 @@
 
 .header-content {
   position: absolute;
-  width: 16%;
-  height: 2.5%;
+  margin-bottom: 0;
   left: 5%;
-  top: 8%;
   font-weight: bold;
   font-size: 1.3rem;
   line-height: 1.8rem;

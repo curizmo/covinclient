@@ -332,3 +332,76 @@ export const PATIENT_CURRENT_STATUS = {
 };
 
 export const NOT_AVAILABLE = 'N/A';
+
+export const scales = {
+  temperature: {
+    minValueDomainYaxis: 90,
+    maxValueDomainYaxis: 111,
+  },
+  spO2: {
+    minValueDomainYaxis: 20,
+    maxValueDomainYaxis: 101,
+  },
+};
+
+export const RangeCheck = {
+  temperature: {
+    High: { min: 104, max: 109.9 },
+    Elevated: { min: 100, max: 103.9 },
+    Normal: { min: 95, max: 99 },
+  },
+  oxygenLevel: {
+    Normal: { min: 95, max: 100 },
+    Elevated: { min: 90, max: 92 },
+    High: { min: 0, max: 90 },
+  },
+  pulseRate: {
+    High: { min: 100, max: 120 },
+    Elevated: { min: 0, max: 60 },
+    Normal: { min: 60, max: 100 },
+  },
+  bloodPressure: {
+    lowBloodPressure: {
+      Normal: { min: 0, max: 120 },
+      Elevated: { min: 120, max: 139 },
+      High: { min: 140, max: 180 },
+    },
+    highBloodPressure: {
+      Normal: { min: 0, max: 80 },
+      Elevated: { min: 80, max: 89 },
+      High: { min: 90, max: 130 },
+    },
+  },
+  respiratoryRate: {
+    Normal: { min: 0, max: 10 },
+    Elevated: { min: 11, max: 16 },
+    High: { min: 17, max: 24 },
+  },
+  spO2: {
+    Normal: { min: 95, max: 100 },
+    Elevated: { min: 90, max: 92 },
+    High: { min: 0, max: 90 },
+  },
+  'Pulse Rate': {
+    High: { min: 100, max: 120 },
+    Elevated: { min: 0, max: 60 },
+    Normal: { min: 60, max: 100 },
+  },
+  'Blood Pressure': {
+    'Low Blood Pressure': {
+      Normal: { min: 0, max: 120 },
+      Elevated: { min: 120, max: 139 },
+      High: { min: 140, max: 180 },
+    },
+    'High Blood Pressure': {
+      Normal: { min: 0, max: 80 },
+      Elevated: { min: 80, max: 89 },
+      High: { min: 90, max: 130 },
+    },
+  },
+  'Respiratory Rate': {
+    Normal: { min: 0, max: 10 },
+    Elevated: { min: 11, max: 16 },
+    High: { min: 17, max: 24 },
+  },
+};

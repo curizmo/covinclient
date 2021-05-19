@@ -2,7 +2,7 @@ import * as patientService from 'services/patient';
 import * as appointmentActions from 'actions/appointment';
 import { APPOINTMENT_EVENT_STATUSES, CALL_METHODS } from '../constants';
 
-export const handleCallAppointment = (dispatch, patientId) => async () => {
+export const handleCallAppointment = async (dispatch, patientId) => {
   try {
     const payload = {
       patientId,

@@ -10,7 +10,7 @@ import {
   getAuthData,
 } from '../utils/auth';
 import { login } from '../services/auth';
-import { setUser } from '../actions/user';
+import { setUser, clearUser } from '../actions/user';
 import { logout } from '../actions/auth';
 import { showSpinner, hideSpinner } from './../actions/spinner';
 import { startLogin, endLogin } from './../actions/login';
@@ -137,6 +137,7 @@ export const useAuthProvider = () => {
 
   const onSignOut = async () => {
     dispatch(logout());
+    dispatch(clearUser());
     await msalApp.logout();
     onSignIn();
   };

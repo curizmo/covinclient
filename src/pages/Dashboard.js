@@ -9,7 +9,7 @@ import CasesCardComponent from 'components/CasesCard';
 import { DashboardLayout } from 'components/common/Layout';
 import { SearchInput } from 'components/common/SearchInput';
 
-import time from 'assets/images/Vector.svg';
+import time from 'assets/images/svg-icons/clock.svg';
 import { getDate } from '../global';
 import {
   DateAndTime,
