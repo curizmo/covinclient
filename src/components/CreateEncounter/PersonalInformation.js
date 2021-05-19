@@ -199,6 +199,7 @@ const MobAgeAndGender = styled.div`
 
 export const PersonalInformation = ({
   data,
+  handleRiskLevelChange,
   setRiskLevel,
   riskLevel,
   onSave,
@@ -251,7 +252,7 @@ export const PersonalInformation = ({
                   value={radio}
                   id={radio}
                   checked={riskLevel === radio}
-                  onChange={() => setRiskLevel(radio)}
+                  onChange={() => handleRiskLevelChange(radio)}
                 />
                 <OptionName checked={riskLevel === radio}>
                   {radio} Risk
