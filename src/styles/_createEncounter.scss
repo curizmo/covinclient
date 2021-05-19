@@ -22,7 +22,16 @@
 .degree {
   margin-top: 4px;
 }
-  
+
+.patient-detail-bold {
+  font-weight: 700 !important;
+  font-size: 12px;
+}
+
+.patient-detail-text {
+  font-size: 12px;
+}
+
 @media screen and (max-width: 1150px) and (min-width: 768px) {
   .desktop-view-vitals-wrp {
     flex-wrap: wrap;

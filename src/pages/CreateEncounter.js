@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
@@ -11,17 +11,23 @@ import {
   GraphicalReadings,
 } from 'components/CreateEncounter';
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
+import { fetchPatient, hideSpinner, showSpinner } from 'actions';
+
 import {
-  fetchPatient,
-  hideSpinner,
-  showSpinner,
-  updateEncounter,
-} from 'actions';
-import { fetchPatientEncountersByPractitionerUserId } from 'services/patient';
+  createEncounter,
+  fetchPatientEncountersByPractitionerUserId,
+  updatePatientRiskStatus,
+} from 'services/patient';
 import { fetchPatientMedicationByPractitionerUserId } from 'services/patientMedication';
+import { debounce } from 'lodash';
+import { createOrUpdateEncounter } from 'services/appointment';
+
 import { getPatient, getIsEncounterUpdated, getUser } from 'selectors';
+
 import { routes } from 'routers';
+
 import { getRandomKey } from 'utils';
+
 import notesIcon from 'assets/images/svg-icons/notesIcon.svg';
 import lineGraphIcon from 'assets/images/svg-icons/lineGraphIcon.svg';
 import prescriptionIcon from 'assets/images/svg-icons/prescriptionIcon.svg';
@@ -182,18 +188,9 @@ function CreateEncounter() {
   const [pastNotes, setPastNotes] = useState([]);
   const [pastPrescriptions, setPastPrescriptions] = useState([]);
   const [vitalsCompletionStatus, setVitalsCompletionStatus] = useState('');
-
-  const handleSave = () => {
-    dispatch(
-      updateEncounter({
-        patientId,
-        riskLevel,
-        labs: labsList,
-        prescriptionList: JSON.stringify(prescriptionList),
-        note,
-      }),
-    );
-  };
+  const [appointmentId, setAppointmentId] = useState('');
+  const [isNoteSaved, setIsNoteSaved] = useState(false);
+  const [isNoteLoading, setIsNoteLoading] = useState(false);
 
   useEffect(() => {
     setRiskLevel(patientData?.status);
@@ -248,7 +245,75 @@ function CreateEncounter() {
   };
 
   const handleNoteChange = (e) => {
-    setNote(e.target.value);
+    const value = e.target.value;
+    setNote(value);
+    setIsNoteLoading(true);
+    setIsNoteSaved(false);
+    delayedHandleNoteChange(value);
+  };
+
+  const createNewEncounter = async (note) => {
+    try {
+      const response = await createEncounter(
+        {
+          patientId,
+          labs: JSON.stringify(
+            prescriptionList.filter(
+              (prescription) => prescription.label === 'lab',
+            ),
+          ),
+          prescriptionList: JSON.stringify(
+            prescriptionList.filter(
+              (prescription) => prescription.label === 'prescription',
+            ),
+          ),
+          note,
+        },
+        patientId,
+      );
+
+      const { organizationEventBookingId } = response.data;
+      setAppointmentId(organizationEventBookingId);
+      setIsNoteSaved(true);
+    } catch (err) {
+      // TODO: Handle error
+    }
+  };
+
+  const updateEncounter = async (note) => {
+    try {
+      const encounter = {
+        note,
+      };
+
+      await createOrUpdateEncounter(appointmentId, {
+        data: { ...encounter },
+      });
+      setIsNoteSaved(true);
+    } catch (err) {
+      // TODO: Handle error
+    }
+  };
+
+  const delayedHandleNoteChange = useCallback(
+    debounce((note) => {
+      if (!appointmentId) {
+        createNewEncounter(note);
+      } else {
+        updateEncounter(note);
+      }
+    }, 1000),
+    [appointmentId, prescriptionList, patientId],
+  );
+
+  const handleSaveAndClose = () => {
+    history.push(routes.patients.path);
+  };
+
+  const handleRiskLevelChange = async (value) => {
+    await updatePatientRiskStatus(patientId, { status: value });
+
+    setRiskLevel(value);
   };
 
   return (
@@ -265,9 +330,10 @@ function CreateEncounter() {
           <PersonalInformation
             dispatch={dispatch}
             data={patientData}
-            onSave={handleSave}
+            onSave={handleSaveAndClose}
             riskLevel={riskLevel}
             setRiskLevel={setRiskLevel}
+            handleRiskLevelChange={handleRiskLevelChange}
           />
           <MedInfoWrap>
             <Column>
@@ -278,16 +344,21 @@ function CreateEncounter() {
                 note={note}
                 handleNoteChange={handleNoteChange}
                 pastNotes={pastNotes}
+                isNoteLoading={isNoteLoading}
+                isNoteSaved={isNoteSaved}
               />
             </Column>
             <Column>
               <PatientPrescription
-                data={patientData}
+                patientData={patientData}
                 prescriptionList={prescriptionList}
                 setPrescriptionList={setPrescriptionList}
                 pastPrescriptions={pastPrescriptions}
                 labsList={labsList}
                 setLabsList={setLabsList}
+                appointmentId={appointmentId}
+                setAppointmentId={setAppointmentId}
+                patientId={patientId}
               />
             </Column>
           </MedInfoWrap>
@@ -360,16 +431,21 @@ function CreateEncounter() {
                   note={note}
                   handleNoteChange={handleNoteChange}
                   pastNotes={pastNotes}
+                  isNoteLoading={isNoteLoading}
+                  isNoteSaved={isNoteSaved}
                 />
               )}
               {selectedTab === PATIENT_DETAILS_TABS.PRESCRIPTION && (
                 <PatientPrescription
-                  data={patientData}
+                  patientData={patientData}
                   prescriptionList={prescriptionList}
                   setPrescriptionList={setPrescriptionList}
                   pastPrescriptions={pastPrescriptions}
                   labsList={labsList}
                   setLabsList={setLabsList}
+                  appointmentId={appointmentId}
+                  setAppointmentId={setAppointmentId}
+                  patientId={patientId}
                 />
               )}
             </ContentWrap>

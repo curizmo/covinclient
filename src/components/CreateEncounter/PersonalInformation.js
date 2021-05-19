@@ -199,6 +199,7 @@ const MobAgeAndGender = styled.div`
 
 export const PersonalInformation = ({
   data,
+  handleRiskLevelChange,
   setRiskLevel,
   riskLevel,
   onSave,
@@ -244,14 +245,14 @@ export const PersonalInformation = ({
         <RiskLevelWrap>
           {radioMenu.map((radio, index) => {
             return (
-              <RadioLabel for={radio} key={index}>
+              <RadioLabel htmlFor={radio} key={index}>
                 <RadioInput
                   type="radio"
                   name="option"
                   value={radio}
                   id={radio}
                   checked={riskLevel === radio}
-                  onChange={() => setRiskLevel(radio)}
+                  onChange={() => handleRiskLevelChange(radio)}
                 />
                 <OptionName checked={riskLevel === radio}>
                   {radio} Risk
