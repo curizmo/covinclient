@@ -4,6 +4,8 @@ import { debounce } from 'lodash';
 
 import HeadersComponent from '../common/HeadersComponent/HeadersComponent';
 
+import { Button } from 'reactstrap';
+
 import med from '../../assets/images/grey-med.svg';
 import closeIcon from '../../assets/images/blue-close.svg';
 import minusIcon from '../../assets/images/minus.svg';
@@ -41,6 +43,7 @@ import {
 
 import { getMedications } from 'services/medication';
 import { getLabs } from 'services/labs';
+import SendToPatientPreviewModal from './SendToPatientPreviewModal';
 import { createEncounter } from 'services/patient';
 import {
   createPatientMedication,
@@ -51,6 +54,7 @@ import { createPatientLab, deletePatientLab } from 'services/patientLabs';
 import { getRandomKey } from 'utils';
 
 export const PatientPrescription = ({
+  patientData,
   prescriptionList,
   setPrescriptionList,
   pastPrescriptions,
@@ -62,6 +66,7 @@ export const PatientPrescription = ({
   const [dropdownList, setDropdownList] = useState([]);
   const [medicineList, setMedicineList] = useState([]);
   const [showMore, setShowMore] = useState(false);
+  const [showPreviewWindow, setShowPreviewWindow] = useState(false);
 
   useEffect(() => {
     fetchMedicinesAndLabs();
@@ -249,6 +254,10 @@ export const PatientPrescription = ({
     }
   };
 
+  const handlePreview = useCallback(() => {
+    setShowPreviewWindow(true);
+  });
+
   return (
     <>
       <HeadersComponent
@@ -319,6 +328,15 @@ export const PatientPrescription = ({
               </>
             )}
           </div>
+          <Button className="mt-3" onClick={handlePreview}>
+            Preview And Send To Patient
+          </Button>
+          <SendToPatientPreviewModal
+            patientData={patientData}
+            prescriptionList={prescriptionList}
+            show={showPreviewWindow}
+            setShowPreviewWindow={setShowPreviewWindow}
+          />
         </TopContainer>
         <DesktopViewPastPrescription>
           <PastOrderText>

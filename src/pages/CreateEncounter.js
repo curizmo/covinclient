@@ -339,7 +339,7 @@ function CreateEncounter() {
             </Column>
             <Column>
               <PatientPrescription
-                data={patientData}
+                patientData={patientData}
                 prescriptionList={prescriptionList}
                 setPrescriptionList={setPrescriptionList}
                 pastPrescriptions={pastPrescriptions}
@@ -426,7 +426,7 @@ function CreateEncounter() {
               )}
               {selectedTab === PATIENT_DETAILS_TABS.PRESCRIPTION && (
                 <PatientPrescription
-                  data={patientData}
+                  patientData={patientData}
                   prescriptionList={prescriptionList}
                   setPrescriptionList={setPrescriptionList}
                   pastPrescriptions={pastPrescriptions}
