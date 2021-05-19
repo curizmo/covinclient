@@ -405,3 +405,11 @@ export const RangeCheck = {
     High: { min: 17, max: 24 },
   },
 };
+
+export const INTAKE_FORM_GROUPS = {
+  PRE_EXISTING_CONDITION: 'Pre-existing condition',
+  PERSONAL_INFORMATION: 'Personal Information',
+  COVID_19_CONDITION: 'Covid-19 Condition',
+  CURRENT_MEDICATION: 'Current Medication',
+  ALLERGY: 'Allergy',
+};

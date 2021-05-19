@@ -244,3 +244,10 @@ export async function searchPatients(search) {
 export function createCallBooking(data) {
   return BEApi.post('/appointment/create-call-booking', data);
 }
+
+/**
+ * @returns {Promise<object>}
+ */
+export function fetchPatientIntakeData(patentId) {
+  return BEApi.get(`/patient-intake-form/data/${patentId}`);
+}

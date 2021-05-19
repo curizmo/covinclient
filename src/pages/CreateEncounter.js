@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import { debounce } from 'lodash';
 
 import {
   PatientNotes,
@@ -11,22 +12,20 @@ import {
   GraphicalReadings,
 } from 'components/CreateEncounter';
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
-import { fetchPatient, hideSpinner, showSpinner } from 'actions';
+import { DashboardLayout } from 'components/common/Layout';
 
+import { fetchPatient, hideSpinner, showSpinner } from 'actions';
+import { getPatient, getIsEncounterUpdated, getUser } from 'selectors';
 import {
   createEncounter,
   fetchPatientEncountersByPractitionerUserId,
   updatePatientRiskStatus,
+  fetchPatientIntakeData,
 } from 'services/patient';
 import { fetchPatientMedicationByPractitionerUserId } from 'services/patientMedication';
-import { debounce } from 'lodash';
 import { createOrUpdateEncounter } from 'services/appointment';
-
-import { getPatient, getIsEncounterUpdated, getUser } from 'selectors';
-
-import { routes } from 'routers';
-
 import { getRandomKey } from 'utils';
+import { routes } from 'routers';
 
 import notesIcon from 'assets/images/svg-icons/notesIcon.svg';
 import lineGraphIcon from 'assets/images/svg-icons/lineGraphIcon.svg';
@@ -49,7 +48,6 @@ import {
   ResendWrap,
 } from 'global/styles';
 import { getDate } from 'global';
-import { DashboardLayout } from 'components/common/Layout';
 
 const PATIENT_DETAILS_TABS = {
   READINGS: 'Readings',
@@ -187,10 +185,31 @@ function CreateEncounter() {
   const [labsList, setLabsList] = useState([]);
   const [pastNotes, setPastNotes] = useState([]);
   const [pastPrescriptions, setPastPrescriptions] = useState([]);
+  const [personalInformation, setPersonalInformation] = useState({});
   const [vitalsCompletionStatus, setVitalsCompletionStatus] = useState('');
   const [appointmentId, setAppointmentId] = useState('');
   const [isNoteSaved, setIsNoteSaved] = useState(false);
   const [isNoteLoading, setIsNoteLoading] = useState(false);
+
+  const fetchPatientData = async (patientId, ntoUserId) => {
+    try {
+      dispatch(showSpinner());
+      const [encountersResponse, prescriptionsResponse, intakeFormResponse] =
+        await Promise.all([
+          fetchPatientEncountersByPractitionerUserId(patientId, ntoUserId),
+          fetchPatientMedicationByPractitionerUserId(patientId, ntoUserId),
+          fetchPatientIntakeData(patientId),
+        ]);
+
+      setPastNotes(encountersResponse?.data);
+      setPastPrescriptions(prescriptionsResponse?.data?.prescriptions);
+      setPersonalInformation({ ...patientData, ...intakeFormResponse?.data });
+    } catch (err) {
+      // TODO: Handle error
+    } finally {
+      dispatch(hideSpinner());
+    }
+  };
 
   useEffect(() => {
     setRiskLevel(patientData?.status);
@@ -201,8 +220,7 @@ function CreateEncounter() {
   }, [patientData]);
 
   useEffect(() => {
-    fetchPatientEncounters(patientId, user.NTOUserID);
-    fetchPatientPrescriptions(patientId, user.NTOUserID);
+    fetchPatientData(patientId, user.NTOUserID);
   }, [patientId, user.NTOUserID]);
 
   useEffect(() => {
@@ -214,35 +232,6 @@ function CreateEncounter() {
       history.push(routes.patients.path);
     }
   }, [isEncounterUpdated]);
-
-  const fetchPatientEncounters = async (patientId) => {
-    try {
-      dispatch(showSpinner());
-      const response = await fetchPatientEncountersByPractitionerUserId(
-        patientId,
-        user.NTOUserID,
-      );
-
-      setPastNotes(response.data);
-    } catch (err) {
-      // TODO: Handle error
-    } finally {
-      dispatch(hideSpinner());
-    }
-  };
-
-  const fetchPatientPrescriptions = async (patientId, ntoUserId) => {
-    try {
-      const response = await fetchPatientMedicationByPractitionerUserId(
-        patientId,
-        ntoUserId,
-      );
-
-      setPastPrescriptions(response.data.prescriptions);
-    } catch (err) {
-      // TODO: Handle error
-    }
-  };
 
   const handleNoteChange = (e) => {
     const value = e.target.value;
@@ -329,7 +318,7 @@ function CreateEncounter() {
         <PatientDetailsWrapper>
           <PersonalInformation
             dispatch={dispatch}
-            data={patientData}
+            data={personalInformation}
             onSave={handleSaveAndClose}
             riskLevel={riskLevel}
             setRiskLevel={setRiskLevel}
