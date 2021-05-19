@@ -242,6 +242,9 @@ function CreateEncounter() {
                 pastPrescriptions={pastPrescriptions}
                 labsList={labsList}
                 setLabsList={setLabsList}
+                appointmentId={appointmentId}
+                setAppointmentId={setAppointmentId}
+                patientId={patientId}
               />
             </Col>
           </Row>

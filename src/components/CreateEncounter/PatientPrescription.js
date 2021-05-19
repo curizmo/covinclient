@@ -41,11 +41,21 @@ import {
 
 import { getMedications } from 'services/medication';
 import { getLabs } from 'services/labs';
+import { createEncounter } from 'services/patient';
+import {
+  createPatientMedication,
+  deletePatientMedication,
+  updatePatientMedication,
+} from 'services/patientMedication';
+import { createPatientLab, deletePatientLab } from 'services/patientLabs';
 
 export const PatientPrescription = ({
   prescriptionList,
   setPrescriptionList,
   pastPrescriptions,
+  appointmentId,
+  setAppointmentId,
+  patientId,
 }) => {
   const [searchValue, setSearchValue] = useState('');
   const [dropdownList, setDropdownList] = useState([]);
@@ -114,41 +124,75 @@ export const PatientPrescription = ({
     );
   };
 
-  const onAddClick = (item) => {
+  const onAddClick = async (item) => {
+    let appointmentIdValue = appointmentId;
+    if (!appointmentId) {
+      appointmentIdValue = await createNewEncounter();
+    }
+
+    let response = {};
+
+    if (item.label === 'prescription') {
+      response = await createPatientMedication(item, appointmentIdValue);
+    } else {
+      response = await createPatientLab(item, appointmentIdValue);
+    }
+
     setPrescriptionList((prev) => [
       ...prev,
-      { name: item.name, frequency: '', label: item.label },
+      {
+        name: item.name,
+        frequency: '',
+        label: item.label,
+        id: response.data.id,
+      },
     ]);
     setDropdownList([]);
     setSearchValue('');
   };
 
-  const onRemoveClick = (name) => {
+  const onRemoveClick = async (item) => {
+    let selectedItem = { ...item };
+    if (!selectedItem.id) {
+      selectedItem = prescriptionList.find(
+        (prescription) =>
+          prescription?.name?.toLowerCase() === item?.name?.toLowerCase(),
+      );
+    }
+
+    if (item.label === 'prescription') {
+      await deletePatientMedication(selectedItem.id, appointmentId);
+    } else {
+      await deletePatientLab(selectedItem.id, appointmentId);
+    }
+
     const newPrescriptionList = prescriptionList.filter(
-      (prescription) => prescription?.name?.toLowerCase !== name?.toLowerCase,
+      (prescription) =>
+        prescription?.name?.toLowerCase() !== item?.name?.toLowerCase(),
     );
 
     setPrescriptionList(newPrescriptionList);
+    setDropdownList([]);
+    setSearchValue('');
   };
 
   const onIconClick = (item) => {
     if (!checkAvailability(item.name)) {
       onAddClick(item);
     } else {
-      onRemoveClick(item.name);
+      onRemoveClick(item);
     }
   };
 
-  const removeMed = (i) => {
-    const newPrescriptionList = prescriptionList.filter(
-      (prescription, index) => i !== index,
+  const handleFrequencyChange = async (value, index, item) => {
+    await updatePatientMedication(
+      {
+        ...item,
+        frequency: value,
+      },
+      item.id,
+      appointmentId,
     );
-
-    setPrescriptionList(newPrescriptionList);
-  };
-
-  const handleFrequencyChange = (e, index) => {
-    const value = e.target.value;
 
     const newPrescriptionList = prescriptionList.map((prescription, i) => {
       if (i === index) {
@@ -164,8 +208,44 @@ export const PatientPrescription = ({
     setPrescriptionList(newPrescriptionList);
   };
 
+  const delayedHandleFrequencyChange = useCallback(
+    debounce((value, index, item) => {
+      handleFrequencyChange(value, index, item);
+    }, 1000),
+    [appointmentId, prescriptionList],
+  );
+
   const toggleShowMore = () => {
     setShowMore(!showMore);
+  };
+
+  const createNewEncounter = async () => {
+    try {
+      const response = await createEncounter(
+        {
+          patientId,
+          labs: JSON.stringify(
+            prescriptionList.filter(
+              (prescription) => prescription.label === 'lab',
+            ),
+          ),
+          prescriptionList: JSON.stringify(
+            prescriptionList.filter(
+              (prescription) => prescription.label === 'prescription',
+            ),
+          ),
+          note: '',
+        },
+        patientId,
+      );
+
+      const { organizationEventBookingId } = response.data;
+      setAppointmentId(organizationEventBookingId);
+
+      return organizationEventBookingId;
+    } catch (err) {
+      // TODO: Handle error
+    }
   };
 
   return (
@@ -218,13 +298,19 @@ export const PatientPrescription = ({
                       {item.label === 'prescription' ? (
                         <MedDose
                           placeholder="Add dosage"
-                          onChange={(e) => handleFrequencyChange(e, index)}
+                          onChange={(e) => {
+                            delayedHandleFrequencyChange(
+                              e.target.value,
+                              index,
+                              item,
+                            );
+                          }}
                         />
                       ) : null}
                       <CloseIcon
                         src={closeIcon}
                         alt="close"
-                        onClick={() => removeMed(index)}
+                        onClick={() => onRemoveClick(item)}
                       />
                     </PrescriptionWrap>
                   );
