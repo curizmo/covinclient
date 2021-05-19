@@ -32,7 +32,7 @@ const GraphicalRepresentation = (props) => {
     desktopViewLabelsForPatientsWithCurrentStats,
   } = props;
 
-  return (
+  return data?.vitals ? (
     <>
       {Object.entries(data.vitals).map((bodyParams, i) => {
         const colors = rangeCheck(bodyParams);
@@ -96,7 +96,7 @@ const GraphicalRepresentation = (props) => {
         );
       })}
     </>
-  );
+  ) : null;
 };
 
 export { GraphicalRepresentation };

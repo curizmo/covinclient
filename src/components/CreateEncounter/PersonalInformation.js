@@ -244,7 +244,7 @@ export const PersonalInformation = ({
         <RiskLevelWrap>
           {radioMenu.map((radio, index) => {
             return (
-              <RadioLabel for={radio} key={index}>
+              <RadioLabel htmlFor={radio} key={index}>
                 <RadioInput
                   type="radio"
                   name="option"

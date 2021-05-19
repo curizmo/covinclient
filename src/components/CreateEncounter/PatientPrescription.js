@@ -46,6 +46,7 @@ import {
 
 import { getMedications } from 'services/medication';
 import { getLabs } from 'services/labs';
+import { getRandomKey } from 'utils';
 
 export const PatientPrescription = ({
   prescriptionList,
@@ -390,7 +391,7 @@ export const PatientPrescription = ({
                 }
 
                 return (
-                  <>
+                  <div key={getRandomKey()}>
                     {prescription?.prescriptions?.length ? (
                       <LastRow
                         key={`${prescription.organizationEventBookingId}-prescription`}>
@@ -425,7 +426,7 @@ export const PatientPrescription = ({
                         </PastPrescriptionText>
                       </LastRow>
                     ) : null}
-                  </>
+                  </div>
                 );
               })
             : null}
