@@ -21,6 +21,10 @@ table th {
   box-shadow: 0 2px 0 rgba(101, 115, 150, 0.2);
 }
 
+.table-hover tbody tr:hover {
+  background-color: #F6F8FA;
+}
+
 @media only screen and (max-width: 1024px) {
   .table-container {
     font-size: 0.875rem;

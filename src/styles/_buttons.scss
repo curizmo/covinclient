@@ -37,7 +37,7 @@
 .btn {
   &.btn-covin,
   &.btn-cancel {
-    padding: 0 2rem;
+    padding: 0 1.25rem;
     height: 2.35rem;
     display: flex;
     align-items: center;
@@ -48,6 +48,7 @@
     font-weight: bold;
     font-size: 13px;
     line-height: 20px;
+    white-space: nowrap;
   }
   &.btn-covin {
     border: 1px solid #54B8B2;
