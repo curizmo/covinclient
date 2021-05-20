@@ -4,28 +4,39 @@ import React, {
   useMemo,
   useCallback,
   useRef,
+  Fragment,
 } from 'react';
 import { Table, Button, Card, CardBody } from 'reactstrap';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
+import styled from 'styled-components';
+import { debounce } from 'lodash';
 
 import { DashboardLayout } from 'components/common/Layout';
 import { LinkButton } from 'components/common/Button';
-import { CreatePatientTask } from 'components/PatientTaskModal/CreatePatientTask';
 import TableLoader from 'assets/loaders/TableLoader';
 import TableHeader from 'components/common/TableHeader';
 import { StatusIndicator } from 'components/common/StatusIndicator';
 import { SearchInput } from 'components/common/SearchInput';
+import {
+  DateAndTime,
+  DateAndTimeWrap,
+  InfoWrapper,
+  TimeImage,
+  ViewName,
+  WebViewWrap,
+} from 'global/styles';
 
 import * as patientService from 'services/patient';
 import { routes } from 'routers';
 import { getISODate } from 'utils/dateTime';
+import { getRandomKey, handleCallAppointment } from 'utils';
 import useCheckIsMobile from 'hooks/useCheckIsMobile';
-import { GENDER_SHORTHAND, PER_PAGE, SORT_ORDER } from '../../constants';
+import { getDate } from 'global';
+import { GENDER_SHORTHAND, PER_PAGE, RISK, SORT_ORDER } from '../../constants';
 import phoneSvg from 'assets/images/svg-icons/icon-phone.svg';
-import { debounce } from 'lodash';
-import { handleCallAppointment } from 'utils';
+import time from 'assets/images/svg-icons/clock.svg';
 
 const tableHeader = [
   { desc: 'Status', colName: 'Status' },
@@ -37,17 +48,38 @@ const tableHeader = [
   { desc: 'Last Encounter', colName: 'LastEncounter' },
 ];
 
+export const InfoValue = styled.p`
+  margin-bottom: 0;
+  margin-right: 1rem;
+  align-self: center;
+  font: 400 14px / 1.2 Helvetica;
+  color: #657396;
+  white-space: nowrap;
+`;
+
+const RiskLevelWrap = styled.div`
+  display: flex;
+  @media (max-width: 768px) {
+    margin-bottom: 1.875rem;
+  }
+`;
+
+const InfoColumn = styled.div`
+  display: flex;
+  justify-content: space-between;
+  min-width: 49%;
+`;
+
 const Patients = () => {
   const dispatch = useDispatch();
   const searchRef = useRef(null);
+  const riskNames = Object.values(RISK);
 
   const [patients, setPatients] = useState([]);
-  const [selectedPatient, setSelectedPatient] = useState({});
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchText, setSearchText] = useState('');
   const [isFetching, setIsFetching] = useState(true);
-  const [displayAssignTaskModal, setDisplayAssignTaskModal] = useState(false);
 
   const [sortField, setSortField] = useState({
     colName: tableHeader[0]?.colName,
@@ -133,49 +165,51 @@ const Patients = () => {
     }
   }, [patients, isMobile, currentPage]);
 
-  const handlePatientSelect = (selectedPatient) => {
-    setSelectedPatient(selectedPatient);
-    const newPatients = filteredPatients.map((patient) => ({
-      ...patient,
-      isSelected:
-        patient.patientId === selectedPatient.patientId
-          ? !patient.isSelected
-          : false,
-    }));
-
-    setFilteredPatients(newPatients);
-  };
-
-  const closeAssignTaskModal = () => {
-    setDisplayAssignTaskModal(false);
-  };
-
   const onCall = useCallback(
     (patientId) => () => handleCallAppointment(dispatch, patientId),
     [dispatch],
   );
 
   const WebView = () => (
-    <div className="webview">
-      <div className="mb-3 d-flex justify-content-between">
-        <h3 className="page-title">Patients</h3>
-      </div>
-      <div className="dashboard-header mb-4 d-flex justify-content-between">
-        {displayAssignTaskModal && (
-          <CreatePatientTask
-            handleClose={closeAssignTaskModal}
-            patient={selectedPatient}
+    <WebViewWrap>
+      <InfoWrapper className="w-100">
+        <ViewName>Patients</ViewName>
+        <DateAndTimeWrap>
+          <TimeImage src={time} />
+          <DateAndTime>{getDate()}</DateAndTime>
+        </DateAndTimeWrap>
+      </InfoWrapper>
+      <div className="dashboard-header mb-2 d-flex justify-content-between flex-wrap w-100">
+        <InfoColumn>
+          <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
+          <SearchInput
+            placeholder="Search your patient"
+            onChange={handleSearchText}
+            searchText={searchText}
+            searchRef={searchRef}
+            customClass="my-2"
           />
-        )}
-        <SearchInput
-          placeholder="Search your patient"
-          onChange={handleSearchText}
-          searchText={searchText}
-          searchRef={searchRef}
-        />
-        <LinkButton className="btn btn-covin" to={routes.addPatient.path}>
-          + New Patient
-        </LinkButton>
+        </InfoColumn>
+        <InfoColumn>
+          <RiskLevelWrap>
+            {riskNames.map((risk) => {
+              return (
+                <Fragment key={getRandomKey()}>
+                  <StatusIndicator status={risk} />
+                  <InfoValue className="ml-2">
+                    {risk} ({patients?.filter((p) => p.status === risk)?.length}
+                    )
+                  </InfoValue>
+                </Fragment>
+              );
+            })}
+          </RiskLevelWrap>
+          <LinkButton
+            className="btn btn-covin my-2"
+            to={routes.addPatient.path}>
+            + New Patient
+          </LinkButton>
+        </InfoColumn>
       </div>
       <div className="dashboard-container">
         {isFetching ? (
@@ -201,10 +235,7 @@ const Patients = () => {
               {filteredPatients.map((patient, index) => (
                 <tr
                   key={`${patient.email} - ${patient.fullName}`}
-                  className={patient.isSelected ? 'bg-light' : ''}
-                  onClick={() => {
-                    handlePatientSelect(patient);
-                  }}>
+                  className={patient.isSelected ? 'bg-light' : ''}>
                   <td>{index + 1}</td>
                   <td className="pt-3">
                     <StatusIndicator status={patient.status} size={12} />
@@ -257,25 +288,45 @@ const Patients = () => {
           />
         </div>
       </div>
-    </div>
+    </WebViewWrap>
   );
 
   const MobileView = () => (
     <div className="mobileview">
-      <div className="header mb-1 d-flex justify-content-between px-3 py-2">
-        <h3 className="page-title">Patients</h3>
+      <div className="header d-flex justify-content-between px-3 pt-2 align-items-center">
+        <ViewName>Patients</ViewName>
         <LinkButton className="mr-2 btn btn-covin" to={routes.addPatient.path}>
           + New
         </LinkButton>
       </div>
-      <div className="filter-container">
-        <SearchInput
-          placeholder="Search your patient"
-          onChange={handleSearchText}
-          searchText={searchText}
-          searchRef={searchRef}
-        />
-      </div>
+      <InfoColumn className="bg-white">
+        <InfoValue className="m-0 px-3">
+          {patients?.length ?? 0} active patients
+        </InfoValue>
+        <div className="filter-container">
+          <SearchInput
+            placeholder="Search your patient"
+            onChange={handleSearchText}
+            searchText={searchText}
+            searchRef={searchRef}
+            customClass="right"
+          />
+        </div>
+      </InfoColumn>
+      <InfoColumn className="bg-white">
+        <RiskLevelWrap className="m-0 py-4 px-3 justify-content-between w-100">
+          {riskNames.map((risk) => {
+            return (
+              <div className="d-flex" key={getRandomKey()}>
+                <StatusIndicator status={risk} />
+                <InfoValue className="ml-2">
+                  {risk} ({patients?.filter((p) => p.status === risk)?.length})
+                </InfoValue>
+              </div>
+            );
+          })}
+        </RiskLevelWrap>
+      </InfoColumn>
       <div className="appointment-body-wrapper mb-1">
         {isFetching ? (
           <TableLoader />

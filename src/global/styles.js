@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const MainConatinerWrapper = styled.main`
+export const MainContainerWrapper = styled.main`
   background: #f2f7fd;
   display: flex;
   justify-content: center;
@@ -8,6 +8,14 @@ export const MainConatinerWrapper = styled.main`
   align-items: center;
   margin-top: 4.375rem;
   ${(props) => props.extraCss}
+`;
+
+export const WebViewWrap = styled.div`
+  padding: 0 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
 `;
 
 export const Wrapper = styled.div`
