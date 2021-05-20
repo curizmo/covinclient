@@ -293,20 +293,23 @@ const Patients = () => {
 
   const MobileView = () => (
     <div className="mobileview">
-      <div className="header mb-1 d-flex justify-content-between px-3 py-2">
-        <h3 className="page-title">Patients</h3>
+      <div className="header d-flex justify-content-between px-3 pt-2 align-items-center">
+        <ViewName>Patients</ViewName>
         <LinkButton className="mr-2 btn btn-covin" to={routes.addPatient.path}>
           + New
         </LinkButton>
       </div>
-      <div className="filter-container">
-        <SearchInput
-          placeholder="Search your patient"
-          onChange={handleSearchText}
-          searchText={searchText}
-          searchRef={searchRef}
-        />
-      </div>
+      <InfoColumn className="bg-white">
+        <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
+        <div className="filter-container">
+          <SearchInput
+            placeholder="Search your patient"
+            onChange={handleSearchText}
+            searchText={searchText}
+            searchRef={searchRef}
+          />
+        </div>
+      </InfoColumn>
       <div className="appointment-body-wrapper mb-1">
         {isFetching ? (
           <TableLoader />
