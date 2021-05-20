@@ -28,6 +28,16 @@
     max-height: 100vh;
     overflow: scroll;
   }
+  &.right {
+    .search-icon {
+      left: auto;
+      right: .625rem;
+    }
+    .search-input.form-control {
+      padding-left: 0;
+      padding-right: 34px;
+    }
+  }
 }
 
 .search-input.form-control {

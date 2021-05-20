@@ -300,15 +300,32 @@ const Patients = () => {
         </LinkButton>
       </div>
       <InfoColumn className="bg-white">
-        <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
+        <InfoValue className="m-0 px-3">
+          {patients?.length ?? 0} active patients
+        </InfoValue>
         <div className="filter-container">
           <SearchInput
             placeholder="Search your patient"
             onChange={handleSearchText}
             searchText={searchText}
             searchRef={searchRef}
+            customClass="right"
           />
         </div>
+      </InfoColumn>
+      <InfoColumn className="bg-white">
+        <RiskLevelWrap className="m-0 py-4 px-3 justify-content-between w-100">
+          {riskNames.map((risk) => {
+            return (
+              <div className="d-flex" key={getRandomKey()}>
+                <StatusIndicator status={risk} />
+                <InfoValue className="ml-2">
+                  {risk} ({patients?.filter((p) => p.status === risk)?.length})
+                </InfoValue>
+              </div>
+            );
+          })}
+        </RiskLevelWrap>
       </InfoColumn>
       <div className="appointment-body-wrapper mb-1">
         {isFetching ? (
