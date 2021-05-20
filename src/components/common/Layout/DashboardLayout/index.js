@@ -6,7 +6,7 @@ const DashboardLayout = ({ children }) => {
   return (
     <>
       <main>
-        <div className="content py-1 px-md-7 pb-md-7 pt-md-3">{children}</div>
+        <div className="content">{children}</div>
       </main>
       <CallDialog />
     </>

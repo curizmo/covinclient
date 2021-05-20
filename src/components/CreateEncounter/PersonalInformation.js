@@ -276,7 +276,7 @@ export const PersonalInformation = ({
         </Info>
         <Info>
           <Label>Height:</Label>
-          <Value>{data?.height || '-'} cm</Value>
+          <Value>{data?.height || '-'}</Value>
         </Info>
         <Info>
           <Label>Weight:</Label>
