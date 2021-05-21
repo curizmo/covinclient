@@ -240,7 +240,7 @@ export const PersonalInformation = ({
           </Info>
           <Info extraCss={extraCss} width="auto">
             <Label margin="0.3rem">Age:</Label>
-            <Value>{data?.age}</Value>
+            <Value>{data?.age || '-'}</Value>
           </Info>
         </MobAgeAndGender>
         <RiskLevelWrap>
@@ -272,7 +272,7 @@ export const PersonalInformation = ({
         </Info>
         <Info>
           <Label>Age:</Label>
-          <Value>{data?.age}</Value>
+          <Value>{data?.age || '-'}</Value>
         </Info>
         <Info>
           <Label>Height:</Label>

@@ -370,11 +370,11 @@ const Patients = () => {
                           </div>
                           <div>
                             <span className="mr-2">Gender:</span>
-                            <span className="card-value">{gender}</span>
+                            <span className="card-value">{gender || '-'}</span>
                           </div>
                           <div>
                             <span className="mr-2">Age:</span>
-                            <span className="card-value">{age}</span>
+                            <span className="card-value">{age || '-'}</span>
                           </div>
                         </div>
                       </div>

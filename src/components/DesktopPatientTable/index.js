@@ -123,7 +123,7 @@ const DesktopPatientTable = (props) => {
                 </Info>
                 <Info className="min-width-10 mr-2">
                   <Label>Age:</Label>
-                  <Value>{patient.age}</Value>
+                  <Value>{patient.age || '-'}</Value>
                 </Info>
                 <Info>
                   <Label>Pre-Exisiting:</Label>
