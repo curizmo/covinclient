@@ -13,6 +13,8 @@ import { hideSpinner, showSpinner } from 'actions';
 import { setErrorMessage } from '../actions/message';
 import {
   createEncounter,
+  fetchPatientEncountersByPractitionerUserId,
+  fetchPatientIntakeData,
   postAddBooking,
   postCheckinStatus,
 } from '../services/patient';
@@ -28,6 +30,7 @@ import {
   fetchPatientVitals,
 } from '../services/patient';
 import { postData } from '../services/api';
+import { fetchPatientMedicationByPractitionerUserId } from 'services/patientMedication';
 
 function* getPatientId(userData) {
   try {
@@ -60,13 +63,8 @@ function* setPatientInOrganization(patientId, organizationID) {
 }
 
 function* postBooking({ payload }) {
-  const {
-    bookingData,
-    eventId,
-    onBookingSuccess,
-    userData,
-    finishBooking,
-  } = payload;
+  const { bookingData, eventId, onBookingSuccess, userData, finishBooking } =
+    payload;
   const patientID = yield call(checkPatient, {
     ...userData,
     PractitionerId: bookingData.practitionerId,
@@ -96,17 +94,23 @@ function* postCheck({ payload }) {
   });
 }
 
-function* fetchPatientByPatientId({ payload: { patientId } }) {
+function* fetchPatientByPatientId({ payload: { patientId, ntoUserId } }) {
   try {
     yield put(showSpinner());
-    const [patient, vitals] = yield all([
+    const [patient, vitals, encounters, prescriptions, intakeData] = yield all([
       call(fetchPatient, patientId),
       call(fetchPatientVitals, patientId),
+      call(fetchPatientEncountersByPractitionerUserId, patientId, ntoUserId),
+      call(fetchPatientMedicationByPractitionerUserId, patientId, ntoUserId),
+      call(fetchPatientIntakeData, patientId),
     ]);
     yield put(
       setPatient({
         ...patient.data,
         ...vitals.data,
+        ...intakeData.data,
+        pastNotes: encounters.data,
+        pastPrescriptions: prescriptions?.data?.prescriptions,
       }),
     );
   } catch (error) {
