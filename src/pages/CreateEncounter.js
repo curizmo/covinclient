@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import { debounce } from 'lodash';
 
 import {
   PatientNotes,
@@ -11,22 +12,14 @@ import {
   GraphicalReadings,
 } from 'components/CreateEncounter';
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
-import { fetchPatient, hideSpinner, showSpinner } from 'actions';
+import { DashboardLayout } from 'components/common/Layout';
 
-import {
-  createEncounter,
-  fetchPatientEncountersByPractitionerUserId,
-  updatePatientRiskStatus,
-} from 'services/patient';
-import { fetchPatientMedicationByPractitionerUserId } from 'services/patientMedication';
-import { debounce } from 'lodash';
-import { createOrUpdateEncounter } from 'services/appointment';
-
+import { fetchPatient } from 'actions';
 import { getPatient, getIsEncounterUpdated, getUser } from 'selectors';
-
-import { routes } from 'routers';
-
+import { createEncounter, updatePatientRiskStatus } from 'services/patient';
+import { createOrUpdateEncounter } from 'services/appointment';
 import { getRandomKey } from 'utils';
+import { routes } from 'routers';
 
 import notesIcon from 'assets/images/svg-icons/notesIcon.svg';
 import lineGraphIcon from 'assets/images/svg-icons/lineGraphIcon.svg';
@@ -49,7 +42,6 @@ import {
   ResendWrap,
 } from 'global/styles';
 import { getDate } from 'global';
-import { DashboardLayout } from 'components/common/Layout';
 
 const PATIENT_DETAILS_TABS = {
   READINGS: 'Readings',
@@ -185,8 +177,6 @@ function CreateEncounter() {
   const [note, setNote] = useState('');
   const [prescriptionList, setPrescriptionList] = useState([]);
   const [labsList, setLabsList] = useState([]);
-  const [pastNotes, setPastNotes] = useState([]);
-  const [pastPrescriptions, setPastPrescriptions] = useState([]);
   const [vitalsCompletionStatus, setVitalsCompletionStatus] = useState('');
   const [appointmentId, setAppointmentId] = useState('');
   const [isNoteSaved, setIsNoteSaved] = useState(false);
@@ -201,48 +191,14 @@ function CreateEncounter() {
   }, [patientData]);
 
   useEffect(() => {
-    fetchPatientEncounters(patientId, user.NTOUserID);
-    fetchPatientPrescriptions(patientId, user.NTOUserID);
-  }, [patientId, user.NTOUserID]);
-
-  useEffect(() => {
-    dispatch(fetchPatient({ patientId }));
-  }, [dispatch, patientId]);
+    dispatch(fetchPatient({ patientId, ntoUserId: user.NTOUserID }));
+  }, [dispatch, patientId, user.NTOUserID]);
 
   useEffect(() => {
     if (isEncounterUpdated) {
       history.push(routes.patients.path);
     }
   }, [isEncounterUpdated]);
-
-  const fetchPatientEncounters = async (patientId) => {
-    try {
-      dispatch(showSpinner());
-      const response = await fetchPatientEncountersByPractitionerUserId(
-        patientId,
-        user.NTOUserID,
-      );
-
-      setPastNotes(response.data);
-    } catch (err) {
-      // TODO: Handle error
-    } finally {
-      dispatch(hideSpinner());
-    }
-  };
-
-  const fetchPatientPrescriptions = async (patientId, ntoUserId) => {
-    try {
-      const response = await fetchPatientMedicationByPractitionerUserId(
-        patientId,
-        ntoUserId,
-      );
-
-      setPastPrescriptions(response.data.prescriptions);
-    } catch (err) {
-      // TODO: Handle error
-    }
-  };
 
   const handleNoteChange = (e) => {
     const value = e.target.value;
@@ -343,7 +299,7 @@ function CreateEncounter() {
               <PatientNotes
                 note={note}
                 handleNoteChange={handleNoteChange}
-                pastNotes={pastNotes}
+                pastNotes={patientData.pastNotes}
                 isNoteLoading={isNoteLoading}
                 isNoteSaved={isNoteSaved}
               />
@@ -353,7 +309,7 @@ function CreateEncounter() {
                 patientData={patientData}
                 prescriptionList={prescriptionList}
                 setPrescriptionList={setPrescriptionList}
-                pastPrescriptions={pastPrescriptions}
+                pastPrescriptions={patientData.pastPrescriptions}
                 labsList={labsList}
                 setLabsList={setLabsList}
                 appointmentId={appointmentId}
@@ -430,7 +386,7 @@ function CreateEncounter() {
                 <PatientNotes
                   note={note}
                   handleNoteChange={handleNoteChange}
-                  pastNotes={pastNotes}
+                  pastNotes={patientData.pastNotes}
                   isNoteLoading={isNoteLoading}
                   isNoteSaved={isNoteSaved}
                 />
@@ -440,7 +396,7 @@ function CreateEncounter() {
                   patientData={patientData}
                   prescriptionList={prescriptionList}
                   setPrescriptionList={setPrescriptionList}
-                  pastPrescriptions={pastPrescriptions}
+                  pastPrescriptions={patientData.pastPrescriptions}
                   labsList={labsList}
                   setLabsList={setLabsList}
                   appointmentId={appointmentId}

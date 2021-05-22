@@ -12,6 +12,7 @@ import {
   RISK,
 } from '../../constants';
 import { getFormatedDate, handleCallAppointment } from 'utils';
+import { INTAKE_FORM_GROUPS } from '../../constants';
 
 const PersonalInfoWrap = styled.div`
   position: relative;
@@ -239,7 +240,7 @@ export const PersonalInformation = ({
           </Info>
           <Info extraCss={extraCss} width="auto">
             <Label margin="0.3rem">Age:</Label>
-            <Value>{data?.age}</Value>
+            <Value>{data?.age || '-'}</Value>
           </Info>
         </MobAgeAndGender>
         <RiskLevelWrap>
@@ -267,15 +268,15 @@ export const PersonalInformation = ({
       <HiddenView showMore={isShowMore}>
         <Info>
           <Label>Gender:</Label>
-          <Value>{data?.gender}</Value>
+          <Value>{GENDER_SHORTHAND[data?.gender]}</Value>
         </Info>
         <Info>
           <Label>Age:</Label>
-          <Value>{data?.age}</Value>
+          <Value>{data?.age || '-'}</Value>
         </Info>
         <Info>
           <Label>Height:</Label>
-          <Value>{data?.height || '-'} cm</Value>
+          <Value>{data?.height || '-'}</Value>
         </Info>
         <Info>
           <Label>Weight:</Label>
@@ -303,9 +304,9 @@ export const PersonalInformation = ({
         </Info>
         <Info width="12%">
           <Label>Known Allergies:</Label>
-          {data?.knownAllergies?.length > 0 ? (
+          {data?.[INTAKE_FORM_GROUPS.ALLERGY]?.length > 0 ? (
             <>
-              <Value>{data?.knownAllergies?.join(', ')}</Value>
+              <Value>{data?.[INTAKE_FORM_GROUPS.ALLERGY]?.join(', ')}</Value>
             </>
           ) : (
             <Value>-</Value>
@@ -313,9 +314,11 @@ export const PersonalInformation = ({
         </Info>
         <Info width="15%">
           <Label>Pre-Existing Conditions:</Label>
-          {data?.preExisting?.length > 0 ? (
+          {data?.[INTAKE_FORM_GROUPS.PRE_EXISTING_CONDITION]?.length > 0 ? (
             <>
-              <Value>{data?.preExisting?.join(', ')}</Value>
+              <Value>
+                {data?.[INTAKE_FORM_GROUPS.PRE_EXISTING_CONDITION]?.join(', ')}
+              </Value>
             </>
           ) : (
             <Value>-</Value>

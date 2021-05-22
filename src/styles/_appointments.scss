@@ -31,6 +31,7 @@
 }
 
 .dashboard-container {
+  width: 100%;
   background: #ffffff;
   box-shadow: 0 4px .6rem #aeb4c033;
   outline: none !important;
@@ -125,7 +126,7 @@
   }
 
   button {
-    background: white;
+    background: transparent;
     border: none !important;
     border-radius: 0px;
     color: #22345f;
@@ -147,11 +148,6 @@
       box-shadow: none !important;
     }
   }
-}
-
-.search-container {
-  width: 64%;
-  position: relative;
 }
 
 .date-search-container {
@@ -409,23 +405,6 @@
     width: 100%;
     margin-bottom: 1.5rem;
     padding: 0 2rem;
-  }
-
-  .search-container {
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  .search-icon {
-    position: absolute;
-    left: 4px;
-    top: 0.3rem;
-    margin: 0.1rem;
-    height: 1.3rem;
-  }
-
-  .search-input {
-    padding-left: 2.2rem;
-    font-size: 0.8rem;
   }
 
   .filter-container {

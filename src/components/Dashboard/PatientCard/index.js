@@ -5,6 +5,7 @@ import { useHistory } from 'react-router';
 import { rangeCheck } from 'utils';
 import { CMLine } from 'third-party/senze-graphs/dist';
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
+import { GENDER_SHORTHAND } from '../../../constants';
 import './index.css';
 
 const State = styled.div`
@@ -99,7 +100,7 @@ const PatientCard = (props) => {
         {patient?.gender ? (
           <PatientGeneralInfo>
             <FieldName>Gender:</FieldName>
-            &nbsp;<FieldValue>{patient.gender}</FieldValue>
+            &nbsp;<FieldValue>{GENDER_SHORTHAND[patient.gender]}</FieldValue>
           </PatientGeneralInfo>
         ) : null}
         {patient?.age ? (

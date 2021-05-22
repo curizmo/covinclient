@@ -350,33 +350,6 @@ export const RangeCheck = {
     Elevated: { min: 100, max: 103.9 },
     Normal: { min: 95, max: 99 },
   },
-  oxygenLevel: {
-    Normal: { min: 95, max: 100 },
-    Elevated: { min: 90, max: 92 },
-    High: { min: 0, max: 90 },
-  },
-  pulseRate: {
-    High: { min: 100, max: 120 },
-    Elevated: { min: 0, max: 60 },
-    Normal: { min: 60, max: 100 },
-  },
-  bloodPressure: {
-    lowBloodPressure: {
-      Normal: { min: 0, max: 120 },
-      Elevated: { min: 120, max: 139 },
-      High: { min: 140, max: 180 },
-    },
-    highBloodPressure: {
-      Normal: { min: 0, max: 80 },
-      Elevated: { min: 80, max: 89 },
-      High: { min: 90, max: 130 },
-    },
-  },
-  respiratoryRate: {
-    Normal: { min: 0, max: 10 },
-    Elevated: { min: 11, max: 16 },
-    High: { min: 17, max: 24 },
-  },
   spO2: {
     Normal: { min: 95, max: 100 },
     Elevated: { min: 90, max: 92 },
@@ -404,4 +377,12 @@ export const RangeCheck = {
     Elevated: { min: 11, max: 16 },
     High: { min: 17, max: 24 },
   },
+};
+
+export const INTAKE_FORM_GROUPS = {
+  PRE_EXISTING_CONDITION: 'Pre-existing condition',
+  PERSONAL_INFORMATION: 'Personal Information',
+  COVID_19_CONDITION: 'Covid-19 Condition',
+  CURRENT_MEDICATION: 'Current Medication',
+  ALLERGY: 'Allergy',
 };
