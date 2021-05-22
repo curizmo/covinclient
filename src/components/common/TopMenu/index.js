@@ -17,13 +17,13 @@ const TopMenu = () => {
 
   const menuItems = [
     {
-      name: 'Dashboard',
-      goTo: routes.dashboard.path,
+      name: '', //'Dashboard',
+      goTo: '/', //routes.dashboard.path,
     },
-    {
-      name: 'Patients',
-      goTo: routes.patients.path,
-    },
+    // {
+    //   name: 'Patients',
+    //   goTo: routes.patients.path,
+    // },
     // @toDo add functionality for commented pages
     // {
     //   name: 'Prescriptions',
@@ -85,7 +85,7 @@ const TopMenu = () => {
                   }`}
                   key={item.name}
                   to={item.goTo}>
-                  {item.name}
+                  {/* {item.name} */}
                 </Link>
               ))}
             </Nav>
