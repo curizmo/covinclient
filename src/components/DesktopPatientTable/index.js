@@ -1,11 +1,10 @@
 import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
-import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Button } from 'reactstrap';
 
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
-import { handleCallAppointment } from 'utils';
+import { getFormatedTimeDate, handleCallAppointment } from 'utils';
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
 import { GENDER_SHORTHAND } from '../../constants';
 import './index.css';
@@ -96,16 +95,15 @@ const DesktopPatientTable = (props) => {
       <TableWrapper className="dashboard-container">
         {selectedCaseData.map((patient, index) => {
           return (
-            <InfoAndGraphWrapper key={index} className="mb-0">
+            <InfoAndGraphWrapper key={index} className="mb-3">
               <InfoWrapper>
                 {/* <Status selectedCases={patient.status} /> */}
-                <Link
+                <p
                   className="card-name patient-link--small min-width-20 mr-2"
-                  to={''}
                   // to={`/patients/${patient.patientId}/encounter/create`}>
                 >
                   {patient.fullName}
-                </Link>
+                </p>
                 <Info className="min-width-20 mr-2">
                   <Button
                     className="d-flex"
@@ -128,14 +126,8 @@ const DesktopPatientTable = (props) => {
                   <Value>{patient.age || '-'}</Value>
                 </Info>
                 <Info>
-                  <Label>Pre-Exisiting:</Label>
-                  {patient?.preExisting?.length > 0 ? (
-                    <>
-                      <Value>{patient?.preExisting?.join(', ')}</Value>
-                    </>
-                  ) : (
-                    <Value>-</Value>
-                  )}
+                  <Label>Last updated:</Label>
+                  <Value>{getFormatedTimeDate(patient?.lastUpdated)}</Value>
                 </Info>
               </InfoWrapper>
               <div className="desktop-view-vitals-wrp display-flex-direction">

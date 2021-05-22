@@ -367,3 +367,12 @@ export const getStartOfDayToday = () => {
 
   return new Date(date);
 };
+
+/**
+ * @param {Date} date
+ * @return {string} - example: 10:22am on 22 May 2021
+ */
+export const getFormatedTimeDate = (date) => {
+  const dateObject = date ? new Date(date) : new Date();
+  return dateObject.toLocaleString();
+};
