@@ -347,36 +347,36 @@ export const scales = {
 
 export const RangeCheck = {
   temperature: {
-    High: { min: 104, max: 109.9 },
-    Elevated: { min: 100, max: 103.9 },
-    Normal: { min: 95, max: 99 },
+    High: { min: 99.2, max: 109.9 },
+    Elevated: { min: 80, max: 97.7 },
+    Normal: { min: 97.8, max: 99.1 },
   },
   spO2: {
     Normal: { min: 95, max: 100 },
-    Elevated: { min: 90, max: 92 },
-    High: { min: 0, max: 90 },
+    Elevated: { min: 90, max: 94 },
+    High: { min: 0, max: 89 },
   },
   'Pulse Rate': {
-    High: { min: 100, max: 120 },
-    Elevated: { min: 0, max: 60 },
+    High: { min: 101, max: 300 },
+    Elevated: { min: 0, max: 59 },
     Normal: { min: 60, max: 100 },
   },
   'Blood Pressure': {
     'Low Blood Pressure': {
-      Normal: { min: 0, max: 120 },
-      Elevated: { min: 120, max: 139 },
-      High: { min: 140, max: 180 },
+      Normal: { min: 60, max: 80 },
+      Elevated: { min: 0, max: 59 },
+      High: { min: 81, max: 300 },
     },
     'High Blood Pressure': {
-      Normal: { min: 0, max: 80 },
-      Elevated: { min: 80, max: 89 },
-      High: { min: 90, max: 130 },
+      Normal: { min: 90, max: 120 },
+      Elevated: { min: 0, max: 119 },
+      High: { min: 121, max: 300 },
     },
   },
   'Respiratory Rate': {
-    Normal: { min: 0, max: 10 },
-    Elevated: { min: 11, max: 16 },
-    High: { min: 17, max: 24 },
+    Normal: { min: 12, max: 20 },
+    Elevated: { min: 0, max: 11 },
+    High: { min: 21, max: 100 },
   },
 };
 
