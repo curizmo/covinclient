@@ -140,7 +140,7 @@ const DashBoardComponent = () => {
       <FirstRow>
         <Headings>
           <InfoWrapper>
-            <ViewName>Patients vitals</ViewName>
+            <ViewName>Patients ({patients?.length ?? 0})</ViewName>
             {!isLightVersion && <ViewName>Dashboard</ViewName>}
             <DateAndTimeWrap>
               <TimeImage src={time} />
