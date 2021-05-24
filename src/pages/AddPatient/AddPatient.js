@@ -40,7 +40,6 @@ const AddPatient = () => {
     return !(
       values.firstName &&
       values.phone &&
-      values.email &&
       Object.keys(errors)?.length < 1
     );
   }, [errors, values]);
@@ -50,7 +49,7 @@ const AddPatient = () => {
       dispatch(showSpinner());
       await patientService.createPatient(patient);
 
-      history.push(routes.patients.path);
+      history.push(routes.dashboard.path);
     } catch (err) {
       if (err.response.data) {
         setServerError(err.response.data.message);
@@ -83,8 +82,6 @@ const AddPatient = () => {
                 title="Email"
                 name="email"
                 type="email"
-                required
-                error={getErrorMessage(errors, 'email')}
                 innerRef={register}
                 placeholder="Enter Patient Email ID"
               />
@@ -198,7 +195,7 @@ const AddPatient = () => {
               {serverError ? <Alert color="danger">{serverError}</Alert> : null}
               <div className="d-flex justify-content-end">
                 <LinkButton
-                  to={routes.patients.path}
+                  to={routes.dashboard.path}
                   className="btn-cancel mr-2">
                   Cancel
                 </LinkButton>

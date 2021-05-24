@@ -1,24 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
-// import { useHistory } from 'react-router';
+import { useHistory } from 'react-router';
 
 import { rangeCheck } from 'utils';
 import { CMLine } from 'third-party/senze-graphs/dist';
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
+import { isLightVersion } from '../../../config';
 import { GENDER_SHORTHAND } from '../../../constants';
 import './index.css';
 
-// const State = styled.div`
-//   border-radius: 50%;
-//   background-color: ${(props) =>
-//     props.selectedState === 'High'
-//       ? '#eb2f2f'
-//       : props.selectedState === 'Mild'
-//       ? '#657396'
-//       : '#e5881b'};
-//   width: 1rem;
-//   height: 1rem;
-// `;
+const State = styled.div`
+  border-radius: 50%;
+  background-color: ${(props) =>
+    props.selectedState === 'High'
+      ? '#eb2f2f'
+      : props.selectedState === 'Mild'
+      ? '#657396'
+      : '#e5881b'};
+  width: 1rem;
+  height: 1rem;
+`;
 const PatientName = styled.div`
   padding-left: 0.75rem;
   font-size: 1.5rem;
@@ -67,17 +68,19 @@ const PatientVitalFieldName = styled.div`
 // Patient information at a glace
 const PatientCard = (props) => {
   const { patient } = props;
-  // const history = useHistory();
-  const onPatientNameClick = () => {
-    return; //TOD: Temp
-    // const val = name.replace(/ /g, '_').toLowerCase();
-    // history.push({ pathname: `/patients/${val}`, state: {} });
+  const history = useHistory();
+  const onPatientNameClick = (name) => {
+    if (isLightVersion) {
+      return;
+    }
+    const val = name.replace(/ /g, '_').toLowerCase();
+    history.push({ pathname: `/patients/${val}`, state: {} });
   };
   return (
     <div className="patient-info">
       {/*patient name & state */}
       <PatientStatusWrp>
-        {/* <State selectedState={patient.status} /> */}
+        {!isLightVersion && <State selectedState={patient.status} />}
         <PatientName onClick={() => onPatientNameClick(patient?.fullName)}>
           {patient?.fullName}
         </PatientName>

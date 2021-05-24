@@ -321,6 +321,7 @@ export const SORT_ORDER = Object.freeze({
 });
 
 export const RISK = {
+  ALL: 'All',
   HIGH: 'High',
   MODERATE: 'Moderate',
   LOW: 'Low',

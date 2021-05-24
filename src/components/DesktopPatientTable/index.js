@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Button } from 'reactstrap';
 
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
 import { getFormatedTimeDate, handleCallAppointment } from 'utils';
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
+import { isLightVersion } from '../../config';
 import { GENDER_SHORTHAND } from '../../constants';
 import './index.css';
 
@@ -16,18 +18,18 @@ const Wrapper = styled.section`
 
 const TableWrapper = styled.div``;
 
-// const Status = styled.div`
-//   border-radius: 50%;
-//   background-color: ${(props) =>
-//     props.selectedCases === 'High'
-//       ? '#eb2f2f'
-//       : props.selectedCases === 'Mild'
-//       ? '#657396'
-//       : '#e5881b'};
-//   width: 1rem;
-//   height: 1rem;
-//   margin-right: 1.25rem;
-// `;
+const Status = styled.div`
+  border-radius: 50%;
+  background-color: ${(props) =>
+    props.selectedCases === 'High'
+      ? '#eb2f2f'
+      : props.selectedCases === 'Mild'
+      ? '#657396'
+      : '#e5881b'};
+  width: 1rem;
+  height: 1rem;
+  margin-right: 1.25rem;
+`;
 
 const InfoAndGraphWrapper = styled.div`
   padding: 1.25rem;
@@ -97,13 +99,19 @@ const DesktopPatientTable = (props) => {
           return (
             <InfoAndGraphWrapper key={index} className="mb-3">
               <InfoWrapper>
-                {/* <Status selectedCases={patient.status} /> */}
-                <p
-                  className="card-name patient-link--small min-width-20 mr-2"
-                  // to={`/patients/${patient.patientId}/encounter/create`}>
-                >
-                  {patient.fullName}
-                </p>
+                {!isLightVersion && <Status selectedCases={patient.status} />}
+                {isLightVersion ? (
+                  <p className="card-name patient-link--small min-width-20 mr-2">
+                    {patient.fullName}
+                  </p>
+                ) : (
+                  <Link
+                    className="card-name patient-link--small min-width-20 mr-2"
+                    to={`/patients/${patient.patientId}/encounter/create`}>
+                    {patient.fullName}
+                  </Link>
+                )}
+
                 <Info className="min-width-20 mr-2">
                   <Button
                     className="d-flex"

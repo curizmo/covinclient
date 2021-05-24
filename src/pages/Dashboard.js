@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-// import { debounce } from 'lodash';
+import { useDispatch, useSelector } from 'react-redux';
+import { debounce } from 'lodash';
 
 import PatientCard from 'components/Dashboard/PatientCard';
 import DesktopPatientTable from 'components/DesktopPatientTable';
-// import CasesCardComponent from 'components/CasesCard';
+import CasesCardComponent from 'components/CasesCard';
 import { DashboardLayout } from 'components/common/Layout';
-// import { SearchInput } from 'components/common/SearchInput';
+import { SearchInput } from 'components/common/SearchInput';
 
 import time from 'assets/images/svg-icons/clock.svg';
 import { getDate } from '../global';
@@ -18,19 +18,22 @@ import {
   TimeImage,
   ViewName,
 } from '../global/styles';
-// import { getUser } from 'selectors';
+import { getUser } from 'selectors';
 import {
-  //usePatientsRiskData,
+  usePatientsRiskData,
   usePatientsVitals,
 } from '../services/practitioner';
-// import { RISK } from '../constants';
+import { isLightVersion } from '../config';
+import { RISK } from '../constants';
+import { LinkButton } from 'components/common/Button';
+import { routes } from 'routers';
 
-// const TypeHeader = styled.h3`
-//   margin-bottom: 0;
-//   font-size: 1.25rem;
-//   line-height: 1.875rem;
-//   color: #1f3259;
-// `;
+const TypeHeader = styled.h3`
+  margin-bottom: 0;
+  font-size: 1.25rem;
+  line-height: 1.875rem;
+  color: #1f3259;
+`;
 const FirstRow = styled.section`
   padding: 0em 4em;
   width: 100%;
@@ -53,25 +56,25 @@ const PatientsWrapper = styled.div`
   }
 `;
 
-// const SearchWrapper = styled.div`
-//   display: none;
-//   @media (max-width: 768px) {
-//     display: block;
-//     padding: 1.25rem;
-//     background: #fff;
-//   }
-// `;
+const SearchWrapper = styled.div`
+  display: none;
+  @media (max-width: 768px) {
+    display: block;
+    padding: 1.25rem;
+    background: #fff;
+  }
+`;
 
-// const CasesHeader = styled.p`
-//   margin: 0;
-//   @media (max-width: 768px) {
-//     font-family: Helvetica;
-//     font-weight: bold;
-//     font-size: 1.25rem;
-//     line-height: 1.875rem;
-//     color: #1f3259;
-//   }
-// `;
+const CasesHeader = styled.p`
+  margin: 0;
+  @media (max-width: 768px) {
+    font-family: Helvetica;
+    font-weight: bold;
+    font-size: 1.25rem;
+    line-height: 1.875rem;
+    color: #1f3259;
+  }
+`;
 
 const DeskTopViewPatient = styled.section`
   @media (min-width: 768px) {
@@ -83,55 +86,54 @@ const DeskTopViewPatient = styled.section`
   display: none;
 `;
 
-// const InputContainer = styled.div`
-//   position: relative;
-//   min-width: 33%;
-// `;
+const InputContainer = styled.div`
+  position: relative;
+  min-width: 33%;
+`;
 
-// const HeaderSearchWrap = styled.div`
-//   padding: 0 4rem;
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
-// `;
+const HeaderSearchWrap = styled.div`
+  padding: 0 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
 
 const DashBoardComponent = () => {
   const dispatch = useDispatch();
-  // const [searchText, setSearchText] = useState('');
-  // const [selectedCases, setSelectedCases] = useState(RISK.HIGH);
-  // const [filteredPatients, setFilteredPatients] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [selectedCases, setSelectedCases] = useState(RISK.ALL);
+  const [filteredPatients, setFilteredPatients] = useState([]);
 
-  //const user = useSelector(getUser);
-  // const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
-  // const { data: patients, refetch } = usePatientsVitals(searchText, dispatch);
-  const { data: patients } = usePatientsVitals('', dispatch);
-  // const searchRef = useRef(null);
+  const user = useSelector(getUser);
+  const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
+  const { data: patients, refetch } = usePatientsVitals(searchText, dispatch);
+  const searchRef = useRef(null);
 
-  // const handleSearchText = (e) => {
-  //   setSearchText(e.target.value);
-  // };
+  const handleSearchText = (e) => {
+    setSearchText(e.target.value);
+  };
 
-  // const changesCases = (sel) => {
-  //   setSelectedCases(sel);
-  // };
+  const changesCases = (sel) => {
+    setSelectedCases(sel);
+  };
 
-  // useEffect(() => {
-  //   if (searchRef?.current) {
-  //     searchRef.current.focus();
-  //   }
-  //   const debounced = debounce(refetch, 1000);
-  //   debounced();
+  useEffect(() => {
+    if (searchRef?.current) {
+      searchRef.current.focus();
+    }
+    const debounced = debounce(refetch, 1000);
+    debounced();
 
-  //   return () => {
-  //     debounced.cancel();
-  //   };
-  // }, [searchText]);
+    return () => {
+      debounced.cancel();
+    };
+  }, [searchText]);
 
-  // useEffect(() => {
-  //   setFilteredPatients(
-  //     patients?.filter((p) => p.status === selectedCases) ?? [],
-  //   );
-  // }, [patients, selectedCases]);
+  useEffect(() => {
+    setFilteredPatients(
+      patients?.filter((p) => p.status === selectedCases) ?? [],
+    );
+  }, [patients, selectedCases]);
 
   return (
     <DashboardLayout>
@@ -139,26 +141,37 @@ const DashBoardComponent = () => {
         <Headings>
           <InfoWrapper>
             <ViewName>Patients vitals</ViewName>
-            {/* <ViewName>Dashboard</ViewName> */}
+            {!isLightVersion && <ViewName>Dashboard</ViewName>}
             <DateAndTimeWrap>
               <TimeImage src={time} />
               <DateAndTime>{getDate()}</DateAndTime>
             </DateAndTimeWrap>
           </InfoWrapper>
-          {/* <CasesCardComponent
-            casesCardData={patientRiskData}
-            changesCases={changesCases}
-            selectedCases={selectedCases}
-          /> */}
-          {/* <SearchWrapper>
-            <CasesHeader>{selectedCases} Cases</CasesHeader>
-            <SearchInput
-              placeholder="Search"
-              searchText={searchText}
-              onChange={handleSearchText}
-              searchRef={searchRef}
+          {!isLightVersion && (
+            <CasesCardComponent
+              casesCardData={patientRiskData}
+              changesCases={changesCases}
+              selectedCases={selectedCases}
             />
-          </SearchWrapper> */}
+          )}
+          <div className="flex justify-content-space-between">
+            <SearchWrapper>
+              {!isLightVersion && (
+                <CasesHeader>{selectedCases} Cases</CasesHeader>
+              )}
+              <SearchInput
+                placeholder="Search"
+                searchText={searchText}
+                onChange={handleSearchText}
+                searchRef={searchRef}
+              />
+              <LinkButton
+                className="btn btn-covin my-2"
+                to={routes.addPatient.path}>
+                + New Patient
+              </LinkButton>
+            </SearchWrapper>
+          </div>
         </Headings>
       </FirstRow>
 
@@ -167,16 +180,14 @@ const DashBoardComponent = () => {
         {patients?.map((patient) => (
           <PatientCard key={patient.patientId} patient={patient} />
         ))}
-        {/* {filteredPatients?.map((patient) => (
-          <PatientCard key={patient.patientId} patient={patient} />
-        ))} */}
       </PatientsWrapper>
       <DeskTopViewPatient>
         {patients ? (
           <>
-            {/* <HeaderSearchWrap className="w-100 mb-3">
-                    <TypeHeader>{selectedCases} Risk Cases</TypeHeader>
-              <TypeHeader>{selectedCases} Risk Cases</TypeHeader>
+            <HeaderSearchWrap className="w-100 mb-3">
+              {!isLightVersion && (
+                <TypeHeader>{selectedCases} Risk Cases</TypeHeader>
+              )}
               <InputContainer>
                 <SearchInput
                   customClass="w-100"
@@ -186,11 +197,15 @@ const DashBoardComponent = () => {
                   searchRef={searchRef}
                 />
               </InputContainer>
-            </HeaderSearchWrap> */}
+              <LinkButton
+                className="btn btn-covin my-2"
+                to={routes.addPatient.path}>
+                + New Patient
+              </LinkButton>
+            </HeaderSearchWrap>
             <DesktopPatientTable
-              selectedCaseData={patients}
-              // selectedCaseData={filteredPatients}
-              // selectedCases={selectedCases}
+              selectedCaseData={isLightVersion ? patients : filteredPatients}
+              selectedCases={selectedCases}
             />
           </>
         ) : null}
