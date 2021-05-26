@@ -24,26 +24,21 @@ const ReadingIconStyleRepresentation = styled.div`
   display: flex;
 `;
 
-const IconRepresentation = styled.div`
+const IconRepresentation = styled.img`
   width: 1.25rem;
   height: 1.25rem;
   margin-right: 0.5rem;
 `;
 
 const HeadersComponent = (props) => {
-  const { image, alt, text } = props;
+  const { image, alt, text, children } = props;
   return (
     <HeaderReaderWrap>
       <ReadingIconStyleRepresentation>
-        <IconRepresentation>
-          <img src={image} alt={alt} />
-        </IconRepresentation>
+        <IconRepresentation src={image} alt={alt} />
         <ReadingFontStyle>{text}</ReadingFontStyle>
       </ReadingIconStyleRepresentation>
-      {/* <ReadingStatus>
-          {data && data?.patientSince && <div>From: {data.patientSince}</div>}
-          {data && data?.lastUpdated && <div>Updated: {data.lastUpdated}</div>}
-        </ReadingStatus> */}
+      {children}
     </HeaderReaderWrap>
   );
 };

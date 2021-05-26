@@ -42,6 +42,7 @@ import {
   ResendWrap,
 } from 'global/styles';
 import { getDate } from 'global';
+import { isLightVersion } from 'config';
 
 const PATIENT_DETAILS_TABS = {
   READINGS: 'Readings',
@@ -84,7 +85,7 @@ const MedInfoWrap = styled.div`
   }
 `;
 const Column = styled.div`
-  width: 33.33%;
+  width: ${(props) => (props.isLightVersion ? '50%' : '33.33%')};
   border-right: 1px solid rgba(101, 115, 150, 0.2);
   &:last-child {
     border-right: none;
@@ -292,10 +293,10 @@ function CreateEncounter() {
             handleRiskLevelChange={handleRiskLevelChange}
           />
           <MedInfoWrap>
-            <Column>
+            <Column isLightVersion>
               <GraphicalReadings data={patientData} />
             </Column>
-            <Column>
+            <Column isLightVersion>
               <PatientNotes
                 note={note}
                 handleNoteChange={handleNoteChange}
@@ -304,19 +305,21 @@ function CreateEncounter() {
                 isNoteSaved={isNoteSaved}
               />
             </Column>
-            <Column>
-              <PatientPrescription
-                patientData={patientData}
-                prescriptionList={prescriptionList}
-                setPrescriptionList={setPrescriptionList}
-                pastPrescriptions={patientData.pastPrescriptions}
-                labsList={labsList}
-                setLabsList={setLabsList}
-                appointmentId={appointmentId}
-                setAppointmentId={setAppointmentId}
-                patientId={patientId}
-              />
-            </Column>
+            {!isLightVersion && (
+              <Column>
+                <PatientPrescription
+                  patientData={patientData}
+                  prescriptionList={prescriptionList}
+                  setPrescriptionList={setPrescriptionList}
+                  pastPrescriptions={patientData.pastPrescriptions}
+                  labsList={labsList}
+                  setLabsList={setLabsList}
+                  appointmentId={appointmentId}
+                  setAppointmentId={setAppointmentId}
+                  patientId={patientId}
+                />
+              </Column>
+            )}
           </MedInfoWrap>
           <MobileViewMedInfoWrap>
             <TabWrap>

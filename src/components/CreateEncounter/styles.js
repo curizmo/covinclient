@@ -4,6 +4,8 @@ export const ContentWrap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
+  height: 100%;
 `;
 
 export const TopContainer = styled.div`
@@ -13,6 +15,17 @@ export const TopContainer = styled.div`
   flex-direction: column;
   @media (max-width: 768px) {
     padding: 0;
+  }
+`;
+
+export const NoteContainer = styled.div`
+  padding: 0;
+  border: 1px solid #e0e3ea;
+  box-sizing: border-box;
+  box-shadow: 0px 2px 0px #e0e3ea;
+  border-radius: 3px;
+  @media (max-width: 768px) {
+    margin-top: 4.5rem;
   }
 `;
 
@@ -110,20 +123,30 @@ export const CloseIcon = styled.img`
   cursor: pointer;
 `;
 
+export const NoteCaption = styled.p`
+  padding: 0.5rem 0.7rem;
+  margin: 0;
+  height: 40px;
+  background: #f8fbfe;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #657396;
+
+  opacity: 0.5;
+`;
+
 export const Note = styled.textarea`
   background: #ffffff;
-  border: 1px solid #e0e3ea;
-  box-sizing: border-box;
-  box-shadow: 0px 2px 0px #e0e3ea;
-  border-radius: 3px;
+  border: none;
   width: 100%;
-  height: 5.625rem;
+  height: 28rem;
   padding: 0.75rem;
   ::placeholder {
+    color: #22335e;
     opacity: 0.5;
   }
-  @media (max-width: 768px) {
-    margin-top: 4.5rem;
+  :focus-visible {
+    outline: none;
   }
 `;
 
@@ -201,7 +224,14 @@ export const PastPrescriptionConsultant = styled.div`
   color: #22335e;
 `;
 export const DesktopViewPastPrescription = styled.div`
-  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: ${(props) => (props.showMore ? 0 : 'auto')};
+  border-top: ${(props) =>
+    props.showMore ? '1px solid rgba(101, 115, 150, 0.2)' : 'none'};
+  background-color: white;
 `;
 
 export const IconSmall = styled.div`

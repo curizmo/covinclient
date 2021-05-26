@@ -101,7 +101,7 @@ const HeaderSearchWrap = styled.div`
 const DashBoardComponent = () => {
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState('');
-  const [selectedCases, setSelectedCases] = useState(RISK.ALL);
+  const [selectedCases, setSelectedCases] = useState(RISK.HIGH);
   const [filteredPatients, setFilteredPatients] = useState([]);
 
   const user = useSelector(getUser);

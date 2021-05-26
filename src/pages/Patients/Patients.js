@@ -234,7 +234,7 @@ const Patients = () => {
             <tbody>
               {filteredPatients.map((patient, index) => (
                 <tr
-                  key={`${patient.email} - ${patient.fullName}`}
+                  key={getRandomKey()}
                   className={patient.isSelected ? 'bg-light' : ''}>
                   <td>{index + 1}</td>
                   <td className="pt-3">
@@ -334,7 +334,7 @@ const Patients = () => {
           filteredPatients.map((patient) => {
             const { patientId, fullName, age, gender, phone } = patient;
             return (
-              <>
+              <Fragment key={getRandomKey()}>
                 <Card className="mb-1 appointment-info-card">
                   <CardBody>
                     <div className="card-info-body">
@@ -349,7 +349,10 @@ const Patients = () => {
                             </div>
                             <Link
                               className="patient-link--small card-name mb-2"
-                              to={`/patients/${patientId}/encounter/create`}>
+                              to={routes.createEncounter.path.replace(
+                                ':patientId',
+                                patientId,
+                              )}>
                               {fullName}
                             </Link>
                           </div>
@@ -381,7 +384,7 @@ const Patients = () => {
                     </div>
                   </CardBody>
                 </Card>
-              </>
+              </Fragment>
             );
           })
         ) : (

@@ -10,6 +10,7 @@ import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
 import { isLightVersion } from '../../config';
 import { GENDER_SHORTHAND } from '../../constants';
 import './index.css';
+import { routes } from 'routers';
 
 const Wrapper = styled.section`
   padding: 0 4rem;
@@ -100,17 +101,14 @@ const DesktopPatientTable = (props) => {
             <InfoAndGraphWrapper key={index} className="mb-3">
               <InfoWrapper>
                 {!isLightVersion && <Status selectedCases={patient.status} />}
-                {isLightVersion ? (
-                  <p className="card-name patient-link--small min-width-20 mr-2">
-                    {patient.fullName}
-                  </p>
-                ) : (
-                  <Link
-                    className="card-name patient-link--small min-width-20 mr-2"
-                    to={`/patients/${patient.patientId}/encounter/create`}>
-                    {patient.fullName}
-                  </Link>
-                )}
+                <Link
+                  className="card-name patient-link--small min-width-20 mr-2"
+                  to={routes.createEncounter.path.replace(
+                    ':patientId',
+                    patient.patientId,
+                  )}>
+                  {patient.fullName}
+                </Link>
 
                 <Info className="min-width-20 mr-2">
                   <Button
