@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
+import styled from 'styled-components';
 
 import {
   Container,
@@ -16,19 +17,40 @@ import {
 } from 'reactstrap';
 import { DashboardLayout } from 'components/common/Layout';
 import { InputField } from 'components/common/InputField';
-
-import { getISODate, currentDate, getErrorMessage } from 'utils';
-import * as patientService from 'services/patient';
-import { GENDER_OPTIONS } from '../../constants';
-import { patientValidation } from 'validations';
-import { hideSpinner, showSpinner } from 'actions/spinner';
-import { routes } from 'routers';
 import { LinkButton } from 'components/common/Button';
+
+import { hideSpinner, showSpinner } from 'actions/spinner';
+import * as patientService from 'services/patient';
+import { getISODate, currentDate, getErrorMessage, getRandomKey } from 'utils';
+import { routes } from 'routers';
+import { patientValidation } from 'validations';
+import { GENDER_OPTIONS } from '../../constants';
+import time from 'assets/images/svg-icons/clock.svg';
+import { getDate } from 'global';
+import {
+  RadioLabel,
+  RadioInput,
+  OptionName,
+  DateAndTime,
+  DateAndTimeWrap,
+  InfoWrapper,
+  TimeImage,
+  ViewName,
+} from 'global/styles';
+
+const Headings = styled.section`
+  padding: 0em 4em;
+  width: 100%;
+  @media (max-width: 768px) {
+    padding: 0em;
+  }
+`;
 
 const AddPatient = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [serverError, setServerError] = useState('');
+  const [checkedGender] = useState('');
 
   const { register, handleSubmit, errors, getValues } = useForm({
     resolver: yupResolver(patientValidation),
@@ -61,9 +83,15 @@ const AddPatient = () => {
 
   return (
     <DashboardLayout>
-      <div className="header mb-1 d-flex justify-content-between px-3 py-2">
-        <h3 className="page-title">Add New Patient</h3>
-      </div>
+      <Headings>
+        <InfoWrapper>
+          <ViewName>Add New Patient</ViewName>
+          <DateAndTimeWrap>
+            <TimeImage src={time} />
+            <DateAndTime>{getDate()}</DateAndTime>
+          </DateAndTimeWrap>
+        </InfoWrapper>
+      </Headings>
       <Container>
         <Form onSubmit={handleSubmit(handleSave)}>
           <Row>
@@ -113,15 +141,18 @@ const AddPatient = () => {
                 <Label>Gender</Label>
                 <div className="d-flex mt-2">
                   {GENDER_OPTIONS.map(({ label, value }) => (
-                    <InputField
-                      key={label}
-                      id={value}
-                      value={value}
-                      name="gender"
-                      innerRef={register}
-                      title={label}
-                      type="radio"
-                    />
+                    <RadioLabel htmlFor={value} key={getRandomKey()}>
+                      <RadioInput
+                        type="radio"
+                        name="gender"
+                        value={value}
+                        id={value}
+                        innerRef={register}
+                      />
+                      <OptionName checked={checkedGender === value}>
+                        {label}
+                      </OptionName>
+                    </RadioLabel>
                   ))}
                 </div>
               </FormGroup>
@@ -143,6 +174,7 @@ const AddPatient = () => {
                 innerRef={register}
                 error={getErrorMessage(errors, 'height')}
                 placeholder="Enter Height"
+                customClass="measurement ft"
               />
             </Col>
             <Col md={{ size: 3 }}>
@@ -151,7 +183,9 @@ const AddPatient = () => {
                 name="weight"
                 innerRef={register}
                 placeholder="Enter Weight"
+                customClass="measurement kg"
               />
+              <span />
             </Col>
           </Row>
           <Row>

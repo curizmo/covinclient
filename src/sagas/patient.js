@@ -97,22 +97,29 @@ function* postCheck({ payload }) {
 function* fetchPatientByPatientId({ payload: { patientId, ntoUserId } }) {
   try {
     yield put(showSpinner());
-    const [patient, vitals, encounters, prescriptions, intakeData] = yield all([
+    yield put(clearPatient());
+    const [patient, vitals, encounters, prescriptions] = yield all([
       call(fetchPatient, patientId),
       call(fetchPatientVitals, patientId),
       call(fetchPatientEncountersByPractitionerUserId, patientId, ntoUserId),
       call(fetchPatientMedicationByPractitionerUserId, patientId, ntoUserId),
-      call(fetchPatientIntakeData, patientId),
     ]);
-    yield put(
-      setPatient({
-        ...patient.data,
-        ...vitals.data,
-        ...intakeData.data,
-        pastNotes: encounters.data,
-        pastPrescriptions: prescriptions?.data?.prescriptions,
-      }),
-    );
+    let intakeData = { data: {} };
+    try {
+      intakeData = yield call(fetchPatientIntakeData, patientId);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      yield put(
+        setPatient({
+          ...patient.data,
+          ...vitals.data,
+          ...intakeData.data,
+          pastNotes: encounters.data,
+          pastPrescriptions: prescriptions?.data?.prescriptions,
+        }),
+      );
+    }
   } catch (error) {
     console.error(error);
   } finally {

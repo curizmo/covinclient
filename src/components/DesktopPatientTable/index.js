@@ -125,7 +125,7 @@ const DesktopPatientTable = (props) => {
                 </Info>
                 <Info className="min-width-10 mr-2">
                   <Label>Gender:</Label>
-                  <Value>{GENDER_SHORTHAND[patient.gender]}</Value>
+                  <Value>{GENDER_SHORTHAND[patient.gender] || '-'}</Value>
                 </Info>
                 <Info className="min-width-10 mr-2">
                   <Label>Age:</Label>
