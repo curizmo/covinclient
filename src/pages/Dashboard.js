@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Button } from 'reactstrap';
+
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { debounce } from 'lodash';
@@ -8,6 +10,7 @@ import DesktopPatientTable from 'components/DesktopPatientTable';
 import CasesCardComponent from 'components/CasesCard';
 import { DashboardLayout } from 'components/common/Layout';
 import { SearchInput } from 'components/common/SearchInput';
+import { exportToCSV } from 'utils/vitalsDownload';
 
 import time from 'assets/images/svg-icons/clock.svg';
 import { getDate } from '../global';
@@ -23,6 +26,7 @@ import {
   usePatientsRiskData,
   usePatientsVitals,
 } from '../services/practitioner';
+import * as patientVitalsService from 'services/patientVitals';
 import { isLightVersion } from '../config';
 import { RISK } from '../constants';
 import { LinkButton } from 'components/common/Button';
@@ -135,6 +139,13 @@ const DashBoardComponent = () => {
     );
   }, [patients, selectedCases]);
 
+  const exportVitals = async () => {
+    const vitals = await patientVitalsService.getPatientVitals(
+      user.PractitionerID,
+    );
+    exportToCSV(vitals.data);
+  };
+
   return (
     <DashboardLayout>
       <FirstRow>
@@ -165,6 +176,9 @@ const DashBoardComponent = () => {
                 onChange={handleSearchText}
                 searchRef={searchRef}
               />
+              <Button className="btn btn-covin my-2" onClick={exportVitals}>
+                Download Patient Vitals
+              </Button>
               <LinkButton
                 className="btn btn-covin my-2"
                 to={routes.addPatient.path}>
@@ -197,6 +211,9 @@ const DashBoardComponent = () => {
                   searchRef={searchRef}
                 />
               </InputContainer>
+              <Button className="btn btn-covin my-2" onClick={exportVitals}>
+                Download Patient Vitals
+              </Button>
               <LinkButton
                 className="btn btn-covin my-2"
                 to={routes.addPatient.path}>
