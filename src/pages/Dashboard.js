@@ -29,6 +29,7 @@ import {
 import * as patientVitalsService from 'services/patientVitals';
 import { isLightVersion } from '../config';
 import { RISK, VitalsDateFields } from '../constants';
+import { CAMEL_CASE_REGEX } from '../constants/regex';
 import { LinkButton } from 'components/common/Button';
 import { routes } from 'routers';
 
@@ -146,7 +147,7 @@ const DashBoardComponent = () => {
 
     let vitalDetails = vitals.data.map((vital) => {
       for (var key in vital) {
-        var result = key.replace(/([A-Z])/g, ' $1');
+        var result = key.replace(CAMEL_CASE_REGEX, ' $1');
         var title = result.charAt(0).toUpperCase() + result.slice(1);
         if (title !== key) {
           vital[title] = vital[key];
