@@ -1,10 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import styled from 'styled-components';
-
 import {
   Container,
   Row,
@@ -14,17 +13,23 @@ import {
   Alert,
   FormGroup,
   Label,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from 'reactstrap';
+
 import { DashboardLayout } from 'components/common/Layout';
 import { InputField } from 'components/common/InputField';
 import { LinkButton } from 'components/common/Button';
 
+import csc from 'third-party/country-state-city';
 import { hideSpinner, showSpinner } from 'actions/spinner';
 import * as patientService from 'services/patient';
 import { getISODate, currentDate, getErrorMessage, getRandomKey } from 'utils';
 import { routes } from 'routers';
 import { patientValidation } from 'validations';
-import { GENDER_OPTIONS } from '../../constants';
+import { GENDER_OPTIONS, INDIA_COUNTRY_CODE } from '../../constants';
 import time from 'assets/images/svg-icons/clock.svg';
 import { getDate } from 'global';
 import {
@@ -37,6 +42,10 @@ import {
   TimeImage,
   ViewName,
 } from 'global/styles';
+
+const states = csc.getStatesOfCountry(INDIA_COUNTRY_CODE);
+const countries = csc.getAllCountriesPhoneCodes();
+const phoneCodeIn = csc.getCountryPhoneCode(INDIA_COUNTRY_CODE);
 
 const Headings = styled.section`
   padding: 0em 4em;
@@ -51,6 +60,30 @@ const AddPatient = () => {
   const history = useHistory();
   const [serverError, setServerError] = useState('');
   const [checkedGender] = useState('');
+
+  const [isPhoneCodesDropdownOpen, setIsPhoneCodesDropdownOpen] =
+    useState(false);
+  const [isStatesDropdownOpen, setIsStatesDropdownOpen] = useState(false);
+  const [isCitiesDropdownOpen, setIsCitiesDropdownOpen] = useState(false);
+  const [phoneCode, setPhoneCode] = useState(phoneCodeIn);
+  const [state, setState] = useState({});
+  const [city, setCity] = useState({});
+  const [citiesList, setCitiesList] = useState([]);
+  const [gender, setGender] = useState('');
+
+  const togglePhoneCodesDropdown = () =>
+    setIsPhoneCodesDropdownOpen((prevState) => !prevState);
+  const toggleStatesDropdown = () =>
+    setIsStatesDropdownOpen((prevState) => !prevState);
+  const toggleCitiesDropdown = () =>
+    setIsCitiesDropdownOpen((prevState) => !prevState);
+
+  useEffect(() => {
+    setCitiesList(
+      state ? csc.getCitiesOfState(INDIA_COUNTRY_CODE, state.isoCode) : [],
+    );
+    setCity({});
+  }, [state]);
 
   const { register, handleSubmit, errors, getValues } = useForm({
     resolver: yupResolver(patientValidation),
@@ -69,7 +102,13 @@ const AddPatient = () => {
   const handleSave = async (patient) => {
     try {
       dispatch(showSpinner());
-      await patientService.createPatient(patient);
+      await patientService.createPatient({
+        ...patient,
+        state: state.name,
+        city: city.name,
+        phone: `${phoneCode}${patient.phone}`,
+        gender,
+      });
 
       history.push(routes.dashboard.path);
     } catch (err) {
@@ -96,18 +135,42 @@ const AddPatient = () => {
         <Form onSubmit={handleSubmit(handleSave)}>
           <Row>
             <Col md={{ size: 6 }}>
-              <InputField
-                title="Cell Phone"
-                name="phone"
-                required
-                error={getErrorMessage(errors, 'phone')}
-                innerRef={register}
-                defaultValue="+91-"
-              />
+              <Label className="required w-100">Cellphone Number</Label>
+              <div className="d-flex">
+                <Col md={{ size: 3 }} className="px-0">
+                  <Dropdown
+                    isOpen={isPhoneCodesDropdownOpen}
+                    toggle={togglePhoneCodesDropdown}
+                    direction="down"
+                    className="classic-dropdown">
+                    <DropdownToggle caret className="w-100">
+                      {phoneCode || 'Code'}
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      {countries.map((country) => (
+                        <DropdownItem
+                          key={getRandomKey()}
+                          onClick={() => setPhoneCode(country.phone_code)}>
+                          {country.phone_code}
+                        </DropdownItem>
+                      ))}
+                    </DropdownMenu>
+                  </Dropdown>
+                </Col>
+                <Col md={{ size: 9 }} className="pr-0">
+                  <InputField
+                    name="phone"
+                    required
+                    error={getErrorMessage(errors, 'phone')}
+                    innerRef={register}
+                    placeholder="Enter Cellphone Number"
+                  />
+                </Col>
+              </div>
             </Col>
             <Col md={{ size: 6 }}>
               <InputField
-                title="Email"
+                title="Patient Email"
                 name="email"
                 type="email"
                 innerRef={register}
@@ -137,7 +200,7 @@ const AddPatient = () => {
           </Row>
           <Row>
             <Col md={{ size: 3 }}>
-              <FormGroup check row className="mx-0 pl-0">
+              <FormGroup check row className="mx-0 pl-0 form-group">
                 <Label>Gender</Label>
                 <div className="d-flex mt-2">
                   {GENDER_OPTIONS.map(({ label, value }) => (
@@ -147,7 +210,7 @@ const AddPatient = () => {
                         name="gender"
                         value={value}
                         id={value}
-                        innerRef={register}
+                        onClick={() => setGender(value)}
                       />
                       <OptionName checked={checkedGender === value}>
                         {label}
@@ -200,27 +263,56 @@ const AddPatient = () => {
           </Row>
           <Row>
             <Col md={{ size: 6 }}>
-              <InputField
-                title="City"
-                name="city"
-                innerRef={register}
-                placeholder="Enter City"
-              />
+              <Label>State</Label>
+              <Dropdown
+                isOpen={isStatesDropdownOpen}
+                toggle={toggleStatesDropdown}
+                direction="down"
+                className="classic-dropdown">
+                <DropdownToggle caret className="w-100">
+                  {state.name || 'Select State'}
+                </DropdownToggle>
+                <DropdownMenu>
+                  {states.map((state) => (
+                    <DropdownItem
+                      key={getRandomKey()}
+                      onClick={() => setState(state)}>
+                      {state.name}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
             </Col>
             <Col md={{ size: 4 }}>
-              <InputField
-                title="State"
-                name="state"
-                innerRef={register}
-                placeholder="Enter State"
-              />
+              <Label>City</Label>
+              <Dropdown
+                isOpen={isCitiesDropdownOpen}
+                toggle={toggleCitiesDropdown}
+                direction="down"
+                className="classic-dropdown">
+                <DropdownToggle
+                  caret
+                  className="w-100"
+                  disabled={citiesList.length < 1}>
+                  {city.name || 'Select City'}
+                </DropdownToggle>
+                <DropdownMenu>
+                  {citiesList.map((city) => (
+                    <DropdownItem
+                      key={getRandomKey()}
+                      onClick={() => setCity(city)}>
+                      {city.name}
+                    </DropdownItem>
+                  ))}
+                </DropdownMenu>
+              </Dropdown>
             </Col>
             <Col md={{ size: 2 }}>
               <InputField
                 title="Postal Code"
                 name="zip"
                 innerRef={register}
-                placeholder="Enter Postal Code"
+                placeholder="Postal Code"
               />
             </Col>
           </Row>

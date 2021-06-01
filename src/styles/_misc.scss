@@ -10,3 +10,24 @@
 .z-1060 {
   z-index: 1060 !important;
 }
+
+.classic-dropdown {
+  button {
+    border: 1px solid #E0E3EA !important;
+    box-sizing: border-box;
+    box-shadow: 0px 2px 0px #E0E3EA !important;
+    border-radius: 3px;
+    text-align: left;
+    background-color: #fff !important;
+    color: #22335E !important;
+    &:after {
+      position: absolute;
+      top: 50%;
+      right: 17px;
+    }
+  }
+  .dropdown-menu.show {
+    overflow-y: scroll;
+    max-height: 20rem;
+  }
+}

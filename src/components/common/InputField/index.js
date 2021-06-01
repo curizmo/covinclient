@@ -32,6 +32,7 @@ const InputField = (props) => {
           ['checkbox', 'radio'].includes(type) ? 'ml-0' : ''
         }`}
       />
+      <span />
       <FormFeedback>{error}</FormFeedback>
     </>
   );
