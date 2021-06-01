@@ -2,6 +2,14 @@ import country_json_1 from './lib/country.json';
 import state_json_1 from './lib/state.json';
 import city_json_1 from './lib/city.json';
 
+const getFormattedPhoneCode = (phoneCode) => {
+  let formattedPhoneCode = `${phoneCode}-`;
+  if (phoneCode.startsWith('+')) {
+    return formattedPhoneCode;
+  }
+  return `+${formattedPhoneCode}`;
+};
+
 var _findEntryByCode = function (source, code) {
   if (code && source != null) {
     var codex = source.findIndex(function (c) {
@@ -66,6 +74,20 @@ const csc = {
   },
   getStateByCodeAndCountry: function (isoCode, countryCode) {
     return _findStateByCodeAndCountryCode(state_json_1, isoCode, countryCode);
+  },
+  getAllCountriesPhoneCodes: function () {
+    return country_json_1
+      .filter(({ phone_code }) => phone_code)
+      .map(({ iso2, phone_code }) => ({
+        iso2,
+        phone_code: getFormattedPhoneCode(phone_code),
+      }));
+  },
+  getCountryPhoneCode: function (_iso2) {
+    const phone_code = country_json_1.find(
+      ({ iso2 }) => iso2 === _iso2,
+    )?.phone_code;
+    return getFormattedPhoneCode(phone_code || '');
   },
 };
 export default csc;
