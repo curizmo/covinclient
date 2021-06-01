@@ -82,3 +82,30 @@ main {
     flex-direction: column;
   }
 }
+
+.headsearch-btn-div {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.excel-image-wrap{
+  margin-right: 0.9rem;
+}
+
+.download-excel-icon {
+  color: #23a566;
+  width: 0.945rem;
+  height: 1.1rem;
+  position: absolute;
+  top: 0.562rem;
+  left: 0.75rem;
+  margin-right: 0.625rem;
+}
+.x-icon {
+  color: #FFFFFF;
+  width: 0.437rem;
+  height: 0.437rem;
+  position: absolute;
+  top: 0.937rem;
+  left: 0.937rem;
+}

@@ -11,3 +11,5 @@ export const SUBDOMAIN_REGEX = new RegExp(
 export const PHONE_SCHEMA = /^(\(?[0-9]{2,4}\)?[-]?)*([0-9]{2,4})$/;
 
 export const HEIGHT_SCHEMA = /^([0-9]{1,2}'[0-9]{1,2}")?$/;
+
+export const CAMEL_CASE_REGEX = /([A-Z])/g;
