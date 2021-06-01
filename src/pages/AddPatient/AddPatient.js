@@ -268,7 +268,7 @@ const AddPatient = () => {
                 isOpen={isStatesDropdownOpen}
                 toggle={toggleStatesDropdown}
                 direction="down"
-                className="classic-dropdown">
+                className="classic-dropdown form-group">
                 <DropdownToggle caret className="w-100">
                   {state.name || 'Select State'}
                 </DropdownToggle>
@@ -289,7 +289,7 @@ const AddPatient = () => {
                 isOpen={isCitiesDropdownOpen}
                 toggle={toggleCitiesDropdown}
                 direction="down"
-                className="classic-dropdown">
+                className="classic-dropdown form-group">
                 <DropdownToggle
                   caret
                   className="w-100"
