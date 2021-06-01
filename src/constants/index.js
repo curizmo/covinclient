@@ -20,6 +20,8 @@ export const weekDays = [
   'saturday',
 ];
 
+export const excelTitleCell = ['A1', 'B1'];
+
 export const DIAL = [
   '1',
   '2',
