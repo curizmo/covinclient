@@ -28,7 +28,7 @@
 }
 
 .green {
-  color: #00BEBE;
+  color: #00bebe;
 }
 
 .btn-secondary {
@@ -43,7 +43,7 @@
     align-items: center;
     box-sizing: border-box;
     justify-content: center;
-    letter-spacing: .1em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     font-weight: bold;
     font-size: 13px;
@@ -51,22 +51,43 @@
     white-space: nowrap;
   }
   &.btn-covin {
-    border: 1px solid #54B8B2;
+    border: 1px solid #54b8b2;
     border-radius: 3px;
     box-shadow: 0 3px 0 #008484;
-    background-color: #54B8B2;
+    background-color: #54b8b2;
     color: #fff;
     &.dark {
       border-color: #657396;
       box-shadow: 0 3px 0 #657396;
-      background-color: #22335E;
+      background-color: #22335e;
     }
   }
   &.btn-cancel {
     border: none;
     box-shadow: none;
     background: none;
-    color: #22335E;
+    color: #22335e;
+  }
+  &.btn-download {
+    padding: 0 1.25rem;
+    height: 2.35rem;
+    width: 184px;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    justify-content: center;
+    letter-spacing: 0.1em;
+    font-weight: bold;
+    font-size: 13px;
+    line-height: 20px;
+    white-space: nowrap;
+    border: 1px solid #9FA7BA;
+    border-radius: 3px;
+    box-shadow: 0 3px 0 #9FA7BA;
+    background-color: #22335e;
+    background-color: #ffffff;
+    color: #657396;
+    position: relative;
   }
 }
 
@@ -79,11 +100,20 @@ button.transparent-button {
   }
 }
 
+.btn-download {
+  &:active {  
+    background-color: #ffffff !important;
+    color: #657396 !important;
+    box-shadow: 0 0 0 0.2rem #9FA7BA !important;
+    border-color: #9FA7BA !important;
+  }
+}
+
 @media only screen and (max-width: 1024px) {
   .btn-small {
-    margin: .3rem .5rem;
-    padding: .3rem .65rem;
-    font-size: .65rem;
-    border-radius: .2rem;
+    margin: 0.3rem 0.5rem;
+    padding: 0.3rem 0.65rem;
+    font-size: 0.65rem;
+    border-radius: 0.2rem;
   }
 }

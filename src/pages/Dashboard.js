@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Button } from 'reactstrap';
+
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { debounce } from 'lodash';
@@ -8,9 +10,12 @@ import DesktopPatientTable from 'components/DesktopPatientTable';
 import CasesCardComponent from 'components/CasesCard';
 import { DashboardLayout } from 'components/common/Layout';
 import { SearchInput } from 'components/common/SearchInput';
+import { exportToCSV } from 'utils/vitalsDownload';
 
 import time from 'assets/images/svg-icons/clock.svg';
-import { getDate } from '../global';
+import excel from 'assets/images/svg-icons/excel.svg';
+import xicon from 'assets/images/x-icon.png';
+import { getDate, setDate } from '../global';
 import {
   DateAndTime,
   DateAndTimeWrap,
@@ -23,8 +28,10 @@ import {
   usePatientsRiskData,
   usePatientsVitals,
 } from '../services/practitioner';
+import * as patientVitalsService from 'services/patientVitals';
 import { isLightVersion } from '../config';
-import { RISK } from '../constants';
+import { RISK, VitalsDateFields } from '../constants';
+import { CAMEL_CASE_REGEX } from '../constants/regex';
 import { LinkButton } from 'components/common/Button';
 import { routes } from 'routers';
 
@@ -135,6 +142,32 @@ const DashBoardComponent = () => {
     );
   }, [patients, selectedCases]);
 
+  const exportVitals = async () => {
+    const vitals = await patientVitalsService.getPatientVitals(
+      user.PractitionerID,
+    );
+
+    let vitalDetails = vitals.data.map((vital) => {
+      for (var key in vital) {
+        var result = key.replace(CAMEL_CASE_REGEX, ' $1');
+        var title = result.charAt(0).toUpperCase() + result.slice(1);
+        if (title !== key) {
+          vital[title] = vital[key];
+          delete vital[key];
+        }
+      }
+      return {
+        ...vital,
+        [VitalsDateFields.updated]: setDate(vital[VitalsDateFields.updated]),
+        [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
+        [VitalsDateFields.patientSince]: setDate(
+          vital[VitalsDateFields.patientSince],
+        ),
+      };
+    });
+    exportToCSV(vitalDetails);
+  };
+
   return (
     <DashboardLayout>
       <FirstRow>
@@ -165,11 +198,24 @@ const DashBoardComponent = () => {
                 onChange={handleSearchText}
                 searchRef={searchRef}
               />
-              <LinkButton
-                className="btn btn-covin my-2"
-                to={routes.addPatient.path}>
-                + New Patient
-              </LinkButton>
+              <div className="headsearch-btn-div">
+                <Button className="btn btn-download m-2" onClick={exportVitals}>
+                  <span className="excel-image-wrap">
+                    <img
+                      src={excel}
+                      alt="Covin"
+                      className="logo download-excel-icon"
+                    />
+                    <img src={xicon} alt="Covin" className="logo x-icon" />
+                  </span>{' '}
+                  DOWNLOAD (Xls)
+                </Button>
+                <LinkButton
+                  className="btn btn-covin my-2"
+                  to={routes.addPatient.path}>
+                  + New Patient
+                </LinkButton>
+              </div>
             </SearchWrapper>
           </div>
         </Headings>
@@ -197,11 +243,24 @@ const DashBoardComponent = () => {
                   searchRef={searchRef}
                 />
               </InputContainer>
-              <LinkButton
-                className="btn btn-covin my-2"
-                to={routes.addPatient.path}>
-                + New Patient
-              </LinkButton>
+              <div className="headsearch-btn-div">
+                <Button className="btn btn-download m-2" onClick={exportVitals}>
+                  <span className="excel-image-wrap">
+                    <img
+                      src={excel}
+                      alt="Covin"
+                      className="logo download-excel-icon"
+                    />
+                    <img src={xicon} alt="Covin" className="logo x-icon" />
+                  </span>{' '}
+                  DOWNLOAD (Xls)
+                </Button>
+                <LinkButton
+                  className="btn btn-covin my-2"
+                  to={routes.addPatient.path}>
+                  + New Patient
+                </LinkButton>
+              </div>
             </HeaderSearchWrap>
             <DesktopPatientTable
               selectedCaseData={isLightVersion ? patients : filteredPatients}
