@@ -195,14 +195,16 @@ const DashBoardComponent = () => {
                 onChange={handleSearchText}
                 searchRef={searchRef}
               />
-              <Button className="btn btn-covin my-2" onClick={exportVitals}>
-                Download Patient Vitals
-              </Button>
-              <LinkButton
-                className="btn btn-covin my-2"
-                to={routes.addPatient.path}>
-                + New Patient
-              </LinkButton>
+              <div className="headsearch-btn-div">
+                <Button className="btn btn-covin m-2" onClick={exportVitals}>
+                  Download Vitals
+                </Button>
+                <LinkButton
+                  className="btn btn-covin my-2"
+                  to={routes.addPatient.path}>
+                  + New Patient
+                </LinkButton>
+              </div>
             </SearchWrapper>
           </div>
         </Headings>
@@ -230,14 +232,16 @@ const DashBoardComponent = () => {
                   searchRef={searchRef}
                 />
               </InputContainer>
-              <Button className="btn btn-covin my-2" onClick={exportVitals}>
-                Download Patient Vitals
-              </Button>
-              <LinkButton
-                className="btn btn-covin my-2"
-                to={routes.addPatient.path}>
-                + New Patient
-              </LinkButton>
+              <div className="headsearch-btn-div">
+                <Button className="btn btn-covin m-2" onClick={exportVitals}>
+                  Download Vitals
+                </Button>
+                <LinkButton
+                  className="btn btn-covin my-2"
+                  to={routes.addPatient.path}>
+                  + New Patient
+                </LinkButton>
+              </div>
             </HeaderSearchWrap>
             <DesktopPatientTable
               selectedCaseData={isLightVersion ? patients : filteredPatients}
