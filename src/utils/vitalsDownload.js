@@ -1,6 +1,6 @@
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx-js-style';
-import { excelTitleCell } from '../../src/constants/index';
+import { excelTitleCell } from '../constants/index';
 
 export const exportToCSV = (csvData) => {
   const identifier = new Date().getTime();
