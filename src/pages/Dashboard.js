@@ -13,6 +13,8 @@ import { SearchInput } from 'components/common/SearchInput';
 import { exportToCSV } from 'utils/vitalsDownload';
 
 import time from 'assets/images/svg-icons/clock.svg';
+import excel from 'assets/images/svg-icons/excel.svg';
+import xicon from 'assets/images/x-icon.png';
 import { getDate, setDate } from '../global';
 import {
   DateAndTime,
@@ -197,8 +199,16 @@ const DashBoardComponent = () => {
                 searchRef={searchRef}
               />
               <div className="headsearch-btn-div">
-                <Button className="btn btn-covin m-2" onClick={exportVitals}>
-                  Download Vitals
+                <Button className="btn btn-download m-2" onClick={exportVitals}>
+                  <span className="excel-image-wrap">
+                    <img
+                      src={excel}
+                      alt="Covin"
+                      className="logo download-excel-icon"
+                    />
+                    <img src={xicon} alt="Covin" className="logo x-icon" />
+                  </span>{' '}
+                  DOWNLOAD (Xls)
                 </Button>
                 <LinkButton
                   className="btn btn-covin my-2"
@@ -234,8 +244,16 @@ const DashBoardComponent = () => {
                 />
               </InputContainer>
               <div className="headsearch-btn-div">
-                <Button className="btn btn-covin m-2" onClick={exportVitals}>
-                  Download Vitals
+                <Button className="btn btn-download m-2" onClick={exportVitals}>
+                  <span className="excel-image-wrap">
+                    <img
+                      src={excel}
+                      alt="Covin"
+                      className="logo download-excel-icon"
+                    />
+                    <img src={xicon} alt="Covin" className="logo x-icon" />
+                  </span>{' '}
+                  DOWNLOAD (Xls)
                 </Button>
                 <LinkButton
                   className="btn btn-covin my-2"
