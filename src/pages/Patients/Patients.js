@@ -7,11 +7,10 @@ import React, {
   Fragment,
 } from 'react';
 import { Table, Button, Card, CardBody } from 'reactstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import styled from 'styled-components';
-import { getUser } from 'selectors';
 import { debounce } from 'lodash';
 
 import { DashboardLayout } from 'components/common/Layout';
@@ -30,10 +29,8 @@ import {
 } from 'global/styles';
 
 import * as patientService from 'services/patient';
-import * as patientVitalsService from 'services/patientVitals';
 import { routes } from 'routers';
 import { getISODate } from 'utils/dateTime';
-import { exportToCSV } from 'utils/vitalsDownload';
 import { getRandomKey, handleCallAppointment } from 'utils';
 import useCheckIsMobile from 'hooks/useCheckIsMobile';
 import { getDate } from 'global';
@@ -77,7 +74,6 @@ const Patients = () => {
   const dispatch = useDispatch();
   const searchRef = useRef(null);
   const riskNames = Object.values(RISK);
-  const user = useSelector(getUser);
 
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
@@ -174,13 +170,6 @@ const Patients = () => {
     [dispatch],
   );
 
-  const exportVitals = async () => {
-    const vitals = await patientVitalsService.getPatientVitals(
-      user.PractitionerID,
-    );
-    exportToCSV(vitals.data);
-  };
-
   const WebView = () => (
     <WebViewWrap>
       <InfoWrapper className="w-100">
@@ -215,13 +204,10 @@ const Patients = () => {
               );
             })}
           </RiskLevelWrap>
-          <Button className="btn btn-covin my-2" onClick={exportVitals}>
-            Download Patient Vitals
-          </Button>
           <LinkButton
             className="btn btn-covin my-2"
             to={routes.addPatient.path}>
-            + New Patient
+            + New Patients
           </LinkButton>
         </InfoColumn>
       </div>
