@@ -13,14 +13,17 @@ export const exportToCSV = (csvData) => {
     ws[cell].s = {
       font: { sz: 12, bold: true, color: '#FF00FF' },
       fill: {
-        patternType: 'solid',
-        bgColor: { rgb: '#FBE5D6' },
+        fgColor: {
+          theme: 8,
+          tint: 0.3999755851924192,
+          rgb: 'FBE5D6',
+        },
       },
       border: {
-        top: { style: 'thick', color: '#FBE5D6' },
-        bottom: { style: 'thick', color: '#FBE5D6' },
-        right: { style: 'thick', color: '#FBE5D6' },
-        left: { style: 'thick', color: '#FBE5D6' },
+        top: { style: 'thin', color: 'FBE5D6' },
+        bottom: { style: 'thin', color: 'FBE5D6' },
+        right: { style: 'thin', color: 'FBE5D6' },
+        left: { style: 'thin', color: 'FBE5D6' },
       },
     };
   });
