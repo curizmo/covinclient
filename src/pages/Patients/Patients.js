@@ -207,7 +207,7 @@ const Patients = () => {
           <LinkButton
             className="btn btn-covin my-2"
             to={routes.addPatient.path}>
-            + New Patients
+            + New Patient
           </LinkButton>
         </InfoColumn>
       </div>
