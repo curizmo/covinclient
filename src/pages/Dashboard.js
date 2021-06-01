@@ -13,7 +13,7 @@ import { SearchInput } from 'components/common/SearchInput';
 import { exportToCSV } from 'utils/vitalsDownload';
 
 import time from 'assets/images/svg-icons/clock.svg';
-import { getDate } from '../global';
+import { getDate, setDate } from '../global';
 import {
   DateAndTime,
   DateAndTimeWrap,
@@ -28,7 +28,7 @@ import {
 } from '../services/practitioner';
 import * as patientVitalsService from 'services/patientVitals';
 import { isLightVersion } from '../config';
-import { RISK } from '../constants';
+import { RISK, VitalsDateFields } from '../constants';
 import { LinkButton } from 'components/common/Button';
 import { routes } from 'routers';
 
@@ -143,7 +143,26 @@ const DashBoardComponent = () => {
     const vitals = await patientVitalsService.getPatientVitals(
       user.PractitionerID,
     );
-    exportToCSV(vitals.data);
+
+    let vitalDetails = vitals.data.map((vital) => {
+      for (var key in vital) {
+        var result = key.replace(/([A-Z])/g, ' $1');
+        var title = result.charAt(0).toUpperCase() + result.slice(1);
+        if (title !== key) {
+          vital[title] = vital[key];
+          delete vital[key];
+        }
+      }
+      return {
+        ...vital,
+        [VitalsDateFields.updated]: setDate(vital[VitalsDateFields.updated]),
+        [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
+        [VitalsDateFields.patientSince]: setDate(
+          vital[VitalsDateFields.patientSince],
+        ),
+      };
+    });
+    exportToCSV(vitalDetails);
   };
 
   return (

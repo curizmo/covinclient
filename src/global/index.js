@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 export const severePreferences = {
   lineColor: '#eb2f2f',
   showCircleOnLines: false,
@@ -59,4 +61,8 @@ export const getDate = () => {
     ' ' +
     ampm
   );
+};
+
+export const setDate = (date) => {
+  return moment(date).format('LL');
 };

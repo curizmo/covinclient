@@ -43,6 +43,12 @@ export const excelTitleCell = [
   'T1',
 ];
 
+export const VitalsDateFields = {
+  updated: 'Last Vitals Update',
+  dob: 'Date Of Birth',
+  patientSince: 'Patient Since',
+};
+
 export const DIAL = [
   '1',
   '2',
