@@ -38,9 +38,6 @@ export const excelTitleCell = [
   'O1',
   'P1',
   'Q1',
-  'R1',
-  'S1',
-  'T1',
 ];
 
 export const VitalsDateFields = {
