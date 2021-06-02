@@ -38,12 +38,19 @@ export const excelTitleCell = [
   'O1',
   'P1',
   'Q1',
+  'R1',
+  'S1',
+  'T1',
+  'U1',
+  'V1',
 ];
 
 export const VitalsDateFields = {
   updated: 'Last Vitals Update',
   dob: 'Date Of Birth',
   patientSince: 'Patient Since',
+  doseOne: 'Dose1 Vaccination On',
+  doseTwo: 'Dose2 Vaccination On',
 };
 
 export const DIAL = [
