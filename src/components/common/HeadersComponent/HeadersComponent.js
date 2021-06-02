@@ -35,7 +35,7 @@ const HeadersComponent = (props) => {
   return (
     <HeaderReaderWrap>
       <ReadingIconStyleRepresentation>
-        <IconRepresentation src={image} alt={alt} />
+        {image && <IconRepresentation src={image} alt={alt} />}
         <ReadingFontStyle>{text}</ReadingFontStyle>
       </ReadingIconStyleRepresentation>
       {children}

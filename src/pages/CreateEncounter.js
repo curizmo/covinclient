@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components/macro';
+import { css } from 'styled-components';
 import { debounce } from 'lodash';
 
 import {
@@ -43,6 +44,7 @@ import {
 } from 'global/styles';
 import { getDate } from 'global';
 import { isLightVersion } from 'config';
+import GeneralInformation from 'components/CreateEncounter/GeneralInformation';
 
 const PATIENT_DETAILS_TABS = {
   READINGS: 'Readings',
@@ -293,6 +295,9 @@ function CreateEncounter() {
             handleRiskLevelChange={handleRiskLevelChange}
           />
           <MedInfoWrap>
+            <Column isLightVersion>
+              <GeneralInformation data={patientData} dispatch={dispatch} />
+            </Column>
             <Column isLightVersion>
               <GraphicalReadings data={patientData} />
             </Column>
