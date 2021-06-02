@@ -17,15 +17,18 @@ import {
   NoteContainer,
   ImgButton,
   DesktopViewPastPrescription,
-  LastRow,
+  PastNote,
   LoadingIcon,
   UploadContainer,
   FileName,
 } from './styles';
 
 import { getTabIndex } from 'utils';
+import { downloadFileFromBlob } from 'utils/file';
 
 import { ENTER } from '../../constants';
+
+import * as fileService from 'services/file';
 
 export const PatientNotes = ({
   note,
@@ -46,6 +49,16 @@ export const PatientNotes = ({
 
   const handleUploadClick = () => {
     imageUploadRef.current.click();
+  };
+
+  const handleFileDownload = async (file) => {
+    try {
+      const response = await fileService.getFile(file.file);
+
+      downloadFileFromBlob(response.data, file.name);
+    } catch (err) {
+      // TODO: Handle error
+    }
   };
 
   return (
@@ -140,16 +153,33 @@ export const PatientNotes = ({
           {showMore &&
             pastNotes?.length > 0 &&
             pastNotes.map((note) => {
-              if (!note.notes) {
+              if (!note.notes && !note?.labResults?.length) {
                 return null;
               }
 
-              const value = `${note.eventStartTime}\n${note.notes}`;
-
               return (
-                <LastRow key={note.encounterId}>
-                  <Note value={value} disabled />
-                </LastRow>
+                <PastNote key={note.encounterId}>
+                  <div className="mb-2">{note.eventStartTime}</div>
+                  {note.notes ? <div>{note.notes}</div> : null}
+                  {note?.labResults?.map((labResult) => {
+                    return (
+                      <div
+                        className="mt-2"
+                        role="button"
+                        tabIndex={getTabIndex()}
+                        onClick={() => handleFileDownload(labResult)}
+                        onKeyPress={(e) => {
+                          if (e.key === ENTER) {
+                            handleFileDownload(labResult);
+                          }
+                        }}
+                        key={labResult.name}>
+                        <ImAttachment className="mr-1" />
+                        {labResult.name}
+                      </div>
+                    );
+                  })}
+                </PastNote>
               );
             })}
         </DesktopViewPastPrescription>
