@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import styled from 'styled-components';
 import {
-  Container,
   Row,
   Col,
   Button,
@@ -43,10 +42,22 @@ import {
 const states = csc.getStatesOfCountry(INDIA_COUNTRY_CODE);
 
 const Headings = styled.section`
-  padding: 0em 4em;
+  padding: 0 4em;
   width: 100%;
   @media (max-width: 768px) {
-    padding: 0em;
+    padding: 0;
+  }
+`;
+const Container = styled.section`
+  margin: 0 4em;
+  padding: 4em 10em;
+  background-color: #fff;
+  @media (max-width: 768px) {
+    padding: 2em;
+    margin: 0;
+  }
+  @media (max-width: 1024px) {
+    padding: 4em;
   }
 `;
 
@@ -192,7 +203,7 @@ const AddPatient = () => {
                 innerRef={register}
                 type="date"
                 max={getISODate(currentDate())}
-                placeholder="Select Date"
+                placeholder="dd/mm/yyyy"
               />
             </Col>
             <Col md={{ size: 3 }}>
@@ -281,10 +292,13 @@ const AddPatient = () => {
               <div className="d-flex justify-content-end">
                 <LinkButton
                   to={routes.dashboard.path}
-                  className="btn-cancel mr-2">
+                  className="btn-cancel mr-2 cancel-add-patient">
                   Cancel
                 </LinkButton>
-                <Button className="btn-covin" type="submit" disabled={disabled}>
+                <Button
+                  className="btn-covin add-patient"
+                  type="submit"
+                  disabled={disabled}>
                   Add Patient
                 </Button>
               </div>

@@ -1,6 +1,15 @@
 form {
   label {
     font-size: 13px;
+    color: #657396;
+  }
+  .form-control {
+    height: 45px;
+  }
+  .invalid-feedback {
+    position: absolute;
+    font-size: 75%;
+    line-height: 1.2;
   }
 }
 .form-control {
@@ -17,7 +26,7 @@ form {
     & +span:after {
       position: absolute;
       right: .7rem;
-      top: .4rem;
+      top: .6rem;
       color: rgba(#22335E, .5);
       pointer-events: none;
     }

@@ -34,8 +34,8 @@ const InputField = (props) => {
           }`}
         />
         <span />
+        <FormFeedback>{error}</FormFeedback>
       </div>
-      <FormFeedback>{error}</FormFeedback>
     </>
   );
 

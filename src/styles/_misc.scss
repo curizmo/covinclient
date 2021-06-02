@@ -13,10 +13,11 @@
 
 .classic-dropdown {
   background: none;
+  height: 45px;
   & +span {
     pointer-events: none;
     position: absolute;
-    top: 17px;
+    top: 21px;
     right: 17px;
     vertical-align: 0.255em;
     border-top: 0.3em solid;

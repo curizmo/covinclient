@@ -50,6 +50,9 @@ export const ViewName = styled.h3`
 `;
 export const DateAndTimeWrap = styled.div`
   display: flex;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 export const TimeImage = styled.img`
   margin-right: 9px;
