@@ -41,8 +41,6 @@ import {
 } from 'global/styles';
 
 const states = csc.getStatesOfCountry(INDIA_COUNTRY_CODE);
-const countries = csc.getAllCountriesPhoneCodes();
-const phoneCodeIn = csc.getCountryPhoneCode(INDIA_COUNTRY_CODE);
 
 const Headings = styled.section`
   padding: 0em 4em;
@@ -58,7 +56,6 @@ const AddPatient = () => {
   const [serverError, setServerError] = useState('');
   const [checkedGender] = useState('');
   const [gender, setGender] = useState('');
-  const [phoneCode, setPhoneCode] = useState(phoneCodeIn);
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [citiesList, setCitiesList] = useState([]);
@@ -94,7 +91,7 @@ const AddPatient = () => {
       dispatch(showSpinner());
       await patientService.createPatient({
         ...patient,
-        phone: `${phoneCode}${patient.phone}`,
+        phone: patient.phone.replace(/\(/g, '').replace(/\)/g, ''),
         state,
         city,
         gender,
@@ -125,34 +122,14 @@ const AddPatient = () => {
         <Form onSubmit={handleSubmit(handleSave)}>
           <Row>
             <Col md={{ size: 6 }}>
-              <Label className="required w-100">Cellphone Number</Label>
-              <div className="d-flex">
-                <Col md={{ size: 3 }} className="px-0">
-                  <InputField
-                    tag={CustomInput}
-                    customClass="classic-dropdown"
-                    bsSize="xs"
-                    onChange={(e) => setPhoneCode(e.target.value)}
-                    type="select"
-                    defaultValue={phoneCodeIn}
-                    name="phoneCode">
-                    {countries.map(({ phone_code }) => (
-                      <option key={phone_code} value={phone_code}>
-                        {phone_code}
-                      </option>
-                    ))}
-                  </InputField>
-                </Col>
-                <Col md={{ size: 9 }} className="pr-0">
-                  <InputField
-                    name="phone"
-                    required
-                    error={getErrorMessage(errors, 'phone')}
-                    innerRef={register}
-                    placeholder="Enter Cellphone Number"
-                  />
-                </Col>
-              </div>
+              <InputField
+                title="Cell Phone"
+                name="phone"
+                required
+                error={getErrorMessage(errors, 'phone')}
+                innerRef={register}
+                defaultValue="+91-"
+              />
             </Col>
             <Col md={{ size: 6 }}>
               <InputField
