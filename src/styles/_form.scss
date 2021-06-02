@@ -16,8 +16,8 @@ form {
     position: relative;
     & +span:after {
       position: absolute;
-      right: 1.5rem;
-      top: 2.3rem;
+      right: .7rem;
+      top: .4rem;
       color: rgba(#22335E, .5);
       pointer-events: none;
     }

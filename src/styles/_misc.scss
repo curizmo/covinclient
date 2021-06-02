@@ -15,9 +15,9 @@
   background: none;
   & +span {
     pointer-events: none;
-    position: relative;
+    position: absolute;
     top: 17px;
-    right: 25px;
+    right: 17px;
     vertical-align: 0.255em;
     border-top: 0.3em solid;
     border-right: 0.3em solid transparent;
