@@ -64,5 +64,5 @@ export const getDate = () => {
 };
 
 export const setDate = (date) => {
-  return moment(date).format('LL');
+  return date ? moment(date).format('LL') : '';
 };
