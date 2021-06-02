@@ -16,3 +16,13 @@ export function uploadLabResult(patientId, appointmentId, labResults) {
     formData,
   );
 }
+
+/**
+ * @returns {Promise<object>}
+ */
+export function deleteLabResult(appointmentId, labResults) {
+  return BEApi.put(
+    `/patient-labs/lab/appointment/${appointmentId}/delete`,
+    labResults,
+  );
+}

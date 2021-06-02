@@ -43,7 +43,7 @@ import {
 } from 'global/styles';
 import { getDate } from 'global';
 import { isLightVersion } from 'config';
-import { uploadLabResult } from 'services/labResults';
+import { deleteLabResult, uploadLabResult } from 'services/labResults';
 
 const PATIENT_DETAILS_TABS = {
   READINGS: 'Readings',
@@ -338,10 +338,22 @@ function CreateEncounter() {
     }
   };
 
-  const handleRemoveFile = (selectedFile) => {
-    setLabResults((prevFiles) =>
-      prevFiles.filter((file) => file.name !== selectedFile.name),
-    );
+  const handleRemoveFile = async (selectedFile) => {
+    try {
+      setIsNoteSaved(false);
+      const results = labResults.filter(
+        (result) => result.name !== selectedFile.name,
+      );
+      const labImageUrl = results.map((result) => result.file);
+
+      await deleteLabResult(appointmentId, { labImageUrl });
+
+      setLabResults(results);
+    } catch (err) {
+      // TODO: Handle error.
+    } finally {
+      setIsNoteSaved(true);
+    }
   };
 
   return (
