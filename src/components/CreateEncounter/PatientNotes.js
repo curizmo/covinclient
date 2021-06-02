@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import * as PropTypes from 'prop-types';
 import { FaCheck, FaSpinner } from 'react-icons/fa';
+import { AiOutlineUpload, AiOutlineClose } from 'react-icons/ai';
+import { ImAttachment } from 'react-icons/im';
 
 import notesIcon from 'assets/images/svg-icons/notesIcon.svg';
 import showMoreIcon from 'assets/images/svg-icons/showMore.svg';
@@ -17,7 +19,13 @@ import {
   DesktopViewPastPrescription,
   LastRow,
   LoadingIcon,
+  UploadContainer,
+  FileName,
 } from './styles';
+
+import { getTabIndex } from 'utils';
+
+import { ENTER } from '../../constants';
 
 export const PatientNotes = ({
   note,
@@ -25,11 +33,19 @@ export const PatientNotes = ({
   pastNotes,
   isNoteLoading,
   isNoteSaved,
+  labResults,
+  handleFileSelect,
+  handleRemoveFile,
 }) => {
   const [showMore, setShowMore] = useState(false);
+  const imageUploadRef = useRef(null);
 
   const toggleShowMore = () => {
     setShowMore(!showMore);
+  };
+
+  const handleUploadClick = () => {
+    imageUploadRef.current.click();
   };
 
   return (
@@ -61,6 +77,47 @@ export const PatientNotes = ({
               </LoadingIcon>
             )}
           </NoteContainer>
+          <UploadContainer
+            role="button"
+            tabIndex={getTabIndex()}
+            onClick={handleUploadClick}
+            onKeyPress={(e) => {
+              if (e.key === ENTER) {
+                handleUploadClick();
+              }
+            }}>
+            <AiOutlineUpload className="mr-2" />
+            Upload a file
+          </UploadContainer>
+          <input
+            type="file"
+            onChange={handleFileSelect}
+            style={{ display: 'none' }}
+            ref={imageUploadRef}
+          />
+          {labResults?.length ? (
+            <div>
+              {labResults.map((labResult) => {
+                return (
+                  <div key={labResult.name}>
+                    <ImAttachment className="mr-1" />
+                    <FileName>{labResult.name} </FileName>
+                    <AiOutlineClose
+                      className="ml-1"
+                      role="button"
+                      tabIndex={getTabIndex()}
+                      onClick={() => handleRemoveFile(labResult)}
+                      onKeyPress={(e) => {
+                        if (e.key === ENTER) {
+                          handleRemoveFile(labResult);
+                        }
+                      }}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          ) : null}
         </TopContainer>
 
         <DesktopViewPastPrescription showMore={showMore}>

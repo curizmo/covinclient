@@ -248,3 +248,16 @@ export const LoadingIcon = styled.div`
   bottom: 1.25rem !important;
   right: 2.5rem !important;
 `;
+
+export const UploadContainer = styled.div`
+  padding: 1rem 0rem;
+  color: #3182fb;
+  font-size: 14px;
+  line-height: 18px;
+`;
+
+export const FileName = styled.span`
+  color: #3182fb;
+  font-size: 14px;
+  line-height: 18px;
+`;
