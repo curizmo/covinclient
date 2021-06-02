@@ -113,7 +113,7 @@ const DesktopPatientTable = (props) => {
                     </Link>
                   </>
                 ) : (
-                  <p className="card-name patient-link--small min-width-20 mr-2">
+                  <p className="card-name patient-link--small min-width-20 mr-2 mb-0">
                     {patient.fullName}
                   </p>
                 )}
