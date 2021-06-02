@@ -163,6 +163,8 @@ const DashBoardComponent = () => {
         [VitalsDateFields.patientSince]: setDate(
           vital[VitalsDateFields.patientSince],
         ),
+        [VitalsDateFields.doseOne]: setDate(vital[VitalsDateFields.doseOne]),
+        [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
       };
     });
     exportToCSV(vitalDetails);
