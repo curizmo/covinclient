@@ -12,8 +12,28 @@ form {
     color: #22335E;
     opacity: .4;
   }
+  &.measurement {
+    position: relative;
+    & +span:after {
+      position: absolute;
+      right: 1.5rem;
+      top: 2.3rem;
+      color: rgba(#22335E, .5);
+      pointer-events: none;
+    }
+    &.kg +span:after {
+      content: 'Kg';
+    }
+    &.ft +span:after {
+      content: 'Ft/In';
+    }
+  }
 }
 
 .form-group {
   margin-bottom: 2rem;
+}
+
+.field_with_errors input+span:after {
+  content: "*"
 }

@@ -8,7 +8,7 @@ export const SUBDOMAIN_REGEX = new RegExp(
 );
 
 // Source:https://stackoverflow.com/questions/52483260/validate-phone-number-with-yup
-export const PHONE_SCHEMA = /^(\+[1-9]{1,4}[-]?)(\(?[0-9]{2,4}\)?[-]?)*$/;
+export const PHONE_SCHEMA = /^(\(?[0-9]{2,4}\)?[-]?)*([0-9]{2,4})$/;
 
 export const HEIGHT_SCHEMA = /^([0-9]{1,2}'[0-9]{1,2}")?$/;
 

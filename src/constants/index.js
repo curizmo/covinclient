@@ -419,3 +419,5 @@ export const INTAKE_FORM_GROUPS = {
   CURRENT_MEDICATION: 'Current Medication',
   ALLERGY: 'Allergy',
 };
+
+export const INDIA_COUNTRY_CODE = 'IN';
