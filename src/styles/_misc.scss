@@ -12,22 +12,19 @@
 }
 
 .classic-dropdown {
-  button {
-    border: 1px solid #E0E3EA !important;
-    box-sizing: border-box;
-    box-shadow: 0px 2px 0px #E0E3EA !important;
-    border-radius: 3px;
-    text-align: left;
-    background-color: #fff !important;
-    color: #22335E !important;
-    &:after {
-      position: absolute;
-      top: 50%;
-      right: 17px;
-    }
+  background: none;
+  & +span {
+    pointer-events: none;
+    position: relative;
+    top: 17px;
+    right: 25px;
+    vertical-align: 0.255em;
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
   }
-  .dropdown-menu.show {
-    overflow-y: scroll;
-    max-height: 20rem;
+  option {
+    font-size: 12px;
   }
 }

@@ -9,6 +9,9 @@ const getFormattedPhoneCode = (phoneCode) => {
   }
   return `+${formattedPhoneCode}`;
 };
+const statesObject = state_json_1.reduce((acc, { name, isoCode }) => {
+  return { ...acc, [name]: isoCode };
+}, {});
 
 var _findEntryByCode = function (source, code) {
   if (code && source != null) {
@@ -76,18 +79,24 @@ const csc = {
     return _findStateByCodeAndCountryCode(state_json_1, isoCode, countryCode);
   },
   getAllCountriesPhoneCodes: function () {
-    return country_json_1
-      .filter(({ phone_code }) => phone_code)
-      .map(({ iso2, phone_code }) => ({
-        iso2,
-        phone_code: getFormattedPhoneCode(phone_code),
-      }));
+    const codes = [];
+    return country_json_1.reduce((acc, { iso2, phone_code }) => {
+      if (phone_code && !codes.includes(phone_code)) {
+        const newCode = { iso2, phone_code: getFormattedPhoneCode(phone_code) };
+        codes.push(phone_code);
+        acc.push(newCode);
+      }
+      return acc;
+    }, []);
   },
   getCountryPhoneCode: function (_iso2) {
     const phone_code = country_json_1.find(
       ({ iso2 }) => iso2 === _iso2,
     )?.phone_code;
     return getFormattedPhoneCode(phone_code || '');
+  },
+  getStateIsoCodeByName: function (name) {
+    return statesObject[name];
   },
 };
 export default csc;

@@ -13,10 +13,7 @@ import {
   Alert,
   FormGroup,
   Label,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
+  CustomInput,
 } from 'reactstrap';
 
 import { DashboardLayout } from 'components/common/Layout';
@@ -26,7 +23,7 @@ import { LinkButton } from 'components/common/Button';
 import csc from 'third-party/country-state-city';
 import { hideSpinner, showSpinner } from 'actions/spinner';
 import * as patientService from 'services/patient';
-import { getISODate, currentDate, getErrorMessage, getRandomKey } from 'utils';
+import { getISODate, currentDate, getErrorMessage } from 'utils';
 import { routes } from 'routers';
 import { patientValidation } from 'validations';
 import { GENDER_OPTIONS, INDIA_COUNTRY_CODE } from '../../constants';
@@ -60,37 +57,18 @@ const AddPatient = () => {
   const history = useHistory();
   const [serverError, setServerError] = useState('');
   const [checkedGender] = useState('');
-
-  const [isPhoneCodesDropdownOpen, setIsPhoneCodesDropdownOpen] =
-    useState(false);
-  const [isStatesDropdownOpen, setIsStatesDropdownOpen] = useState(false);
-  const [isCitiesDropdownOpen, setIsCitiesDropdownOpen] = useState(false);
-  const [phoneCode, setPhoneCode] = useState(phoneCodeIn);
-  const [state, setState] = useState({});
-  const [city, setCity] = useState({});
-  const [citiesList, setCitiesList] = useState([]);
   const [gender, setGender] = useState('');
-
-  const togglePhoneCodesDropdown = () =>
-    setIsPhoneCodesDropdownOpen((prevState) => !prevState);
-  const toggleStatesDropdown = () =>
-    setIsStatesDropdownOpen((prevState) => !prevState);
-  const toggleCitiesDropdown = () =>
-    setIsCitiesDropdownOpen((prevState) => !prevState);
-
-  useEffect(() => {
-    setCitiesList(
-      state ? csc.getCitiesOfState(INDIA_COUNTRY_CODE, state.isoCode) : [],
-    );
-    setCity({});
-  }, [state]);
+  const [phoneCode, setPhoneCode] = useState(phoneCodeIn);
+  const [state, setState] = useState('');
+  const [city, setCity] = useState('');
+  const [citiesList, setCitiesList] = useState([]);
 
   const { register, handleSubmit, errors, getValues } = useForm({
     resolver: yupResolver(patientValidation),
     mode: 'onBlur',
   });
-  const values = getValues();
 
+  const values = getValues();
   const disabled = useMemo(() => {
     return !(
       values.firstName &&
@@ -99,14 +77,26 @@ const AddPatient = () => {
     );
   }, [errors, values]);
 
+  useEffect(() => {
+    setCitiesList(
+      state
+        ? csc.getCitiesOfState(
+            INDIA_COUNTRY_CODE,
+            csc.getStateIsoCodeByName(state),
+          )
+        : [],
+    );
+    setCity('');
+  }, [state]);
+
   const handleSave = async (patient) => {
     try {
       dispatch(showSpinner());
       await patientService.createPatient({
         ...patient,
-        state: state.name,
-        city: city.name,
         phone: `${phoneCode}${patient.phone}`,
+        state,
+        city,
         gender,
       });
 
@@ -138,24 +128,20 @@ const AddPatient = () => {
               <Label className="required w-100">Cellphone Number</Label>
               <div className="d-flex">
                 <Col md={{ size: 3 }} className="px-0">
-                  <Dropdown
-                    isOpen={isPhoneCodesDropdownOpen}
-                    toggle={togglePhoneCodesDropdown}
-                    direction="down"
-                    className="classic-dropdown">
-                    <DropdownToggle caret className="w-100">
-                      {phoneCode || 'Code'}
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      {countries.map((country) => (
-                        <DropdownItem
-                          key={getRandomKey()}
-                          onClick={() => setPhoneCode(country.phone_code)}>
-                          {country.phone_code}
-                        </DropdownItem>
-                      ))}
-                    </DropdownMenu>
-                  </Dropdown>
+                  <InputField
+                    tag={CustomInput}
+                    customClass="classic-dropdown"
+                    bsSize="xs"
+                    onChange={(e) => setPhoneCode(e.target.value)}
+                    type="select"
+                    defaultValue={phoneCodeIn}
+                    name="phoneCode">
+                    {countries.map(({ phone_code }) => (
+                      <option key={phone_code} value={phone_code}>
+                        {phone_code}
+                      </option>
+                    ))}
+                  </InputField>
                 </Col>
                 <Col md={{ size: 9 }} className="pr-0">
                   <InputField
@@ -204,13 +190,15 @@ const AddPatient = () => {
                 <Label>Gender</Label>
                 <div className="d-flex mt-2">
                   {GENDER_OPTIONS.map(({ label, value }) => (
-                    <RadioLabel htmlFor={value} key={getRandomKey()}>
+                    <RadioLabel
+                      htmlFor={value}
+                      key={value}
+                      onClick={() => setGender(value)}>
                       <RadioInput
                         type="radio"
                         name="gender"
                         value={value}
                         id={value}
-                        onClick={() => setGender(value)}
                       />
                       <OptionName checked={checkedGender === value}>
                         {label}
@@ -263,49 +251,43 @@ const AddPatient = () => {
           </Row>
           <Row>
             <Col md={{ size: 6 }}>
-              <Label>State</Label>
-              <Dropdown
-                isOpen={isStatesDropdownOpen}
-                toggle={toggleStatesDropdown}
-                direction="down"
-                className="classic-dropdown form-group">
-                <DropdownToggle caret className="w-100">
-                  {state.name || 'Select State'}
-                </DropdownToggle>
-                <DropdownMenu>
-                  {states.map((state) => (
-                    <DropdownItem
-                      key={getRandomKey()}
-                      onClick={() => setState(state)}>
-                      {state.name}
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
+              <InputField
+                tag={CustomInput}
+                onChange={(e) => setState(e.target.value)}
+                customClass="classic-dropdown"
+                defaultValue=""
+                title="State"
+                type="select"
+                name="state">
+                <option value="" disabled hidden default>
+                  {'Select State'}
+                </option>
+                {states.map(({ name }) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </InputField>
             </Col>
             <Col md={{ size: 4 }}>
-              <Label>City</Label>
-              <Dropdown
-                isOpen={isCitiesDropdownOpen}
-                toggle={toggleCitiesDropdown}
-                direction="down"
-                className="classic-dropdown form-group">
-                <DropdownToggle
-                  caret
-                  className="w-100"
-                  disabled={citiesList.length < 1}>
-                  {city.name || 'Select City'}
-                </DropdownToggle>
-                <DropdownMenu>
-                  {citiesList.map((city) => (
-                    <DropdownItem
-                      key={getRandomKey()}
-                      onClick={() => setCity(city)}>
-                      {city.name}
-                    </DropdownItem>
-                  ))}
-                </DropdownMenu>
-              </Dropdown>
+              <InputField
+                disabled={citiesList.length < 1}
+                tag={CustomInput}
+                customClass="classic-dropdown"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                title="City"
+                type="select"
+                name="city">
+                <option value="" disabled hidden default>
+                  {'Select City'}
+                </option>
+                {citiesList.map(({ name }) => (
+                  <option key={name} value={name} onClick={() => setCity(name)}>
+                    {name}
+                  </option>
+                ))}
+              </InputField>
             </Col>
             <Col md={{ size: 2 }}>
               <InputField
