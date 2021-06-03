@@ -49,7 +49,7 @@ const GeneralInformation = ({ data, dispatch }) => {
       <Info>
         <Label>Cell Number:</Label>
         <button className="transparent-button d-flex p-0" onClick={onCall}>
-          {data?.phone}{' '}
+          {data?.phone}
           <img style={{ marginLeft: '10px' }} src={mobileIcon} alt="mobile" />
         </button>
       </Info>
@@ -60,9 +60,7 @@ const GeneralInformation = ({ data, dispatch }) => {
       <Info>
         <Label>Medical History:</Label>
         {data['Pre-existing condition']?.length > 0 ? (
-          <>
-            <Value>{data['Pre-existing condition'].join(', ')}</Value>
-          </>
+          <Value>{data['Pre-existing condition'].join(', ')}</Value>
         ) : (
           <Value>-</Value>
         )}

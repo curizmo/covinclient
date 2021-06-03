@@ -81,7 +81,7 @@ const desktopViewLabelsForPatientsWithCurrentStats = css`
 
 const GraphicalReadings = (props) => {
   const { data } = props;
-  const [activeTab, setActiveTab] = React.useState('1');
+  const [activeTab, setActiveTab] = React.useState(vitalsTabMenu[0].index);
 
   const toggle = (tab) => {
     if (activeTab !== tab) setActiveTab(tab);
@@ -126,7 +126,7 @@ const GraphicalReadings = (props) => {
               </InitiateCovidScreenWrap>
             )}
             <div>
-              {data && data.vitals && (
+              {data && data.vitals ? (
                 <div>
                   <GraphicalRepresentation
                     data={data}
@@ -150,7 +150,7 @@ const GraphicalReadings = (props) => {
                     }}
                   />
                 </div>
-              )}
+              ) : null}
             </div>
           </GraphicalColumn>
         </TabPane>
