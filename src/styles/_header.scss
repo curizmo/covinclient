@@ -8,12 +8,14 @@ header {
 
   .logo {
     width: 17rem;
+    // @toDo remove temp (added until svg left padding is fixed)
+    margin-left: -6px;
   }
 
   @media (max-width: 768px) {
     padding: 0 1em 0 0;
     .logo {
-      width: 13rem;
+      width: 14rem;
     }
   }
 
