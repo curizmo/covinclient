@@ -59,7 +59,7 @@ const TopMenu = () => {
   }, [location.pathname]);
 
   return (
-    <header className="sticky-top d-flex justify-content-between align-items-center bg-white shadow-sm w-100 pl-0 pr-3 px-md-7">
+    <header className="sticky-top d-flex justify-content-between align-items-center shadow-sm w-100 top-menu">
       {isMobile ? (
         <>
           <div className="d-flex top-menu-list">

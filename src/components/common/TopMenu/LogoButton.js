@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'reactstrap';
 
 import { useAuthProvider } from 'hooks/useAuthProvider';
-import logo from 'assets/images/covin-logo.svg';
+import logo from 'assets/images/svg-icons/covin-logo.svg';
 
 export const LogoButton = () => {
   const { goHome } = useAuthProvider();
