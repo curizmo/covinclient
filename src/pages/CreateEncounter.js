@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { useParams } from 'react-router-dom';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components/macro';
+import { css } from 'styled-components';
 import { debounce } from 'lodash';
 
 import {
@@ -50,6 +51,7 @@ import {
 } from 'global/styles';
 import { getDate } from 'global';
 import { isLightVersion } from 'config';
+import GeneralInformation from 'components/CreateEncounter/GeneralInformation';
 
 const PATIENT_DETAILS_TABS = {
   READINGS: 'Readings',
@@ -92,7 +94,7 @@ const MedInfoWrap = styled.div`
   }
 `;
 const Column = styled.div`
-  width: ${(props) => (props.isLightVersion ? '50%' : '33.33%')};
+  width: 33.33%;
   border-right: 1px solid rgba(101, 115, 150, 0.2);
   &:last-child {
     border-right: none;
@@ -424,7 +426,10 @@ function CreateEncounter() {
             handleRiskLevelChange={handleRiskLevelChange}
           />
           <MedInfoWrap>
-            <Column isLightVersion>
+            <Column>
+              <GeneralInformation data={patientData} dispatch={dispatch} />
+            </Column>
+            <Column>
               <TabContainer>
                 <Tab
                   role="button"
@@ -458,7 +463,7 @@ function CreateEncounter() {
                 <Symptoms symptoms={symptoms} />
               )}
             </Column>
-            <Column isLightVersion>
+            <Column>
               <PatientNotes
                 note={note}
                 handleNoteChange={handleNoteChange}
