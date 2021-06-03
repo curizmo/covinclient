@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router';
 
-import { rangeCheck } from 'utils';
+import { getRandomKey, rangeCheck } from 'utils';
 import { CMLine } from 'third-party/senze-graphs/dist';
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
 import { isLightVersion } from '../../../config';
@@ -133,13 +133,13 @@ const PatientCard = (props) => {
       <div>
         {patient && patient.vitals && (
           <div className="body-vitals-status-wrap">
-            {Object.entries(patient.vitals).map((bodyParams, i) => {
+            {Object.entries(patient.vitals).map((bodyParams) => {
               if (!bodyParams[1].data.length) {
                 return null;
               }
 
               return (
-                <div className="content-wrp" key={i}>
+                <div className="content-wrp" key={getRandomKey()}>
                   <div className="labels-with-current-stats">
                     <PatientVitalFieldName>
                       {bodyParams && bodyParams[0] === 'bloodPressure'
@@ -156,7 +156,6 @@ const PatientCard = (props) => {
                             .join('-')}
                       </div>
                       <div style={{ color: `${rangeCheck(bodyParams)[0]}` }}>
-                        {' '}
                         {bodyParams && bodyParams[1].unit === 'F'
                           ? '\u00b0'
                           : ''}
@@ -164,7 +163,7 @@ const PatientCard = (props) => {
                       <div
                         className="vital-current-unit"
                         style={{ color: `${rangeCheck(bodyParams)[0]}` }}>
-                        {bodyParams && bodyParams[1].unit}
+                        {bodyParams ? bodyParams[1].unit : ''}
                       </div>
                     </div>
                   </div>
