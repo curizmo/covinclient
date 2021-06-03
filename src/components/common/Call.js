@@ -6,14 +6,14 @@ import { Button } from 'reactstrap';
 import { FaPhone, FaAddressBook } from 'react-icons/fa';
 
 const Call = ({
-  onHangup,
+  // onHangup,
   // onExpand,
   isDisabled,
   openDial,
   handleEndAppointment,
   onCall,
   currentAppointment,
-  isAppointmentEnded,
+  // isAppointmentEnded,
 }) => {
   const cardRef = useRef(null);
   useDragable(cardRef);
@@ -42,7 +42,7 @@ const Call = ({
           {currentAppointment.phone}
         </span>
         <span className="dialog-body">
-          {currentAppointment.isCallInProgress ? (
+          {/* {currentAppointment.isCallInProgress ? (
             <Button
               className="dial-btn-small"
               mr="12"
@@ -62,7 +62,7 @@ const Call = ({
               }}>
               Redial
             </Button>
-          )}
+          )} */}
 
           {/* <Button
             className="dial-btn-small"
@@ -86,8 +86,9 @@ const Call = ({
             className="dial-btn-small"
             color="danger"
             mr="12"
+            disabled={isDisabled}
             onClick={handleEndAppointment}>
-            End Appointment
+            End Call
           </Button>
         </span>
       </div>
