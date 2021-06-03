@@ -43,6 +43,7 @@ import {
 } from 'global/styles';
 import { getDate } from 'global';
 import { isLightVersion } from 'config';
+import { deleteLabResult, uploadLabResult } from 'services/labResults';
 
 const PATIENT_DETAILS_TABS = {
   READINGS: 'Readings',
@@ -182,6 +183,7 @@ function CreateEncounter() {
   const [appointmentId, setAppointmentId] = useState('');
   const [isNoteSaved, setIsNoteSaved] = useState(false);
   const [isNoteLoading, setIsNoteLoading] = useState(false);
+  const [labResults, setLabResults] = useState([]);
 
   useEffect(() => {
     setRiskLevel(patientData?.status);
@@ -273,6 +275,87 @@ function CreateEncounter() {
     setRiskLevel(value);
   };
 
+  const handleFileSelect = async (e) => {
+    try {
+      const files = e.target.files;
+      if (appointmentId) {
+        setIsNoteSaved(false);
+
+        const labResultResponse = await uploadLabResult(
+          patientId,
+          appointmentId,
+          [...files],
+        );
+
+        const newFiles = labResultResponse.data.files.map((file) => ({
+          name: file.replace('laboratory/', ''),
+          file,
+        }));
+
+        setLabResults((labResult) => [...labResult, ...newFiles]);
+      } else {
+        setIsNoteLoading(true);
+        setIsNoteSaved(false);
+
+        const response = await createEncounter(
+          {
+            patientId,
+            labs: JSON.stringify(
+              prescriptionList.filter(
+                (prescription) => prescription.label === 'lab',
+              ),
+            ),
+            prescriptionList: JSON.stringify(
+              prescriptionList.filter(
+                (prescription) => prescription.label === 'prescription',
+              ),
+            ),
+            note: '',
+          },
+          patientId,
+        );
+
+        const { organizationEventBookingId } = response.data;
+        setAppointmentId(organizationEventBookingId);
+
+        const labResultResponse = await uploadLabResult(
+          patientId,
+          organizationEventBookingId,
+          [...files],
+        );
+
+        const newFiles = labResultResponse.data.files.map((file) => ({
+          name: file.replace('laboratory/', ''),
+          file,
+        }));
+
+        setLabResults((labResult) => [...labResult, ...newFiles]);
+      }
+    } catch (err) {
+      // TODO: Handle error
+    } finally {
+      setIsNoteSaved(true);
+    }
+  };
+
+  const handleRemoveFile = async (selectedFile) => {
+    try {
+      setIsNoteSaved(false);
+      const results = labResults.filter(
+        (result) => result.name !== selectedFile.name,
+      );
+      const labImageUrl = results.map((result) => result.file);
+
+      await deleteLabResult(appointmentId, { labImageUrl });
+
+      setLabResults(results);
+    } catch (err) {
+      // TODO: Handle error.
+    } finally {
+      setIsNoteSaved(true);
+    }
+  };
+
   return (
     <DashboardLayout>
       <Wrapper>
@@ -303,6 +386,10 @@ function CreateEncounter() {
                 pastNotes={patientData.pastNotes}
                 isNoteLoading={isNoteLoading}
                 isNoteSaved={isNoteSaved}
+                labResults={labResults}
+                setLabResults={setLabResults}
+                handleFileSelect={handleFileSelect}
+                handleRemoveFile={handleRemoveFile}
               />
             </Column>
             {!isLightVersion && (
@@ -392,6 +479,10 @@ function CreateEncounter() {
                   pastNotes={patientData.pastNotes}
                   isNoteLoading={isNoteLoading}
                   isNoteSaved={isNoteSaved}
+                  labResults={labResults}
+                  setLabResults={setLabResults}
+                  handleFileSelect={handleFileSelect}
+                  handleRemoveFile={handleRemoveFile}
                 />
               )}
               {selectedTab === PATIENT_DETAILS_TABS.PRESCRIPTION && (
