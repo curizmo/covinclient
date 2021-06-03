@@ -18,6 +18,7 @@ import {
 import { DashboardLayout } from 'components/common/Layout';
 import { InputField } from 'components/common/InputField';
 import { LinkButton } from 'components/common/Button';
+import { DatePicker } from 'components/common/DatePicker';
 
 import csc from 'third-party/country-state-city';
 import { hideSpinner, showSpinner } from 'actions/spinner';
@@ -70,6 +71,7 @@ const AddPatient = () => {
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [citiesList, setCitiesList] = useState([]);
+  const [birthDate, setBirthDate] = useState(null);
 
   const { register, handleSubmit, errors, getValues } = useForm({
     resolver: yupResolver(patientValidation),
@@ -107,6 +109,7 @@ const AddPatient = () => {
         state,
         city,
         gender,
+        birthDate,
       });
 
       history.push(routes.dashboard.path);
@@ -198,13 +201,13 @@ const AddPatient = () => {
               </FormGroup>
             </Col>
             <Col lg={{ size: 2 }} md={{ size: 3 }}>
-              <InputField
-                title="Date of Birth"
+              <Label>Date of Birth</Label>
+              <DatePicker
                 name="birthDate"
-                innerRef={register}
-                type="date"
                 max={getISODate(currentDate())}
-                placeholder="dd/mm/yyyy"
+                onSelect={setBirthDate}
+                defaultDate={new Date('01/01/1990')}
+                showMonthAfterYear={true}
               />
             </Col>
             <Col md={{ size: 3 }}>
