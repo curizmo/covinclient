@@ -23,7 +23,7 @@ export const MobileDropdownMenu = ({ menuItems, getIsActive }) => {
         tag="div"
         data-toggle="dropdown"
         aria-expanded={isOpen}>
-        <Menu />
+        <Menu className="text-white" />
       </DropdownToggle>
       <DropdownMenu>
         {menuItems.map((item) => (
