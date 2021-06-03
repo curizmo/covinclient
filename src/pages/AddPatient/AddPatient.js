@@ -203,6 +203,7 @@ const AddPatient = () => {
             <Col lg={{ size: 2 }} md={{ size: 3 }}>
               <Label>Date of Birth</Label>
               <DatePicker
+                customClass="form-group"
                 name="birthDate"
                 max={getISODate(currentDate())}
                 onSelect={setBirthDate}
@@ -213,20 +214,24 @@ const AddPatient = () => {
             <Col md={{ size: 3 }}>
               <Label>Height</Label>
               <div className="d-flex">
-                <InputField
-                  type="number"
-                  name="heightFt"
-                  innerRef={register}
-                  customClass="measurement ft"
-                  error={getErrorMessage(errors, 'heightFt')}
-                />
-                <InputField
-                  type="number"
-                  name="heightIn"
-                  innerRef={register}
-                  customClass="measurement in"
-                  error={getErrorMessage(errors, 'heightIn')}
-                />
+                <div className="flex-grow-1">
+                  <InputField
+                    type="number"
+                    name="heightFt"
+                    innerRef={register}
+                    customClass="measurement ft "
+                    error={getErrorMessage(errors, 'heightFt')}
+                  />
+                </div>
+                <div className="flex-grow-1">
+                  <InputField
+                    type="number"
+                    name="heightIn"
+                    innerRef={register}
+                    customClass="measurement in"
+                    error={getErrorMessage(errors, 'heightIn')}
+                  />
+                </div>
               </div>
             </Col>
             <Col md={{ size: 3 }}>

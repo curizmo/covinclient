@@ -20,6 +20,7 @@ const DatePickerIcon = styled.img`
 
 export const DatePicker = ({
   onSelect,
+  customClass = '',
   format = 'DD/MM/YYYY',
   defaultDate = new Date(),
   maxDate = new Date(),
@@ -39,7 +40,7 @@ export const DatePicker = ({
   }, []);
 
   return (
-    <DatePickerWrapper>
+    <DatePickerWrapper className={customClass}>
       <input
         type="text"
         ref={pikadayRef}
@@ -53,6 +54,7 @@ export const DatePicker = ({
 
 DatePicker.propTypes = {
   onSelect: PropTypes.func,
+  customClass: PropTypes.string,
   format: PropTypes.string,
   defaultDate: PropTypes.object,
   showMonthAfterYear: PropTypes.bool,
