@@ -28,6 +28,22 @@ export const height = yup
   .nullable(true)
   .matches(HEIGHT_SCHEMA, "Height is not valid, example of height: 6'9''");
 
+export const heightFt = yup
+  .number()
+  .positive()
+  .integer('Feet should be a positive number')
+  .max(7, 'Feet should be less than 7')
+  .nullable(true)
+  .transform((value) => (isNaN(value) ? null : value));
+
+export const heightIn = yup
+  .number()
+  .positive()
+  .integer('Inches should be a positive number')
+  .max(11, 'Inches should be less than 11')
+  .nullable(true)
+  .transform((value) => (isNaN(value) ? null : value));
+
 export const description = yup
   .string()
   .required('Description is required field')
