@@ -135,7 +135,7 @@ const EditPatient = () => {
           )
         : [],
     );
-    setCity(city ? city : '');
+    setCity(city || '');
   }, [state]);
 
   const handleSave = async (patient) => {
@@ -223,7 +223,8 @@ const EditPatient = () => {
                     <RadioLabel
                       htmlFor={value}
                       key={value}
-                      onClick={() => setGender(value)}>
+                      onClick={() => setGender(value)}
+                      innerRef={register}>
                       <RadioInput
                         type="radio"
                         name="gender"
@@ -291,7 +292,7 @@ const EditPatient = () => {
                 name="state"
                 innerRef={register}>
                 <option value="" disabled hidden default>
-                  {state ? state : 'Select State'}
+                  {state || 'Select State'}
                 </option>
                 {states.map(({ name }) => (
                   <option key={name} value={name}>
@@ -312,7 +313,7 @@ const EditPatient = () => {
                 name="city"
                 innerRef={register}>
                 <option value="" disabled hidden default>
-                  {city ? city : 'Select City'}
+                  {city || 'Select City'}
                 </option>
                 {citiesList.map(({ name }) => (
                   <option key={name} value={name} onClick={() => setCity(name)}>
