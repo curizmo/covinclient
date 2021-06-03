@@ -2,17 +2,18 @@ import React, { useState, useEffect, useCallback } from 'react';
 import styled, { css } from 'styled-components';
 
 import { CommunicationButtons } from 'components/CreateEncounter';
-import arrowIcon from 'assets/images/svg-icons/arrow-left.svg';
-import collapseIcon from 'assets/images/svg-icons/showMore.svg';
-import expandIcon from 'assets/images/svg-icons/showLess.svg';
-import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
+import { getFormatedDate, handleCallAppointment } from 'utils';
 import {
   GENDER_SHORTHAND,
   PATIENT_CURRENT_STATUS,
   RISK,
+  INTAKE_FORM_GROUPS,
 } from '../../constants';
-import { getFormatedDate, handleCallAppointment } from 'utils';
-import { INTAKE_FORM_GROUPS } from '../../constants';
+import { RadioLabel, RadioInput, OptionName } from 'global/styles';
+import arrowIcon from 'assets/images/svg-icons/arrow-left.svg';
+import collapseIcon from 'assets/images/svg-icons/showMore.svg';
+import expandIcon from 'assets/images/svg-icons/showLess.svg';
+import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
 
 const PersonalInfoWrap = styled.div`
   position: relative;
@@ -79,48 +80,6 @@ const RiskLevelWrap = styled.div`
   @media (max-width: 768px) {
     margin-bottom: 1.875rem;
   }
-  input[type='radio'] {
-    -webkit-appearance: none;
-    width: 1.25rem;
-    height: 1.25rem;
-    border-radius: 50%;
-    outline: none;
-    border: 1px solid #9fa7ba;
-    cursor: pointer;
-    margin-left: 0;
-  }
-
-  input[type='radio']:before {
-    content: '';
-    display: block;
-    width: 60%;
-    height: 60%;
-    margin: 20% auto;
-    border-radius: 50%;
-  }
-
-  input[type='radio']:checked:before {
-    background: #22335e;
-  }
-`;
-
-const RadioLabel = styled.label`
-  display: flex;
-  margin-right: 2rem;
-  align-items: center;
-  @media (max-width: 768px) {
-    margin-right: 0.5rem;
-  }
-`;
-const RadioInput = styled.input`
-  margin-right: 0.625rem;
-`;
-
-const OptionName = styled.span`
-  text-transform: capitalize;
-  color: ${(props) => (props.checked ? '#22335E' : '#657396')};
-  font-size: 1rem;
-  line-height: 1.25rem;
 `;
 
 const Button = styled.button`

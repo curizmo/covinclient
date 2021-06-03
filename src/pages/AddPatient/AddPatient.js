@@ -1,11 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
-
+import styled from 'styled-components';
 import {
-  Container,
   Row,
   Col,
   Button,
@@ -13,29 +12,71 @@ import {
   Alert,
   FormGroup,
   Label,
+  CustomInput,
 } from 'reactstrap';
+
 import { DashboardLayout } from 'components/common/Layout';
 import { InputField } from 'components/common/InputField';
-
-import { getISODate, currentDate, getErrorMessage } from 'utils';
-import * as patientService from 'services/patient';
-import { GENDER_OPTIONS } from '../../constants';
-import { patientValidation } from 'validations';
-import { hideSpinner, showSpinner } from 'actions/spinner';
-import { routes } from 'routers';
 import { LinkButton } from 'components/common/Button';
+
+import csc from 'third-party/country-state-city';
+import { hideSpinner, showSpinner } from 'actions/spinner';
+import * as patientService from 'services/patient';
+import { getISODate, currentDate, getErrorMessage } from 'utils';
+import { routes } from 'routers';
+import { patientValidation } from 'validations';
+import { GENDER_OPTIONS, INDIA_COUNTRY_CODE } from '../../constants';
+import time from 'assets/images/svg-icons/clock.svg';
+import { getDate } from 'global';
+import {
+  RadioLabel,
+  RadioInput,
+  OptionName,
+  DateAndTime,
+  DateAndTimeWrap,
+  InfoWrapper,
+  TimeImage,
+  ViewName,
+} from 'global/styles';
+
+const states = csc.getStatesOfCountry(INDIA_COUNTRY_CODE);
+
+const Headings = styled.section`
+  padding: 0 4em;
+  width: 100%;
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+`;
+const Container = styled.section`
+  margin: 0 4em;
+  padding: 4em 10em;
+  background-color: #fff;
+  @media (max-width: 768px) {
+    padding: 2em;
+    margin: 0;
+  }
+  @media (max-width: 1024px) {
+    padding: 4em;
+  }
+`;
 
 const AddPatient = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [serverError, setServerError] = useState('');
+  const [checkedGender] = useState('');
+  const [gender, setGender] = useState('');
+  const [state, setState] = useState('');
+  const [city, setCity] = useState('');
+  const [citiesList, setCitiesList] = useState([]);
 
   const { register, handleSubmit, errors, getValues } = useForm({
     resolver: yupResolver(patientValidation),
     mode: 'onBlur',
   });
-  const values = getValues();
 
+  const values = getValues();
   const disabled = useMemo(() => {
     return !(
       values.firstName &&
@@ -44,10 +85,28 @@ const AddPatient = () => {
     );
   }, [errors, values]);
 
+  useEffect(() => {
+    setCitiesList(
+      state
+        ? csc.getCitiesOfState(
+            INDIA_COUNTRY_CODE,
+            csc.getStateIsoCodeByName(state),
+          )
+        : [],
+    );
+    setCity('');
+  }, [state]);
+
   const handleSave = async (patient) => {
     try {
       dispatch(showSpinner());
-      await patientService.createPatient(patient);
+      await patientService.createPatient({
+        ...patient,
+        phone: patient.phone.replace(/\(/g, '').replace(/\)/g, ''),
+        state,
+        city,
+        gender,
+      });
 
       history.push(routes.dashboard.path);
     } catch (err) {
@@ -61,9 +120,15 @@ const AddPatient = () => {
 
   return (
     <DashboardLayout>
-      <div className="header mb-1 d-flex justify-content-between px-3 py-2">
-        <h3 className="page-title">Add New Patient</h3>
-      </div>
+      <Headings>
+        <InfoWrapper>
+          <ViewName>Add New Patient</ViewName>
+          <DateAndTimeWrap>
+            <TimeImage src={time} />
+            <DateAndTime>{getDate()}</DateAndTime>
+          </DateAndTimeWrap>
+        </InfoWrapper>
+      </Headings>
       <Container>
         <Form onSubmit={handleSubmit(handleSave)}>
           <Row>
@@ -79,7 +144,7 @@ const AddPatient = () => {
             </Col>
             <Col md={{ size: 6 }}>
               <InputField
-                title="Email"
+                title="Patient Email"
                 name="email"
                 type="email"
                 innerRef={register}
@@ -109,19 +174,24 @@ const AddPatient = () => {
           </Row>
           <Row>
             <Col md={{ size: 3 }}>
-              <FormGroup check row className="mx-0 pl-0">
+              <FormGroup check row className="mx-0 pl-0 form-group">
                 <Label>Gender</Label>
                 <div className="d-flex mt-2">
                   {GENDER_OPTIONS.map(({ label, value }) => (
-                    <InputField
-                      key={label}
-                      id={value}
-                      value={value}
-                      name="gender"
-                      innerRef={register}
-                      title={label}
-                      type="radio"
-                    />
+                    <RadioLabel
+                      htmlFor={value}
+                      key={value}
+                      onClick={() => setGender(value)}>
+                      <RadioInput
+                        type="radio"
+                        name="gender"
+                        value={value}
+                        id={value}
+                      />
+                      <OptionName checked={checkedGender === value}>
+                        {label}
+                      </OptionName>
+                    </RadioLabel>
                   ))}
                 </div>
               </FormGroup>
@@ -133,7 +203,7 @@ const AddPatient = () => {
                 innerRef={register}
                 type="date"
                 max={getISODate(currentDate())}
-                placeholder="Select Date"
+                placeholder="dd/mm/yyyy"
               />
             </Col>
             <Col md={{ size: 3 }}>
@@ -143,6 +213,7 @@ const AddPatient = () => {
                 innerRef={register}
                 error={getErrorMessage(errors, 'height')}
                 placeholder="Enter Height"
+                customClass="measurement ft"
               />
             </Col>
             <Col md={{ size: 3 }}>
@@ -151,7 +222,9 @@ const AddPatient = () => {
                 name="weight"
                 innerRef={register}
                 placeholder="Enter Weight"
+                customClass="measurement kg"
               />
+              <span />
             </Col>
           </Row>
           <Row>
@@ -167,26 +240,49 @@ const AddPatient = () => {
           <Row>
             <Col md={{ size: 6 }}>
               <InputField
-                title="City"
-                name="city"
-                innerRef={register}
-                placeholder="Enter City"
-              />
+                tag={CustomInput}
+                onChange={(e) => setState(e.target.value)}
+                customClass="classic-dropdown"
+                defaultValue=""
+                title="State"
+                type="select"
+                name="state">
+                <option value="" disabled hidden default>
+                  {'Select State'}
+                </option>
+                {states.map(({ name }) => (
+                  <option key={name} value={name}>
+                    {name}
+                  </option>
+                ))}
+              </InputField>
             </Col>
             <Col md={{ size: 4 }}>
               <InputField
-                title="State"
-                name="state"
-                innerRef={register}
-                placeholder="Enter State"
-              />
+                disabled={citiesList.length < 1}
+                tag={CustomInput}
+                customClass="classic-dropdown"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                title="City"
+                type="select"
+                name="city">
+                <option value="" disabled hidden default>
+                  {'Select City'}
+                </option>
+                {citiesList.map(({ name }) => (
+                  <option key={name} value={name} onClick={() => setCity(name)}>
+                    {name}
+                  </option>
+                ))}
+              </InputField>
             </Col>
             <Col md={{ size: 2 }}>
               <InputField
                 title="Postal Code"
                 name="zip"
                 innerRef={register}
-                placeholder="Enter Postal Code"
+                placeholder="Postal Code"
               />
             </Col>
           </Row>
@@ -196,10 +292,13 @@ const AddPatient = () => {
               <div className="d-flex justify-content-end">
                 <LinkButton
                   to={routes.dashboard.path}
-                  className="btn-cancel mr-2">
+                  className="btn-cancel mr-2 cancel-add-patient">
                   Cancel
                 </LinkButton>
-                <Button className="btn-covin" type="submit" disabled={disabled}>
+                <Button
+                  className="btn-covin add-patient"
+                  type="submit"
+                  disabled={disabled}>
                   Add Patient
                 </Button>
               </div>

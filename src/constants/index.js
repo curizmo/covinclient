@@ -20,6 +20,39 @@ export const weekDays = [
   'saturday',
 ];
 
+export const excelTitleCell = [
+  'A1',
+  'B1',
+  'C1',
+  'D1',
+  'E1',
+  'F1',
+  'G1',
+  'H1',
+  'I1',
+  'J1',
+  'K1',
+  'L1',
+  'M1',
+  'N1',
+  'O1',
+  'P1',
+  'Q1',
+  'R1',
+  'S1',
+  'T1',
+  'U1',
+  'V1',
+];
+
+export const VitalsDateFields = {
+  updated: 'Last Vitals Update',
+  dob: 'Date Of Birth',
+  patientSince: 'Patient Since',
+  doseOne: 'Dose1 Vaccination On',
+  doseTwo: 'Dose2 Vaccination On',
+};
+
 export const DIAL = [
   '1',
   '2',
@@ -386,3 +419,5 @@ export const INTAKE_FORM_GROUPS = {
   CURRENT_MEDICATION: 'Current Medication',
   ALLERGY: 'Allergy',
 };
+
+export const INDIA_COUNTRY_CODE = 'IN';

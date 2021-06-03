@@ -172,6 +172,21 @@ export const LastRow = styled.div`
   cursor: pointer;
 `;
 
+export const PastNote = styled.div`
+  padding: 1rem 1.875rem;
+  background: #f8fbfe;
+  border-bottom: 1px solid rgba(101, 115, 150, 0.2);
+  &:last-child {
+    border-bottom: none;
+  }
+  @media (max-width: 768px) {
+    background: #f8fbfe;
+    padding: 0.5rem 0.5rem;
+    border-bottom: none;
+    margin-bottom: 0.5em;
+  }
+`;
+
 export const PastPrescriptionImageIcon = styled.img`
   width: 1.25rem;
   height: 1.25rem;
@@ -247,4 +262,32 @@ export const ImgButton = styled.button`
 export const LoadingIcon = styled.div`
   bottom: 1.25rem !important;
   right: 2.5rem !important;
+`;
+
+export const SymptomContainer = styled.div`
+  padding: 1rem 1.875rem;
+  background: #f8fbfe;
+  border-bottom: 1px solid rgba(101, 115, 150, 0.2);
+  &:last-child {
+    border-bottom: none;
+  }
+  @media (max-width: 768px) {
+    background: #f8fbfe;
+    padding: 0.5rem 0.5rem;
+    border-bottom: none;
+    margin-bottom: 0.5em;
+  }
+`;
+
+export const UploadContainer = styled.div`
+  padding: 1rem 0rem;
+  color: #3182fb;
+  font-size: 14px;
+  line-height: 18px;
+`;
+
+export const FileName = styled.span`
+  color: #3182fb;
+  font-size: 14px;
+  line-height: 18px;
 `;

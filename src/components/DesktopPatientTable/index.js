@@ -100,15 +100,23 @@ const DesktopPatientTable = (props) => {
           return (
             <InfoAndGraphWrapper key={index} className="mb-3">
               <InfoWrapper>
-                {!isLightVersion && <Status selectedCases={patient.status} />}
-                <Link
-                  className="card-name patient-link--small min-width-20 mr-2"
-                  to={routes.createEncounter.path.replace(
-                    ':patientId',
-                    patient.patientId,
-                  )}>
-                  {patient.fullName}
-                </Link>
+                {!isLightVersion ? (
+                  <>
+                    <Status selectedCases={patient.status} />
+                    <Link
+                      className="card-name patient-link--small min-width-20 mr-2"
+                      to={routes.createEncounter.path.replace(
+                        ':patientId',
+                        patient.patientId,
+                      )}>
+                      {patient.fullName}
+                    </Link>
+                  </>
+                ) : (
+                  <p className="card-name patient-link--small min-width-20 mr-2 mb-0">
+                    {patient.fullName}
+                  </p>
+                )}
 
                 <Info className="min-width-20 mr-2">
                   <Button
@@ -125,7 +133,7 @@ const DesktopPatientTable = (props) => {
                 </Info>
                 <Info className="min-width-10 mr-2">
                   <Label>Gender:</Label>
-                  <Value>{GENDER_SHORTHAND[patient.gender]}</Value>
+                  <Value>{GENDER_SHORTHAND[patient.gender] || '-'}</Value>
                 </Info>
                 <Info className="min-width-10 mr-2">
                   <Label>Age:</Label>

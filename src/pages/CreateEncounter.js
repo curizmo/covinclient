@@ -14,12 +14,19 @@ import {
 } from 'components/CreateEncounter';
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
 import { DashboardLayout } from 'components/common/Layout';
+import { Symptoms } from 'components/CreateEncounter/Symptoms';
 
 import { fetchPatient } from 'actions';
+
 import { getPatient, getIsEncounterUpdated, getUser } from 'selectors';
+
 import { createEncounter, updatePatientRiskStatus } from 'services/patient';
 import { createOrUpdateEncounter } from 'services/appointment';
-import { getRandomKey } from 'utils';
+import { fetchPatientSymptoms } from 'services/symptoms';
+import { deleteLabResult, uploadLabResult } from 'services/labResults';
+
+import { getRandomKey, getTabIndex } from 'utils';
+
 import { routes } from 'routers';
 
 import notesIcon from 'assets/images/svg-icons/notesIcon.svg';
@@ -87,7 +94,7 @@ const MedInfoWrap = styled.div`
   }
 `;
 const Column = styled.div`
-  width: ${(props) => (props.isLightVersion ? '50%' : '33.33%')};
+  width: 33.33%;
   border-right: 1px solid rgba(101, 115, 150, 0.2);
   &:last-child {
     border-right: none;
@@ -166,6 +173,32 @@ const Icon = styled.img`
   margin-right: 0.5rem;
 `;
 
+const TabContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f2f7fd;
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const Tab = styled.div`
+  font-weight: bold;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  color: #22335e;
+  padding: 1rem;
+  width: 50%;
+  text-align: center;
+  border-bottom: ${(props) => (props.active ? '3px solid #22335E' : '')};
+`;
+
+const VITALS_TABS = {
+  vitals: 'vitals',
+  symptoms: 'symptoms',
+};
+
 function CreateEncounter() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -184,6 +217,9 @@ function CreateEncounter() {
   const [appointmentId, setAppointmentId] = useState('');
   const [isNoteSaved, setIsNoteSaved] = useState(false);
   const [isNoteLoading, setIsNoteLoading] = useState(false);
+  const [vitalsActiveTab, setVitalsActiveTab] = useState(VITALS_TABS.vitals);
+  const [symptoms, setSymptoms] = useState([]);
+  const [labResults, setLabResults] = useState([]);
 
   useEffect(() => {
     setRiskLevel(patientData?.status);
@@ -196,6 +232,20 @@ function CreateEncounter() {
   useEffect(() => {
     dispatch(fetchPatient({ patientId, ntoUserId: user.NTOUserID }));
   }, [dispatch, patientId, user.NTOUserID]);
+
+  useEffect(() => {
+    const fetchSymptoms = async (patientId) => {
+      try {
+        const response = await fetchPatientSymptoms(patientId);
+
+        setSymptoms(response.data.symptoms);
+      } catch (err) {
+        // TODO: Handle err.
+      }
+    };
+
+    fetchSymptoms(patientId);
+  }, [patientId]);
 
   useEffect(() => {
     if (isEncounterUpdated) {
@@ -275,6 +325,87 @@ function CreateEncounter() {
     setRiskLevel(value);
   };
 
+  const handleFileSelect = async (e) => {
+    try {
+      const files = e.target.files;
+      if (appointmentId) {
+        setIsNoteSaved(false);
+
+        const labResultResponse = await uploadLabResult(
+          patientId,
+          appointmentId,
+          [...files],
+        );
+
+        const newFiles = labResultResponse.data.files.map((file) => ({
+          name: file.replace('laboratory/', ''),
+          file,
+        }));
+
+        setLabResults((labResult) => [...labResult, ...newFiles]);
+      } else {
+        setIsNoteLoading(true);
+        setIsNoteSaved(false);
+
+        const response = await createEncounter(
+          {
+            patientId,
+            labs: JSON.stringify(
+              prescriptionList.filter(
+                (prescription) => prescription.label === 'lab',
+              ),
+            ),
+            prescriptionList: JSON.stringify(
+              prescriptionList.filter(
+                (prescription) => prescription.label === 'prescription',
+              ),
+            ),
+            note: '',
+          },
+          patientId,
+        );
+
+        const { organizationEventBookingId } = response.data;
+        setAppointmentId(organizationEventBookingId);
+
+        const labResultResponse = await uploadLabResult(
+          patientId,
+          organizationEventBookingId,
+          [...files],
+        );
+
+        const newFiles = labResultResponse.data.files.map((file) => ({
+          name: file.replace('laboratory/', ''),
+          file,
+        }));
+
+        setLabResults((labResult) => [...labResult, ...newFiles]);
+      }
+    } catch (err) {
+      // TODO: Handle error
+    } finally {
+      setIsNoteSaved(true);
+    }
+  };
+
+  const handleRemoveFile = async (selectedFile) => {
+    try {
+      setIsNoteSaved(false);
+      const results = labResults.filter(
+        (result) => result.name !== selectedFile.name,
+      );
+      const labImageUrl = results.map((result) => result.file);
+
+      await deleteLabResult(appointmentId, { labImageUrl });
+
+      setLabResults(results);
+    } catch (err) {
+      // TODO: Handle error.
+    } finally {
+      setIsNoteSaved(true);
+    }
+  };
+
   return (
     <DashboardLayout>
       <Wrapper>
@@ -295,19 +426,54 @@ function CreateEncounter() {
             handleRiskLevelChange={handleRiskLevelChange}
           />
           <MedInfoWrap>
-            <Column isLightVersion>
+            <Column>
               <GeneralInformation data={patientData} dispatch={dispatch} />
             </Column>
-            <Column isLightVersion>
-              <GraphicalReadings data={patientData} />
+            <Column>
+              <TabContainer>
+                <Tab
+                  role="button"
+                  tabIndex={getTabIndex()}
+                  onClick={() => setVitalsActiveTab(VITALS_TABS.vitals)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      setVitalsActiveTab(VITALS_TABS.vitals);
+                    }
+                  }}
+                  active={vitalsActiveTab === VITALS_TABS.vitals}>
+                  Vitals
+                </Tab>
+                <Tab
+                  role="button"
+                  tabIndex={getTabIndex()}
+                  onClick={() => setVitalsActiveTab(VITALS_TABS.symptoms)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      setVitalsActiveTab(VITALS_TABS.symptoms);
+                    }
+                  }}
+                  active={vitalsActiveTab === VITALS_TABS.symptoms}>
+                  Symptoms
+                </Tab>
+              </TabContainer>
+              {vitalsActiveTab === VITALS_TABS.vitals && (
+                <GraphicalReadings data={patientData} />
+              )}
+              {vitalsActiveTab === VITALS_TABS.symptoms && (
+                <Symptoms symptoms={symptoms} />
+              )}
             </Column>
-            <Column isLightVersion>
+            <Column>
               <PatientNotes
                 note={note}
                 handleNoteChange={handleNoteChange}
                 pastNotes={patientData.pastNotes}
                 isNoteLoading={isNoteLoading}
                 isNoteSaved={isNoteSaved}
+                labResults={labResults}
+                setLabResults={setLabResults}
+                handleFileSelect={handleFileSelect}
+                handleRemoveFile={handleRemoveFile}
               />
             </Column>
             {!isLightVersion && (
@@ -397,6 +563,10 @@ function CreateEncounter() {
                   pastNotes={patientData.pastNotes}
                   isNoteLoading={isNoteLoading}
                   isNoteSaved={isNoteSaved}
+                  labResults={labResults}
+                  setLabResults={setLabResults}
+                  handleFileSelect={handleFileSelect}
+                  handleRemoveFile={handleRemoveFile}
                 />
               )}
               {selectedTab === PATIENT_DETAILS_TABS.PRESCRIPTION && (

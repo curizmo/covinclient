@@ -105,7 +105,7 @@ const GraphicalReadings = (props) => {
       <TabContent activeTab={activeTab}>
         <TabPane tabId="1">
           <GraphicalColumn>
-            {data.patientParameterStatus === 'Initiated' && (
+            {data?.patientParameterStatus === 'Initiated' && (
               <InitiateCovidScreenWrap>
                 <NoRecordStyling>No Record Availaible</NoRecordStyling>
                 <InitiateCovidScreening>
@@ -113,7 +113,6 @@ const GraphicalReadings = (props) => {
                 </InitiateCovidScreening>
               </InitiateCovidScreenWrap>
             )}
-
             {data?.patientParameterStatus === 'Pending' && (
               <InitiateCovidScreenWrap>
                 <NoRecordStyling>No Record Availaible</NoRecordStyling>

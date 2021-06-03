@@ -12,9 +12,10 @@ export const email = yup
 export const phone = yup
   .string()
   .nullable(true)
+  .required('Cellphone Number is required field')
   .matches(
     PHONE_SCHEMA,
-    'Phone Number is not valid: it should start from +91- and contain only numbers, dashes and brackets',
+    'Cellphone Number is not valid: it should contain only numbers, dashes and brackets, and finish with number(s)',
   );
 
 export const title = yup

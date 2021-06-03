@@ -35,6 +35,10 @@ const GraphicalRepresentation = (props) => {
   return data?.vitals ? (
     <>
       {Object.entries(data.vitals).map((bodyParams, i) => {
+        if (!bodyParams[1].data.length) {
+          return null;
+        }
+
         const colors = rangeCheck(bodyParams);
         const minValueDomainYaxis =
           scales[bodyParams?.[0]]?.['minValueDomainYaxis'];

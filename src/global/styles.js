@@ -50,6 +50,9 @@ export const ViewName = styled.h3`
 `;
 export const DateAndTimeWrap = styled.div`
   display: flex;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 export const TimeImage = styled.img`
   margin-right: 9px;
@@ -118,4 +121,44 @@ export const InitiateCovidScreening = styled.div`
   line-height: 1.25px;
   letter-spacing: 0.2em;
   color: #ffffff;
+`;
+
+export const RadioLabel = styled.label`
+  display: flex;
+  margin-right: 2rem;
+  align-items: center;
+  @media (max-width: 768px) {
+    margin-right: 0.5rem;
+  }
+`;
+export const RadioInput = styled.input`
+  -webkit-appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  outline: none;
+  border: 1px solid #9fa7ba;
+  cursor: pointer;
+  margin-left: 0;
+  margin-right: 0.625rem;
+
+  :before {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 60%;
+    margin: 20% auto;
+    border-radius: 50%;
+  }
+
+  :checked:before {
+    background: #22335e;
+  }
+`;
+
+export const OptionName = styled.span`
+  text-transform: capitalize;
+  color: ${(props) => (props.checked ? '#22335E' : '#657396')};
+  font-size: 1rem;
+  line-height: 1.25rem;
 `;

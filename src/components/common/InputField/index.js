@@ -21,18 +21,21 @@ const InputField = (props) => {
 
   const input = (
     <>
-      <Input
-        {...rest}
-        id={name}
-        type={type}
-        name={name}
-        invalid={!!(invalid || error)}
-        placeholder={placeholder}
-        className={`${customClass} ${
-          ['checkbox', 'radio'].includes(type) ? 'ml-0' : ''
-        }`}
-      />
-      <FormFeedback>{error}</FormFeedback>
+      <div className="position-relative">
+        <Input
+          {...rest}
+          id={name}
+          type={type}
+          name={name}
+          invalid={!!(invalid || error)}
+          placeholder={placeholder}
+          className={`${customClass} ${
+            ['checkbox', 'radio'].includes(type) ? 'ml-0' : ''
+          }`}
+        />
+        <span />
+        <FormFeedback>{error}</FormFeedback>
+      </div>
     </>
   );
 
