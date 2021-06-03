@@ -44,6 +44,8 @@ import {
   ViewName,
 } from 'global/styles';
 
+const moment = require('moment');
+
 const states = csc.getStatesOfCountry(INDIA_COUNTRY_CODE);
 
 const Headings = styled.section`
@@ -83,6 +85,7 @@ const EditPatient = () => {
   });
 
   const values = getValues();
+  console.log(values);
   const disabled = useMemo(() => {
     return !(
       values.firstName &&
@@ -94,18 +97,22 @@ const EditPatient = () => {
   const getPatient = async (patientId) => {
     try {
       const response = await patientService.fetchPatient(patientId);
-
       if (response.data) {
         const {
           familyName: lastName,
           givenName: firstName,
+          address1: addressOne,
+          dateOfBirth: birthDate,
           ...outputResponse
         } = response.data;
         const output = {
           ...outputResponse,
           firstName,
           lastName,
+          addressOne,
+          birthDate: moment(birthDate).format('YYYY-MM-DD'),
         };
+        console.log(output);
         arrayObjectFixer(output).map((data) => setValue(...data));
       }
     } catch (err) {
