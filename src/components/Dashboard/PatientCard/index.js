@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router';
 
-import { rangeCheck } from 'utils';
+import { getRandomKey, rangeCheck } from 'utils';
 import { CMLine } from 'third-party/senze-graphs/dist';
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
 import { isLightVersion } from '../../../config';
@@ -133,41 +133,46 @@ const PatientCard = (props) => {
       <div>
         {patient && patient.vitals && (
           <div className="body-vitals-status-wrap">
-            {Object.entries(patient.vitals).map((bodyParms, i) => {
+            {Object.entries(patient.vitals).map((bodyParams) => {
+              if (!bodyParams[1].data.length) {
+                return null;
+              }
+
               return (
-                <div className="content-wrp" key={i}>
+                <div className="content-wrp" key={getRandomKey()}>
                   <div className="labels-with-current-stats">
                     <PatientVitalFieldName>
-                      {bodyParms && bodyParms[0] === 'bloodPressure'
+                      {bodyParams && bodyParams[0] === 'bloodPressure'
                         ? 'BP'
-                        : bodyParms[0]}
+                        : bodyParams[0]}
                     </PatientVitalFieldName>
                     <div className="vital-current-info-stat">
                       <div
                         className="vital-current-value"
-                        style={{ color: `${rangeCheck(bodyParms)[0]}` }}>
-                        {bodyParms &&
-                          bodyParms[1].current
+                        style={{ color: `${rangeCheck(bodyParams)[0]}` }}>
+                        {bodyParams &&
+                          bodyParams[1].current
                             .map((item) => item.value)
                             .join('-')}
                       </div>
-                      <div style={{ color: `${rangeCheck(bodyParms)[0]}` }}>
-                        {' '}
-                        {bodyParms && bodyParms[1].unit === 'F' ? '\u00b0' : ''}
+                      <div style={{ color: `${rangeCheck(bodyParams)[0]}` }}>
+                        {bodyParams && bodyParams[1].unit === 'F'
+                          ? '\u00b0'
+                          : ''}
                       </div>
                       <div
                         className="vital-current-unit"
-                        style={{ color: `${rangeCheck(bodyParms)[0]}` }}>
-                        {bodyParms && bodyParms[1].unit}
+                        style={{ color: `${rangeCheck(bodyParams)[0]}` }}>
+                        {bodyParams ? bodyParams[1].unit : ''}
                       </div>
                     </div>
                   </div>
                   <div className="graph-wrp-for-vitals">
                     <CMLine
                       className="custom-class"
-                      data={bodyParms[1]}
+                      data={bodyParams[1]}
                       preferences={{
-                        graphColors: rangeCheck(bodyParms),
+                        graphColors: rangeCheck(bodyParams),
                         showCircleOnLines: false,
                         showAxisX: false,
                         showAxisY: false,
