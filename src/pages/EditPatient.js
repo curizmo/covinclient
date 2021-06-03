@@ -85,7 +85,6 @@ const EditPatient = () => {
   });
 
   const values = getValues();
-  console.log(values);
   const disabled = useMemo(() => {
     return !(
       values.firstName &&
@@ -113,6 +112,9 @@ const EditPatient = () => {
           birthDate: moment(birthDate).format('YYYY-MM-DD'),
         };
         console.log(output);
+        setCity(output.city);
+        setState(output.state);
+        setGender(output.gender);
         arrayObjectFixer(output).map((data) => setValue(...data));
       }
     } catch (err) {
@@ -133,7 +135,7 @@ const EditPatient = () => {
           )
         : [],
     );
-    setCity('');
+    setCity(city ? city : '');
   }, [state]);
 
   const handleSave = async (patient) => {
@@ -286,9 +288,10 @@ const EditPatient = () => {
                 defaultValue=""
                 title="State"
                 type="select"
-                name="state">
+                name="state"
+                innerRef={register}>
                 <option value="" disabled hidden default>
-                  {'Select State'}
+                  {state ? state : 'Select State'}
                 </option>
                 {states.map(({ name }) => (
                   <option key={name} value={name}>
@@ -306,9 +309,10 @@ const EditPatient = () => {
                 onChange={(e) => setCity(e.target.value)}
                 title="City"
                 type="select"
-                name="city">
+                name="city"
+                innerRef={register}>
                 <option value="" disabled hidden default>
-                  {'Select City'}
+                  {city ? city : 'Select City'}
                 </option>
                 {citiesList.map(({ name }) => (
                   <option key={name} value={name} onClick={() => setCity(name)}>
