@@ -73,7 +73,6 @@ const EditPatient = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [serverError, setServerError] = useState('');
-  const [checkedGender] = useState('');
   const [gender, setGender] = useState('');
   const [initialState, setInitialState] = useState('');
   const [state, setState] = useState('');
@@ -98,6 +97,7 @@ const EditPatient = () => {
           addressOne,
           birthDate: moment(birthDate).format('YYYY-MM-DD'),
         };
+        console.log(output);
         arrayObjectFixer(output).map((data) => setValue(...data));
         setCity(output.city);
         setInitialState(output.state);
@@ -109,6 +109,7 @@ const EditPatient = () => {
     }
   };
 
+  console.log(gender);
   const { register, handleSubmit, errors, getValues, setValue } = useForm({
     resolver: yupResolver(patientValidation),
     mode: 'onBlur',
@@ -224,15 +225,15 @@ const EditPatient = () => {
                     <RadioLabel
                       htmlFor={value}
                       key={value}
-                      onClick={() => setGender(value)}
-                      innerRef={register}>
+                      onClick={() => setGender(value)}>
                       <RadioInput
                         type="radio"
                         name="gender"
                         value={value}
                         id={value}
+                        checked={gender === value}
                       />
-                      <OptionName checked={checkedGender === value}>
+                      <OptionName checked={gender === value}>
                         {label}
                       </OptionName>
                     </RadioLabel>
