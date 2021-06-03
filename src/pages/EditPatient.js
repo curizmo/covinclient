@@ -75,6 +75,7 @@ const EditPatient = () => {
   const [serverError, setServerError] = useState('');
   const [checkedGender] = useState('');
   const [gender, setGender] = useState('');
+  const [initialState, setInitialState] = useState('');
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [citiesList, setCitiesList] = useState([]);
@@ -111,8 +112,8 @@ const EditPatient = () => {
           addressOne,
           birthDate: moment(birthDate).format('YYYY-MM-DD'),
         };
-        console.log(output);
         setCity(output.city);
+        setInitialState(output.state);
         setState(output.state);
         setGender(output.gender);
         arrayObjectFixer(output).map((data) => setValue(...data));
@@ -135,7 +136,7 @@ const EditPatient = () => {
           )
         : [],
     );
-    setCity(city || '');
+    setCity(state === initialState ? city : '');
   }, [state]);
 
   const handleSave = async (patient) => {
@@ -313,7 +314,7 @@ const EditPatient = () => {
                 name="city"
                 innerRef={register}>
                 <option value="" disabled hidden default>
-                  {city || 'Select City'}
+                  {'Select City'}
                 </option>
                 {citiesList.map(({ name }) => (
                   <option key={name} value={name} onClick={() => setCity(name)}>
