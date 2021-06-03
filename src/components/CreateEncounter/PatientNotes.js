@@ -105,7 +105,7 @@ export const PatientNotes = ({
           <input
             type="file"
             onChange={handleFileSelect}
-            style={{ display: 'none' }}
+            className="d-none"
             ref={imageUploadRef}
           />
           {labResults?.length ? (
