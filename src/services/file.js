@@ -9,3 +9,13 @@ export function getEncounterFile(fileName) {
     responseType: 'blob',
   });
 }
+
+/**
+ * @param {string} [view]
+ * @returns {Promise<object>}
+ */
+export function getFile(fileName) {
+  return BEApi.get(`/file/${fileName}`, {
+    responseType: 'blob',
+  });
+}

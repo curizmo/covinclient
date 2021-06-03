@@ -15,7 +15,7 @@ import { exportToCSV } from 'utils/vitalsDownload';
 import time from 'assets/images/svg-icons/clock.svg';
 import excel from 'assets/images/svg-icons/excel.svg';
 import xicon from 'assets/images/x-icon.png';
-import { getDate, setDate } from '../global';
+import { getDate, setDate, setDateTime } from '../global';
 import {
   DateAndTime,
   DateAndTimeWrap,
@@ -158,7 +158,9 @@ const DashBoardComponent = () => {
       }
       return {
         ...vital,
-        [VitalsDateFields.updated]: setDate(vital[VitalsDateFields.updated]),
+        [VitalsDateFields.updated]: setDateTime(
+          vital[VitalsDateFields.updated],
+        ),
         [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
         [VitalsDateFields.patientSince]: setDate(
           vital[VitalsDateFields.patientSince],

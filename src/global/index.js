@@ -66,3 +66,7 @@ export const getDate = () => {
 export const setDate = (date) => {
   return date ? moment(date).format('LL') : '';
 };
+
+export const setDateTime = (date) => {
+  return date ? moment(date).format('MMMM Do YYYY, h:mm:ss a') : '';
+};
