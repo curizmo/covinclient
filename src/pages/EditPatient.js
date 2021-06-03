@@ -80,20 +80,6 @@ const EditPatient = () => {
   const [city, setCity] = useState('');
   const [citiesList, setCitiesList] = useState([]);
 
-  const { register, handleSubmit, errors, getValues, setValue } = useForm({
-    resolver: yupResolver(patientValidation),
-    mode: 'onBlur',
-  });
-
-  const values = getValues();
-  const disabled = useMemo(() => {
-    return !(
-      values.firstName &&
-      values.phone &&
-      Object.keys(errors)?.length < 1
-    );
-  }, [errors, values]);
-
   const getPatient = async (patientId) => {
     try {
       const response = await patientService.fetchPatient(patientId);
@@ -112,20 +98,35 @@ const EditPatient = () => {
           addressOne,
           birthDate: moment(birthDate).format('YYYY-MM-DD'),
         };
+        arrayObjectFixer(output).map((data) => setValue(...data));
         setCity(output.city);
         setInitialState(output.state);
         setState(output.state);
         setGender(output.gender);
-        arrayObjectFixer(output).map((data) => setValue(...data));
       }
     } catch (err) {
       // TODO: Handle error
     }
   };
 
+  const { register, handleSubmit, errors, getValues, setValue } = useForm({
+    resolver: yupResolver(patientValidation),
+    mode: 'onBlur',
+  });
+
   useEffect(() => {
     getPatient(patientId);
   }, [patientId]);
+
+  const values = getValues();
+  console.log(values);
+  const disabled = useMemo(() => {
+    return !(
+      values.firstName &&
+      values.phone &&
+      Object.keys(errors)?.length < 1
+    );
+  }, [errors, values]);
 
   useEffect(() => {
     setCitiesList(
