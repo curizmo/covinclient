@@ -15,10 +15,15 @@ import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
 import { DashboardLayout } from 'components/common/Layout';
 
 import { fetchPatient } from 'actions';
+
 import { getPatient, getIsEncounterUpdated, getUser } from 'selectors';
+
 import { createEncounter, updatePatientRiskStatus } from 'services/patient';
 import { createOrUpdateEncounter } from 'services/appointment';
-import { getRandomKey } from 'utils';
+import { fetchPatientSymptoms } from 'services/symptoms';
+
+import { getRandomKey, getTabIndex } from 'utils';
+
 import { routes } from 'routers';
 
 import notesIcon from 'assets/images/svg-icons/notesIcon.svg';
@@ -43,6 +48,7 @@ import {
 } from 'global/styles';
 import { getDate } from 'global';
 import { isLightVersion } from 'config';
+import { Symptoms } from 'components/CreateEncounter/Symptoms';
 
 const PATIENT_DETAILS_TABS = {
   READINGS: 'Readings',
@@ -164,6 +170,32 @@ const Icon = styled.img`
   margin-right: 0.5rem;
 `;
 
+const TabContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f2f7fd;
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const Tab = styled.div`
+  font-weight: bold;
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  color: #22335e;
+  padding: 1rem;
+  width: 50%;
+  text-align: center;
+  border-bottom: ${(props) => (props.active ? '3px solid #22335E' : '')};
+`;
+
+const VITALS_TABS = {
+  vitals: 'vitals',
+  symptoms: 'symptoms',
+};
+
 function CreateEncounter() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -182,6 +214,8 @@ function CreateEncounter() {
   const [appointmentId, setAppointmentId] = useState('');
   const [isNoteSaved, setIsNoteSaved] = useState(false);
   const [isNoteLoading, setIsNoteLoading] = useState(false);
+  const [vitalsActiveTab, setVitalsActiveTab] = useState(VITALS_TABS.vitals);
+  const [symptoms, setSymptoms] = useState([]);
 
   useEffect(() => {
     setRiskLevel(patientData?.status);
@@ -194,6 +228,20 @@ function CreateEncounter() {
   useEffect(() => {
     dispatch(fetchPatient({ patientId, ntoUserId: user.NTOUserID }));
   }, [dispatch, patientId, user.NTOUserID]);
+
+  useEffect(() => {
+    const fetchSymptoms = async (patientId) => {
+      try {
+        const response = await fetchPatientSymptoms(patientId);
+
+        setSymptoms(response.data.symptoms);
+      } catch (err) {
+        // TODO: Handle err.
+      }
+    };
+
+    fetchSymptoms(patientId);
+  }, [patientId]);
 
   useEffect(() => {
     if (isEncounterUpdated) {
@@ -294,7 +342,38 @@ function CreateEncounter() {
           />
           <MedInfoWrap>
             <Column isLightVersion>
-              <GraphicalReadings data={patientData} />
+              <TabContainer>
+                <Tab
+                  role="button"
+                  tabIndex={getTabIndex()}
+                  onClick={() => setVitalsActiveTab(VITALS_TABS.vitals)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      setVitalsActiveTab(VITALS_TABS.vitals);
+                    }
+                  }}
+                  active={vitalsActiveTab === VITALS_TABS.vitals}>
+                  Vitals
+                </Tab>
+                <Tab
+                  role="button"
+                  tabIndex={getTabIndex()}
+                  onClick={() => setVitalsActiveTab(VITALS_TABS.symptoms)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      setVitalsActiveTab(VITALS_TABS.symptoms);
+                    }
+                  }}
+                  active={vitalsActiveTab === VITALS_TABS.symptoms}>
+                  Symptoms
+                </Tab>
+              </TabContainer>
+              {vitalsActiveTab === VITALS_TABS.vitals && (
+                <GraphicalReadings data={patientData} />
+              )}
+              {vitalsActiveTab === VITALS_TABS.symptoms && (
+                <Symptoms symptoms={symptoms} />
+              )}
             </Column>
             <Column isLightVersion>
               <PatientNotes

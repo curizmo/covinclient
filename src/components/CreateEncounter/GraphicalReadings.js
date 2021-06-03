@@ -1,6 +1,5 @@
 import React from 'react';
 import { GraphicalRepresentation } from '../GraphicalRepresentation/index';
-import lineGraphIcon from '../../assets/images/lineGraphIcon.svg';
 import styled, { css } from 'styled-components';
 import {
   InitiateCovidScreenWrap,
@@ -9,7 +8,6 @@ import {
   InitiateCovidScreening,
   ResendWrap,
 } from '../../global/styles';
-import HeadersComponent from 'components/common/HeadersComponent/HeadersComponent';
 
 const GraphicalColumn = styled.div`
   padding: 0.2rem 1.5rem 1.5rem;
@@ -34,11 +32,6 @@ const GraphicalReadings = (props) => {
 
   return (
     <div>
-      <HeadersComponent
-        image={lineGraphIcon}
-        alt={'lineGraph'}
-        text={'Readings'}
-      />
       <GraphicalColumn>
         {data.patientParameterStatus === 'Initiated' && (
           <InitiateCovidScreenWrap>

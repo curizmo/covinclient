@@ -248,3 +248,18 @@ export const LoadingIcon = styled.div`
   bottom: 1.25rem !important;
   right: 2.5rem !important;
 `;
+
+export const SymptomContainer = styled.div`
+  padding: 1rem 1.875rem;
+  background: #f8fbfe;
+  border-bottom: 1px solid rgba(101, 115, 150, 0.2);
+  &:last-child {
+    border-bottom: none;
+  }
+  @media (max-width: 768px) {
+    background: #f8fbfe;
+    padding: 0.5rem 0.5rem;
+    border-bottom: none;
+    margin-bottom: 0.5em;
+  }
+`;
