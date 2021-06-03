@@ -97,12 +97,13 @@ const AddPatient = () => {
     setCity('');
   }, [state]);
 
-  const handleSave = async (patient) => {
+  const handleSave = async ({ phone, heightFt, heightIn, ...patient }) => {
     try {
       dispatch(showSpinner());
       await patientService.createPatient({
         ...patient,
-        phone: patient.phone.replace(/\(/g, '').replace(/\)/g, ''),
+        phone: phone.replace(/\(/g, '').replace(/\)/g, ''),
+        height: heightFt ? `${heightFt}'${heightIn || 0}"` : '',
         state,
         city,
         gender,
@@ -173,10 +174,10 @@ const AddPatient = () => {
             </Col>
           </Row>
           <Row>
-            <Col md={{ size: 3 }}>
+            <Col lg={{ size: 4 }} md={{ size: 3 }}>
               <FormGroup check row className="mx-0 pl-0 form-group">
                 <Label>Gender</Label>
-                <div className="d-flex mt-2">
+                <div className="d-flex mt-2 flex-wrap">
                   {GENDER_OPTIONS.map(({ label, value }) => (
                     <RadioLabel
                       htmlFor={value}
@@ -196,7 +197,7 @@ const AddPatient = () => {
                 </div>
               </FormGroup>
             </Col>
-            <Col md={{ size: 3 }}>
+            <Col lg={{ size: 2 }} md={{ size: 3 }}>
               <InputField
                 title="Date of Birth"
                 name="birthDate"
@@ -207,14 +208,23 @@ const AddPatient = () => {
               />
             </Col>
             <Col md={{ size: 3 }}>
-              <InputField
-                title="Height"
-                name="height"
-                innerRef={register}
-                error={getErrorMessage(errors, 'height')}
-                placeholder="Enter Height"
-                customClass="measurement ft"
-              />
+              <Label>Height</Label>
+              <div className="d-flex">
+                <InputField
+                  type="number"
+                  name="heightFt"
+                  innerRef={register}
+                  customClass="measurement ft"
+                  error={getErrorMessage(errors, 'heightFt')}
+                />
+                <InputField
+                  type="number"
+                  name="heightIn"
+                  innerRef={register}
+                  customClass="measurement in"
+                  error={getErrorMessage(errors, 'heightIn')}
+                />
+              </div>
             </Col>
             <Col md={{ size: 3 }}>
               <InputField

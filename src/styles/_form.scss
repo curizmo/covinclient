@@ -34,7 +34,10 @@ form {
       content: 'Kg';
     }
     &.ft +span:after {
-      content: 'Ft/In';
+      content: 'Ft';
+    }
+    &.in +span:after {
+      content: 'In';
     }
   }
 }
