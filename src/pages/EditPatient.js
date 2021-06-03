@@ -119,7 +119,6 @@ const EditPatient = () => {
   }, [patientId]);
 
   const values = getValues();
-  console.log(values);
   const disabled = useMemo(() => {
     return !(
       values.firstName &&
