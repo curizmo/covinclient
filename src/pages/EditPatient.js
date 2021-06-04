@@ -100,7 +100,7 @@ const EditPatient = () => {
           firstName,
           lastName,
           addressOne,
-          birthDate: moment(birthDate).format('YYYY-MM-DD'),
+          birthDate: birthDate ? moment(birthDate).format('YYYY-MM-DD') : '',
         };
         const heightInFeet =
           (output.height &&
@@ -110,12 +110,12 @@ const EditPatient = () => {
           (output.height &&
             output.height.split("'")[1].replace(/[^0-9]/g, '')) ||
           '';
-        console.log(output);
         arrayObjectFixer(output).map((data) => setValue(...data));
         setCity(output.city);
         setInitialState(output.state);
         setState(output.state);
         setGender(output.gender);
+        setBirthDate(output.birthDate);
         setFeetHeight(heightInFeet);
         setInchHeight(heightInInch);
       }
@@ -123,8 +123,6 @@ const EditPatient = () => {
       // TODO: Handle error
     }
   };
-
-  console.log(birthDate);
 
   const { register, handleSubmit, errors, getValues, setValue } = useForm({
     resolver: yupResolver(patientValidation),
@@ -188,6 +186,10 @@ const EditPatient = () => {
     } finally {
       dispatch(hideSpinner());
     }
+  };
+
+  const getBirthDate = (birthDate) => {
+    return birthDate ? moment(birthDate).format('DD/MM/YYYY') : '';
   };
 
   return (
@@ -278,6 +280,7 @@ const EditPatient = () => {
                 onSelect={setBirthDate}
                 defaultDate={new Date('01/01/1990')}
                 showMonthAfterYear={true}
+                defaultValue={getBirthDate(birthDate)}
                 innerRef={register}
               />
             </Col>
