@@ -109,3 +109,56 @@ main {
   top: 0.937rem;
   left: 0.937rem;
 }
+
+.excel-image-wrap-small{
+  margin-right: 0.9rem;
+}
+
+.download-excel-icon-small {
+  color: #23a566;
+  width: 0.9rem;
+  height: 1rem;
+  position: absolute;
+  top: 0.65rem;
+  left: 0.75rem;
+  margin-right: 0.625rem;
+}
+.x-icon-small {
+  color: #FFFFFF;
+  width: 0.350rem;
+  height: 0.360rem;
+  position: absolute;
+  top: 1.08rem;
+  left: 0.957rem;
+}
+
+.excel-image-wrap-mobile{
+  margin-right: 0.9rem;
+}
+
+.download-excel-icon-mobile {
+  color: #23a566;
+  width: 1.18rem;
+  height: 1.5rem;
+  position: absolute;
+  margin-right: 0.625rem;
+}
+.x-icon-mobile {
+  color: #FFFFFF;
+  width: 0.5rem;
+  height: 0.5rem;
+  position: absolute;
+  top: 0.5rem;
+  left: 0.3rem;
+}
+
+.mobile-download-button{
+  outline: none;
+}
+
+mobile-download-button {
+  &:active,
+  &:focus {
+    outline: none !important;
+  }
+}

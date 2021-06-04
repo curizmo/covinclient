@@ -3,12 +3,22 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { routes } from 'routers';
+import { useSelector } from 'react-redux';
 
-import { getRandomKey, rangeCheck } from 'utils';
+import { getRandomKey, rangeCheck, getTabIndex } from 'utils';
 import { CMLine } from 'third-party/senze-graphs/dist';
+import * as patientVitalsService from '../../../services/patientVitals';
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
+import excel from 'assets/images/svg-icons/excel.svg';
+import xicon from 'assets/images/x-icon.png';
 import { isLightVersion } from '../../../config';
-import { GENDER_SHORTHAND } from '../../../constants';
+import { GENDER_SHORTHAND, VitalsDateFields } from '../../../constants';
+import { CAMEL_CASE_REGEX } from '../../../constants/regex';
+import { getUser } from '../../../selectors';
+
+import { setDate, setDateTime } from '../../../global';
+import { exportToCSV } from 'utils/vitalsDownload';
+
 import './index.css';
 
 const State = styled.div`
@@ -55,6 +65,15 @@ const PatientGeneralWrapper = styled.div`
   padding: 1.25rem 0rem;
   row-gap: 0.9375rem;
   font-size: 0.875rem;
+  position: relative;
+`;
+
+const ButtonWrap = styled.div`
+  position: absolute;
+  right: 5px;
+  top: -33px;
+  margin-left: 5px;
+  margin-bottom: 5px;
 `;
 
 const PatientStatusWrp = styled.div`
@@ -71,6 +90,7 @@ const PatientVitalFieldName = styled.div`
 const PatientCard = (props) => {
   const { patient } = props;
   const history = useHistory();
+  const user = useSelector(getUser);
   const onPatientNameClick = (name) => {
     if (isLightVersion) {
       return;
@@ -78,6 +98,38 @@ const PatientCard = (props) => {
     const val = name.replace(/ /g, '_').toLowerCase();
     history.push({ pathname: `/patients/${val}`, state: {} });
   };
+
+  const exportVitals = async (patientId) => {
+    const vitals = await patientVitalsService.getIndividualPatientVitals(
+      user.PractitionerID,
+      patientId,
+    );
+
+    let vitalDetails = vitals.data.map((vital) => {
+      for (const key in vital) {
+        const result = key.replace(CAMEL_CASE_REGEX, ' $1');
+        const title = result.charAt(0).toUpperCase() + result.slice(1);
+        if (title !== key) {
+          vital[title] = vital[key];
+          delete vital[key];
+        }
+      }
+      return {
+        ...vital,
+        [VitalsDateFields.updated]: setDateTime(
+          vital[VitalsDateFields.updated],
+        ),
+        [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
+        [VitalsDateFields.patientSince]: setDate(
+          vital[VitalsDateFields.patientSince],
+        ),
+        [VitalsDateFields.doseOne]: setDate(vital[VitalsDateFields.doseOne]),
+        [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
+      };
+    });
+    exportToCSV(vitalDetails);
+  };
+
   return (
     <div className="patient-info">
       {/*patient name & state */}
@@ -121,6 +173,27 @@ const PatientCard = (props) => {
             &nbsp;<FieldValue>{patient.age}</FieldValue>
           </PatientGeneralInfo>
         ) : null}
+        <ButtonWrap className="ml-2 ">
+          <div
+            className="mobile-download-button"
+            role="button"
+            onClick={() => {
+              exportVitals(patient.patientId);
+            }}
+            onKeyDown={(e) => {
+              e.key === 'Enter' && exportVitals(patient.patientId);
+            }}
+            tabIndex={getTabIndex()}>
+            <span className="excel-image-wrap-mobile">
+              <img
+                src={excel}
+                alt="Covin"
+                className="logo download-excel-icon-mobile"
+              />
+              <img src={xicon} alt="Covin" className="logo x-icon-mobile" />
+            </span>
+          </div>
+        </ButtonWrap>
         {patient && patient.preExisting && (
           <PatientGeneralInfo>
             <FieldName>Pre-Existing:</FieldName>
