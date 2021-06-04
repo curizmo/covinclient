@@ -40,6 +40,8 @@ import {
   ViewName,
 } from 'global/styles';
 
+const moment = require('moment');
+
 const states = csc.getStatesOfCountry(INDIA_COUNTRY_CODE);
 
 const Headings = styled.section`
@@ -120,6 +122,10 @@ const AddPatient = () => {
     } finally {
       dispatch(hideSpinner());
     }
+  };
+
+  const getBirthDate = (birthDate) => {
+    return birthDate ? moment(birthDate).format('DD/MM/YYYY') : '';
   };
 
   return (
@@ -208,6 +214,7 @@ const AddPatient = () => {
                 max={getISODate(currentDate())}
                 onSelect={setBirthDate}
                 defaultDate={new Date('01/01/1990')}
+                defaultValue={getBirthDate(birthDate)}
                 showMonthAfterYear={true}
               />
             </Col>
