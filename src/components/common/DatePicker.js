@@ -25,6 +25,8 @@ export const DatePicker = ({
   defaultDate = new Date(),
   maxDate = new Date(),
   showMonthAfterYear = false,
+  yearRange = 50,
+  defaultValue = '',
 }) => {
   const pikadayRef = useRef(null);
 
@@ -36,6 +38,7 @@ export const DatePicker = ({
       defaultDate,
       showMonthAfterYear,
       maxDate,
+      yearRange,
     });
   }, []);
 
@@ -46,6 +49,7 @@ export const DatePicker = ({
         ref={pikadayRef}
         placeholder={format.toLowerCase()}
         className="form-control"
+        value={defaultValue}
       />
       <DatePickerIcon src={calendarIcon} alt="calendar" />
     </DatePickerWrapper>
@@ -57,6 +61,8 @@ DatePicker.propTypes = {
   customClass: PropTypes.string,
   format: PropTypes.string,
   defaultDate: PropTypes.object,
+  defaultValue: PropTypes.string,
   showMonthAfterYear: PropTypes.bool,
   maxDate: PropTypes.object,
+  yearRange: PropTypes.number,
 };

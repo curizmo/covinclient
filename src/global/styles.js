@@ -125,11 +125,8 @@ export const InitiateCovidScreening = styled.div`
 
 export const RadioLabel = styled.label`
   display: flex;
-  margin-right: 2rem;
+  margin-right: 1rem;
   align-items: center;
-  @media (max-width: 768px) {
-    margin-right: 0.5rem;
-  }
 `;
 export const RadioInput = styled.input`
   -webkit-appearance: none;
@@ -140,7 +137,7 @@ export const RadioInput = styled.input`
   border: 1px solid #9fa7ba;
   cursor: pointer;
   margin-left: 0;
-  margin-right: 0.625rem;
+  margin-right: 0.5rem;
 
   :before {
     content: '';

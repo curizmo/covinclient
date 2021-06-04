@@ -151,7 +151,7 @@ const DesktopPatientTable = (props) => {
                     <Status selectedCases={patient.status} />
                     <Link
                       className="card-name patient-link--small min-width-20 mr-2"
-                      to={routes.createEncounter.path.replace(
+                      to={routes.editPatient.path.replace(
                         ':patientId',
                         patient.patientId,
                       )}>
@@ -159,9 +159,16 @@ const DesktopPatientTable = (props) => {
                     </Link>
                   </>
                 ) : (
-                  <p className="card-name patient-link--small min-width-20 mr-2 mb-0">
-                    {patient.fullName}
-                  </p>
+                  <Link
+                    className="card-name patient-link--small min-width-20 mr-2 mb-0"
+                    to={routes.editPatient.path.replace(
+                      ':patientId',
+                      patient.patientId,
+                    )}>
+                    <p className="card-name patient-link--small min-width-20 mr-2 mb-0">
+                      {patient.fullName}
+                    </p>
+                  </Link>
                 )}
                 <Info className="min-width-20 mr-2">
                   <Button
