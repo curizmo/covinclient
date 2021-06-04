@@ -71,7 +71,7 @@ const PatientGeneralWrapper = styled.div`
 const ButtonWrap = styled.div`
   position: absolute;
   right: 5px;
-  top: 18px;
+  top: -33px;
   margin-left: 5px;
   margin-bottom: 5px;
 `;
