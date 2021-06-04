@@ -175,6 +175,7 @@ const PatientCard = (props) => {
         ) : null}
         <ButtonWrap className="ml-2 ">
           <div
+            className="mobile-download-button"
             role="button"
             onClick={() => {
               exportVitals(patient.patientId);

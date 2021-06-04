@@ -151,3 +151,14 @@ main {
   top: 0.5rem;
   left: 0.3rem;
 }
+
+.mobile-download-button{
+  outline: none;
+}
+
+mobile-download-button {
+  &:active,
+  &:focus {
+    outline: none !important;
+  }
+}
