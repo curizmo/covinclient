@@ -102,6 +102,7 @@ export const SHOW_TIMER_BEFORE_HOURS = 1;
 export const GENDER_SHORTHAND = {
   female: 'F',
   male: 'M',
+  other: 'O',
 };
 
 export const GENDER_OPTIONS = [
@@ -112,6 +113,10 @@ export const GENDER_OPTIONS = [
   {
     label: 'Female',
     value: 'female',
+  },
+  {
+    label: 'Other',
+    value: 'other',
   },
 ];
 

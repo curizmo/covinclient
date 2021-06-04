@@ -3,10 +3,24 @@
 }
 
 header {
+  padding: 0 4em;
   height: 4.3rem;
 
   .logo {
-    width: 4.1rem;
+    width: 17rem;
+    // @toDo remove temp (added until svg left padding is fixed)
+    margin-left: -6px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 1em 0 0;
+    .logo {
+      width: 14rem;
+    }
+  }
+
+  &.top-menu {
+    background-color: #60a3d2;
   }
 
   .menu-icon {

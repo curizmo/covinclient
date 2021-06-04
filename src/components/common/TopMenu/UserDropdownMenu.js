@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Dropdown, DropdownMenu, DropdownToggle, Button } from 'reactstrap';
+import { BiUserCircle } from 'react-icons/bi';
 
 import { useAuthProvider } from 'hooks/useAuthProvider';
-import userIcon from 'assets/images/svg-icons/profile-user.svg';
 
 export const UserDropdownMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +18,9 @@ export const UserDropdownMenu = () => {
   return (
     <Dropdown isOpen={isOpen} toggle={toggle}>
       <DropdownToggle tag="div" data-toggle="dropdown" aria-expanded={isOpen}>
-        <img className="menu-icon" src={userIcon} alt="user" />
+        <h1>
+          <BiUserCircle className="text-white" />
+        </h1>
       </DropdownToggle>
       <DropdownMenu right>
         <Button onClick={logOut} className="transparent-button nav-link px-2">
