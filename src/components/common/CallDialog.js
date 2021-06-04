@@ -52,6 +52,7 @@ function CallDialog() {
         ...currentAppointment,
         isCallInProgress: false,
         hasCallEnded: true,
+        hasAppointmentStarted: false,
       }),
     );
   };
@@ -104,7 +105,7 @@ function CallDialog() {
   return (
     <>
       {currentAppointment &&
-      currentAppointment.hasAppointmentStarted &&
+      !currentAppointment.hasCallEnded &&
       location.pathname !== routes.teleHealth.path ? (
         <div>
           <Call
