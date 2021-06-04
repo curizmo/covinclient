@@ -18,6 +18,7 @@ import {
 import { DashboardLayout } from '../components/common/Layout';
 import { InputField } from '../components/common/InputField';
 import { LinkButton } from '../components/common/Button';
+import { DatePicker } from '../components/common/DatePicker';
 
 import {
   getISODate,
@@ -78,6 +79,10 @@ const EditPatient = () => {
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [citiesList, setCitiesList] = useState([]);
+  const [birthDate, setBirthDate] = useState(null);
+  const [inchHeight, setInchHeight] = useState('');
+  const [feetHeight, setFeetHeight] = useState('');
+  const [height, setHeight] = useState('');
 
   const getPatient = async (patientId) => {
     try {
@@ -97,19 +102,30 @@ const EditPatient = () => {
           addressOne,
           birthDate: moment(birthDate).format('YYYY-MM-DD'),
         };
+        const heightInFeet =
+          (output.height &&
+            output.height.split("'")[0].replace(/[^0-9]/g, '')) ||
+          '';
+        const heightInInch =
+          (output.height &&
+            output.height.split("'")[1].replace(/[^0-9]/g, '')) ||
+          '';
         console.log(output);
         arrayObjectFixer(output).map((data) => setValue(...data));
         setCity(output.city);
         setInitialState(output.state);
         setState(output.state);
         setGender(output.gender);
+        setFeetHeight(heightInFeet);
+        setInchHeight(heightInInch);
       }
     } catch (err) {
       // TODO: Handle error
     }
   };
 
-  console.log(gender);
+  console.log(birthDate);
+
   const { register, handleSubmit, errors, getValues, setValue } = useForm({
     resolver: yupResolver(patientValidation),
     mode: 'onBlur',
@@ -127,6 +143,16 @@ const EditPatient = () => {
       Object.keys(errors)?.length < 1
     );
   }, [errors, values]);
+
+  useEffect(() => {
+    if (feetHeight && inchHeight) {
+      setHeight(`${feetHeight}'${inchHeight}"`);
+    } else if (feetHeight && !inchHeight) {
+      setHeight(`${feetHeight}'`);
+    } else {
+      setHeight('');
+    }
+  }, [feetHeight, inchHeight]);
 
   useEffect(() => {
     setCitiesList(
@@ -149,6 +175,8 @@ const EditPatient = () => {
         state,
         city,
         gender,
+        birthDate,
+        height,
         patientId,
       });
 
@@ -217,10 +245,10 @@ const EditPatient = () => {
             </Col>
           </Row>
           <Row>
-            <Col md={{ size: 3 }}>
+            <Col lg={{ size: 4 }} md={{ size: 3 }}>
               <FormGroup check row className="mx-0 pl-0 form-group">
                 <Label>Gender</Label>
-                <div className="d-flex mt-2">
+                <div className="d-flex mt-2 flex-wrap">
                   {GENDER_OPTIONS.map(({ label, value }) => (
                     <RadioLabel
                       htmlFor={value}
@@ -241,25 +269,44 @@ const EditPatient = () => {
                 </div>
               </FormGroup>
             </Col>
-            <Col md={{ size: 3 }}>
-              <InputField
-                title="Date of Birth"
+            <Col lg={{ size: 2 }} md={{ size: 3 }}>
+              <Label>Date of Birth</Label>
+              <DatePicker
+                customClass="form-group"
                 name="birthDate"
-                innerRef={register}
-                type="date"
                 max={getISODate(currentDate())}
-                placeholder="dd/mm/yyyy"
+                onSelect={setBirthDate}
+                defaultDate={new Date('01/01/1990')}
+                showMonthAfterYear={true}
+                innerRef={register}
               />
             </Col>
             <Col md={{ size: 3 }}>
-              <InputField
-                title="Height"
-                name="height"
-                innerRef={register}
-                error={getErrorMessage(errors, 'height')}
-                placeholder="Enter Height"
-                customClass="measurement ft"
-              />
+              <Label>Height</Label>
+              <div className="d-flex">
+                <div className="flex-grow-1">
+                  <InputField
+                    type="number"
+                    name="heightFt"
+                    innerRef={register}
+                    customClass="measurement ft "
+                    value={feetHeight}
+                    onChange={(e) => setFeetHeight(e.target.value)}
+                    error={getErrorMessage(errors, 'heightFt')}
+                  />
+                </div>
+                <div className="flex-grow-1">
+                  <InputField
+                    type="number"
+                    name="heightIn"
+                    innerRef={register}
+                    customClass="measurement in"
+                    value={inchHeight}
+                    onChange={(e) => setInchHeight(e.target.value)}
+                    error={getErrorMessage(errors, 'heightIn')}
+                  />
+                </div>
+              </div>
             </Col>
             <Col md={{ size: 3 }}>
               <InputField
