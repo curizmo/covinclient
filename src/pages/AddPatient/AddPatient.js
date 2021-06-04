@@ -250,6 +250,7 @@ const AddPatient = () => {
                 step="0.01"
                 title="Weight"
                 name="weight"
+                error={getErrorMessage(errors, 'weight')}
                 innerRef={register}
                 customClass="measurement kg"
               />

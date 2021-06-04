@@ -1,6 +1,13 @@
 import * as yup from 'yup';
 
-import { firstName, lastName, phone, heightFt, heightIn } from './schema';
+import {
+  firstName,
+  lastName,
+  phone,
+  heightFt,
+  heightIn,
+  weight,
+} from './schema';
 
 export const patientValidation = yup.object().shape({
   firstName,
@@ -8,4 +15,5 @@ export const patientValidation = yup.object().shape({
   phone,
   heightFt,
   heightIn,
+  weight,
 });

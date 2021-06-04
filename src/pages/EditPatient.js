@@ -323,7 +323,7 @@ const EditPatient = () => {
                 title="Weight"
                 name="weight"
                 innerRef={register}
-                placeholder="Enter Weight"
+                error={getErrorMessage(errors, 'weight')}
                 customClass="measurement kg"
               />
               <span />
