@@ -196,7 +196,7 @@ const EditPatient = () => {
     <DashboardLayout>
       <Headings>
         <InfoWrapper>
-          <ViewName>Edit Patient</ViewName>
+          <ViewName>Edit Patient Details</ViewName>
           <DateAndTimeWrap>
             <TimeImage src={time} />
             <DateAndTime>{getDate()}</DateAndTime>
