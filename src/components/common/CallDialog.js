@@ -105,7 +105,7 @@ function CallDialog() {
   return (
     <>
       {currentAppointment &&
-      !currentAppointment.hasCallEnded &&
+      currentAppointment.hasAppointmentStarted &&
       location.pathname !== routes.teleHealth.path ? (
         <div>
           <Call
