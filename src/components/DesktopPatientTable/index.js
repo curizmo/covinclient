@@ -65,6 +65,7 @@ const ButtonWrap = styled.div`
   position: absolute;
   right: 92px;
   margin-left: 5px;
+  margin-bottom: 5px;
 `;
 
 const Label = styled.span`
@@ -109,9 +110,10 @@ const DesktopPatientTable = (props) => {
     [dispatch],
   );
 
-  const exportVitals = async () => {
-    const vitals = await patientVitalsService.getPatientVitals(
+  const exportVitals = async (patientId) => {
+    const vitals = await patientVitalsService.getIndividualPatientVitals(
       user.PractitionerID,
+      patientId,
     );
 
     let vitalDetails = vitals.data.map((vital) => {
@@ -198,7 +200,9 @@ const DesktopPatientTable = (props) => {
                 <ButtonWrap className="ml-2 ">
                   <Button
                     className="btn btn-download-small"
-                    onClick={exportVitals}>
+                    onClick={() => {
+                      exportVitals(patient.patientId);
+                    }}>
                     <span className="excel-image-wrap-small">
                       <img
                         src={excel}
