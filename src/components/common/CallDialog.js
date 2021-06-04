@@ -52,6 +52,7 @@ function CallDialog() {
         ...currentAppointment,
         isCallInProgress: false,
         hasCallEnded: true,
+        hasAppointmentStarted: false,
       }),
     );
   };
@@ -100,7 +101,6 @@ function CallDialog() {
   const handleDialOpen = () => {
     return setOpenDial(!openDial);
   };
-  console.log(currentAppointment);
 
   return (
     <>
