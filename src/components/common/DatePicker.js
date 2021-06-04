@@ -25,6 +25,7 @@ export const DatePicker = ({
   defaultDate = new Date(),
   maxDate = new Date(),
   showMonthAfterYear = false,
+  yearRange = 50,
 }) => {
   const pikadayRef = useRef(null);
 
@@ -36,6 +37,7 @@ export const DatePicker = ({
       defaultDate,
       showMonthAfterYear,
       maxDate,
+      yearRange,
     });
   }, []);
 
@@ -59,4 +61,5 @@ DatePicker.propTypes = {
   defaultDate: PropTypes.object,
   showMonthAfterYear: PropTypes.bool,
   maxDate: PropTypes.object,
+  yearRange: PropTypes.number,
 };

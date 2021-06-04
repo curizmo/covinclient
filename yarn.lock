@@ -10639,6 +10639,11 @@ react-dom@^16.14.0:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
+react-dropdown-date@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/react-dropdown-date/-/react-dropdown-date-2.2.4.tgz#6793a7d4aa550c13cd28c9be10ae4798adc663b0"
+  integrity sha512-buzc5oSDlcSzbaieI4Vi8XJJFYlUUhl0aVWiTMeyAL/C4twGWZ3lRjeWbj5e6iiKtxAlRB9WuMNkdGKbOXO8Lw==
+
 react-error-boundary@^2.2.2:
   version "2.3.2"
   resolved "https://registry.npmjs.org/react-error-boundary/-/react-error-boundary-2.3.2.tgz"

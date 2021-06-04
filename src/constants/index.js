@@ -107,11 +107,11 @@ export const GENDER_SHORTHAND = {
 
 export const GENDER_OPTIONS = [
   {
-    label: 'Male',
+    label: 'M',
     value: 'male',
   },
   {
-    label: 'Female',
+    label: 'F',
     value: 'female',
   },
   {

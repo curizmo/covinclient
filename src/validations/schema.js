@@ -30,16 +30,16 @@ export const height = yup
 
 export const heightFt = yup
   .number()
-  .positive()
-  .integer('Feet should be a positive number')
-  .max(7, 'Feet should be less than 7')
+  .integer('Feet should be integer')
+  .min(0, 'Feet should be more than 0')
+  .max(8, 'Feet should be less than 7')
   .nullable(true)
   .transform((value) => (isNaN(value) ? null : value));
 
 export const heightIn = yup
   .number()
-  .positive()
-  .integer('Inches should be a positive number')
+  .integer('Inches should be integer')
+  .min(0, 'Inches should be more than 0')
   .max(11, 'Inches should be less than 11')
   .nullable(true)
   .transform((value) => (isNaN(value) ? null : value));
