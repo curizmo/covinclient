@@ -106,9 +106,9 @@ const PatientCard = (props) => {
     );
 
     let vitalDetails = vitals.data.map((vital) => {
-      for (var key in vital) {
-        var result = key.replace(CAMEL_CASE_REGEX, ' $1');
-        var title = result.charAt(0).toUpperCase() + result.slice(1);
+      for (const key in vital) {
+        const result = key.replace(CAMEL_CASE_REGEX, ' $1');
+        const title = result.charAt(0).toUpperCase() + result.slice(1);
         if (title !== key) {
           vital[title] = vital[key];
           delete vital[key];
@@ -179,8 +179,8 @@ const PatientCard = (props) => {
             onClick={() => {
               exportVitals(patient.patientId);
             }}
-            onKeyDown={() => {
-              exportVitals(patient.patientId);
+            onKeyDown={(e) => {
+              e.key === 'Enter' && exportVitals(patient.patientId);
             }}
             tabIndex={getTabIndex()}>
             <span className="excel-image-wrap-mobile">

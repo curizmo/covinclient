@@ -52,7 +52,7 @@ const InfoWrapper = styled.div`
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  position:relative @media (max-width: 768px) {
+  @media (max-width: 768px) {
     width: 100%;
   }
 `;
@@ -117,9 +117,9 @@ const DesktopPatientTable = (props) => {
     );
 
     let vitalDetails = vitals.data.map((vital) => {
-      for (var key in vital) {
-        var result = key.replace(CAMEL_CASE_REGEX, ' $1');
-        var title = result.charAt(0).toUpperCase() + result.slice(1);
+      for (const key in vital) {
+        const result = key.replace(CAMEL_CASE_REGEX, ' $1');
+        const title = result.charAt(0).toUpperCase() + result.slice(1);
         if (title !== key) {
           vital[title] = vital[key];
           delete vital[key];
@@ -214,7 +214,7 @@ const DesktopPatientTable = (props) => {
                         alt="Covin"
                         className="logo x-icon-small"
                       />
-                    </span>{' '}
+                    </span>
                     DOWNLOAD (Xls)
                   </Button>
                 </ButtonWrap>
