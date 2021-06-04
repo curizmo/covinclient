@@ -100,11 +100,12 @@ function CallDialog() {
   const handleDialOpen = () => {
     return setOpenDial(!openDial);
   };
+  console.log(currentAppointment);
 
   return (
     <>
       {currentAppointment &&
-      currentAppointment.hasAppointmentStarted &&
+      !currentAppointment.hasCallEnded &&
       location.pathname !== routes.teleHealth.path ? (
         <div>
           <Call
