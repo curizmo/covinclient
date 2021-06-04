@@ -81,6 +81,7 @@ const useTwilio = () => {
           ...currentAppointment,
           isCallInProgress: false,
           hasCallEnded: true,
+          hasAppointmentStarted: false,
         }),
       );
       dispatch(twilioActions.resetTwilio());
