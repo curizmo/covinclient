@@ -164,7 +164,7 @@ const AddPatient = () => {
             </Col>
             <Col md={{ size: 6 }}>
               <InputField
-                title="Patient Email"
+                title="Contact Email"
                 name="email"
                 type="email"
                 innerRef={register}
