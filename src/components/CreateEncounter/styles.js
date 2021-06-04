@@ -5,7 +5,6 @@ export const ContentWrap = styled.div`
   flex-direction: column;
   justify-content: space-between;
   position: relative;
-  height: 100%;
 `;
 
 export const TopContainer = styled.div`
@@ -173,8 +172,9 @@ export const LastRow = styled.div`
 `;
 
 export const PastNote = styled.div`
-  padding: 1rem 1.875rem;
-  background: #f8fbfe;
+  padding: 1rem;
+  margin: 0.5rem 1rem;
+  background: #e0e3ea;
   border-bottom: 1px solid rgba(101, 115, 150, 0.2);
   &:last-child {
     border-bottom: none;
@@ -275,11 +275,12 @@ export const SymptomContainer = styled.div`
     background: #f8fbfe;
     padding: 0.5rem 0.5rem;
     border-bottom: none;
+    margin: 0rem 0.5rem;
     margin-bottom: 0.5em;
   }
 `;
 
-export const Date = styled.div`
+export const DateText = styled.div`
   font-size: 12px;
   line-height: 20px;
   color: #657396;
@@ -307,6 +308,29 @@ export const UploadContainer = styled.div`
 
 export const FileName = styled.span`
   color: #3182fb;
+  font-size: 14px;
+  line-height: 18px;
+`;
+
+export const ColumnContainer = styled.div`
+  overflow-y: auto;
+  height: 65vh;
+`;
+
+export const PastNotesContainer = styled.div`
+  margin-top: 1rem;
+  border-top: 1px solid #dfe2e9;
+  padding-top: 2rem;
+`;
+
+export const FileText = styled.span`
+  color: #3182fb;
+  font-size: 14px;
+  line-height: 18px;
+`;
+
+export const NoteText = styled.div`
+  color: #22335e;
   font-size: 14px;
   line-height: 18px;
 `;
