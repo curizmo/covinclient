@@ -18,14 +18,9 @@ import {
 import { DashboardLayout } from '../components/common/Layout';
 import { InputField } from '../components/common/InputField';
 import { LinkButton } from '../components/common/Button';
-import { DatePicker } from '../components/common/DatePicker';
+// import { DatePicker } from '../components/common/DatePicker';
 
-import {
-  getISODate,
-  currentDate,
-  getErrorMessage,
-  arrayObjectFixer,
-} from '../utils';
+import { getErrorMessage, arrayObjectFixer } from '../utils';
 import csc from 'third-party/country-state-city';
 import { hideSpinner, showSpinner } from 'actions/spinner';
 import * as patientService from '../services/patient';
@@ -44,6 +39,7 @@ import {
   TimeImage,
   ViewName,
 } from 'global/styles';
+import { SplittedDatePicker } from 'components/common/SplittedDatePicker';
 
 const moment = require('moment');
 
@@ -79,10 +75,14 @@ const EditPatient = () => {
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [citiesList, setCitiesList] = useState([]);
-  const [birthDate, setBirthDate] = useState(null);
   const [inchHeight, setInchHeight] = useState('');
   const [feetHeight, setFeetHeight] = useState('');
   const [height, setHeight] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState({
+    year: '',
+    month: '',
+    day: '',
+  });
 
   const getPatient = async (patientId) => {
     try {
@@ -115,7 +115,11 @@ const EditPatient = () => {
         setInitialState(output.state);
         setState(output.state);
         setGender(output.gender);
-        setBirthDate(output.birthDate);
+        setDateOfBirth({
+          year: moment(birthDate).year(),
+          month: moment(birthDate).month(),
+          day: moment(birthDate).date(),
+        });
         setFeetHeight(heightInFeet);
         setInchHeight(heightInInch);
       }
@@ -167,6 +171,17 @@ const EditPatient = () => {
   const handleSave = async (patient) => {
     try {
       dispatch(showSpinner());
+      const year = dateOfBirth.year;
+      const month = dateOfBirth.month;
+      const day = dateOfBirth.day;
+      const birthDate =
+        year && month && day
+          ? new Date(
+              `${year}-${month < 9 ? '0' : ''}${+month + 1}-${
+                day < 10 ? '0' : ''
+              }${day}`,
+            )
+          : null;
       await patientService.updatePatient(patientId, {
         ...patient,
         phone: patient.phone.replace(/\(/g, '').replace(/\)/g, ''),
@@ -186,10 +201,6 @@ const EditPatient = () => {
     } finally {
       dispatch(hideSpinner());
     }
-  };
-
-  const getBirthDate = (birthDate) => {
-    return birthDate ? moment(birthDate).format('DD/MM/YYYY') : '';
   };
 
   return (
@@ -247,10 +258,10 @@ const EditPatient = () => {
             </Col>
           </Row>
           <Row>
-            <Col lg={{ size: 4 }} md={{ size: 3 }}>
+            <Col md={{ size: 3 }}>
               <FormGroup check row className="mx-0 pl-0 form-group">
                 <Label>Gender</Label>
-                <div className="d-flex mt-2 flex-wrap">
+                <div className="d-flex mt-3 flex-wrap">
                   {GENDER_OPTIONS.map(({ label, value }) => (
                     <RadioLabel
                       htmlFor={value}
@@ -271,31 +282,24 @@ const EditPatient = () => {
                 </div>
               </FormGroup>
             </Col>
-            <Col lg={{ size: 2 }} md={{ size: 3 }}>
+            <Col md={{ size: 4 }}>
               <Label>Date of Birth</Label>
-              <DatePicker
-                customClass="form-group"
-                name="birthDate"
-                max={getISODate(currentDate())}
-                onSelect={setBirthDate}
-                defaultDate={new Date('01/01/1990')}
-                showMonthAfterYear={true}
-                defaultValue={getBirthDate(birthDate)}
-                innerRef={register}
-              />
+              <SplittedDatePicker date={dateOfBirth} setDate={setDateOfBirth} />
             </Col>
             <Col md={{ size: 3 }}>
               <Label>Height</Label>
               <div className="d-flex">
-                <div className="flex-grow-1">
+                <div className="flex-grow-1 mr-2">
                   <InputField
                     type="number"
                     name="heightFt"
                     innerRef={register}
-                    customClass="measurement ft "
+                    customClass="measurement ft pr-3"
                     value={feetHeight}
                     onChange={(e) => setFeetHeight(e.target.value)}
                     error={getErrorMessage(errors, 'heightFt')}
+                    min={0}
+                    max={8}
                   />
                 </div>
                 <div className="flex-grow-1">
@@ -303,15 +307,17 @@ const EditPatient = () => {
                     type="number"
                     name="heightIn"
                     innerRef={register}
-                    customClass="measurement in"
+                    customClass="measurement in pr-3"
                     value={inchHeight}
                     onChange={(e) => setInchHeight(e.target.value)}
                     error={getErrorMessage(errors, 'heightIn')}
+                    min={0}
+                    max={11}
                   />
                 </div>
               </div>
             </Col>
-            <Col md={{ size: 3 }}>
+            <Col md={{ size: 2 }}>
               <InputField
                 title="Weight"
                 name="weight"
