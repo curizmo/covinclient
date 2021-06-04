@@ -196,19 +196,23 @@ const DesktopPatientTable = (props) => {
                   <Value>{getFormatedTimeDate(patient?.lastUpdated)}</Value>
                 </Info>
                 <ButtonWrap className="ml-2 ">
-                  <div className="download-button-wrapper">
-                    <Button className="btn btn-download" onClick={exportVitals}>
-                      <span className="excel-image-wrap">
-                        <img
-                          src={excel}
-                          alt="Covin"
-                          className="logo download-excel-icon"
-                        />
-                        <img src={xicon} alt="Covin" className="logo x-icon" />
-                      </span>{' '}
-                      DOWNLOAD (Xls)
-                    </Button>
-                  </div>
+                  <Button
+                    className="btn btn-download-small"
+                    onClick={exportVitals}>
+                    <span className="excel-image-wrap-small">
+                      <img
+                        src={excel}
+                        alt="Covin"
+                        className="logo download-excel-icon-small"
+                      />
+                      <img
+                        src={xicon}
+                        alt="Covin"
+                        className="logo x-icon-small"
+                      />
+                    </span>{' '}
+                    DOWNLOAD (Xls)
+                  </Button>
                 </ButtonWrap>
               </InfoWrapper>
               <div className="desktop-view-vitals-wrp display-flex-direction">
