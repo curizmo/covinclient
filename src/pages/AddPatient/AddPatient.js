@@ -246,6 +246,8 @@ const AddPatient = () => {
             </Col>
             <Col md={{ size: 2 }}>
               <InputField
+                type="number"
+                step="0.01"
                 title="Weight"
                 name="weight"
                 innerRef={register}
