@@ -1,17 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Button } from 'reactstrap';
-
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { debounce } from 'lodash';
 
 import PatientCard from 'components/Dashboard/PatientCard';
 import DesktopPatientTable from 'components/DesktopPatientTable';
 import CasesCardComponent from 'components/CasesCard';
 import { DashboardLayout } from 'components/common/Layout';
 import { SearchInput } from 'components/common/SearchInput';
-import { exportToCSV } from 'utils/vitalsDownload';
 
+import { exportToCSV } from 'utils/vitalsDownload';
 import time from 'assets/images/svg-icons/clock.svg';
 import excel from 'assets/images/svg-icons/excel.svg';
 import xicon from 'assets/images/x-icon.png';
@@ -23,17 +21,15 @@ import {
   TimeImage,
   ViewName,
 } from '../global/styles';
-import { getUser } from 'selectors';
-import {
-  usePatientsRiskData,
-  usePatientsVitals,
-} from '../services/practitioner';
+import { getSearchResult, getUser } from 'selectors';
+import { usePatientsRiskData } from '../services/practitioner';
 import * as patientVitalsService from 'services/patientVitals';
 import { isLightVersion } from '../config';
 import { RISK, VitalsDateFields } from '../constants';
 import { CAMEL_CASE_REGEX } from '../constants/regex';
 import { LinkButton } from 'components/common/Button';
 import { routes } from 'routers';
+import { clearSearch, requestSearch, setSearchText } from 'actions/search';
 
 const TypeHeader = styled.h3`
   margin-bottom: 0;
@@ -107,18 +103,14 @@ const HeaderSearchWrap = styled.div`
 
 const DashBoardComponent = () => {
   const dispatch = useDispatch();
-  const [searchText, setSearchText] = useState('');
+  const [lastSearchText, setLastSearchText] = useState('');
   const [selectedCases, setSelectedCases] = useState(RISK.HIGH);
   const [filteredPatients, setFilteredPatients] = useState([]);
 
   const user = useSelector(getUser);
+  const patients = useSelector(getSearchResult);
   const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
-  const { data: patients, refetch } = usePatientsVitals(searchText, dispatch);
   const searchRef = useRef(null);
-
-  const handleSearchText = (e) => {
-    setSearchText(e.target.value);
-  };
 
   const changesCases = (sel) => {
     setSelectedCases(sel);
@@ -128,13 +120,15 @@ const DashBoardComponent = () => {
     if (searchRef?.current) {
       searchRef.current.focus();
     }
-    const debounced = debounce(refetch, 1000);
-    debounced();
+    dispatch(setSearchText(lastSearchText));
+    dispatch(requestSearch());
+  }, [lastSearchText]);
 
+  useEffect(() => {
     return () => {
-      debounced.cancel();
+      dispatch(clearSearch());
     };
-  }, [searchText]);
+  }, []);
 
   useEffect(() => {
     setFilteredPatients(
@@ -197,9 +191,9 @@ const DashBoardComponent = () => {
                 <CasesHeader>{selectedCases} Cases</CasesHeader>
               )}
               <SearchInput
-                placeholder="Search"
-                searchText={searchText}
-                onChange={handleSearchText}
+                setSearchText={setLastSearchText}
+                placeholder="Search by Name, Email or cellphone number"
+                searchText={lastSearchText}
                 searchRef={searchRef}
               />
               <div className="headsearch-btn-div">
@@ -241,9 +235,9 @@ const DashBoardComponent = () => {
               <InputContainer>
                 <SearchInput
                   customClass="w-100"
-                  placeholder="Search"
-                  searchText={searchText}
-                  onChange={handleSearchText}
+                  setSearchText={setLastSearchText}
+                  placeholder="Search by Name, Email or cellphone number"
+                  searchText={lastSearchText}
                   searchRef={searchRef}
                 />
               </InputContainer>
