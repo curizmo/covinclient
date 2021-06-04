@@ -18,12 +18,11 @@ import {
 import { DashboardLayout } from 'components/common/Layout';
 import { InputField } from 'components/common/InputField';
 import { LinkButton } from 'components/common/Button';
-import { DatePicker } from 'components/common/DatePicker';
 
 import csc from 'third-party/country-state-city';
 import { hideSpinner, showSpinner } from 'actions/spinner';
 import * as patientService from 'services/patient';
-import { getISODate, currentDate, getErrorMessage } from 'utils';
+import { getErrorMessage } from 'utils';
 import { routes } from 'routers';
 import { patientValidation } from 'validations';
 import { GENDER_OPTIONS, INDIA_COUNTRY_CODE } from '../../constants';
@@ -39,8 +38,7 @@ import {
   TimeImage,
   ViewName,
 } from 'global/styles';
-
-const moment = require('moment');
+import { SplittedDatePicker } from 'components/common/SplittedDatePicker';
 
 const states = csc.getStatesOfCountry(INDIA_COUNTRY_CODE);
 
@@ -73,7 +71,11 @@ const AddPatient = () => {
   const [state, setState] = useState('');
   const [city, setCity] = useState('');
   const [citiesList, setCitiesList] = useState([]);
-  const [birthDate, setBirthDate] = useState(null);
+  const [dateOfBirth, setDateOfBirth] = useState({
+    year: '',
+    month: '',
+    day: '',
+  });
 
   const { register, handleSubmit, errors, getValues } = useForm({
     resolver: yupResolver(patientValidation),
@@ -104,7 +106,18 @@ const AddPatient = () => {
   const handleSave = async ({ phone, heightFt, heightIn, ...patient }) => {
     try {
       dispatch(showSpinner());
-      await patientService.createPatient({
+      const year = dateOfBirth.year;
+      const month = dateOfBirth.month;
+      const day = dateOfBirth.day;
+      const birthDate =
+        year && month && day
+          ? new Date(
+              `${year}-${month < 9 ? '0' : ''}${+month + 1}-${
+                day < 10 ? '0' : ''
+              }${day}`,
+            )
+          : null;
+      const newPatient = {
         ...patient,
         phone: phone.replace(/\(/g, '').replace(/\)/g, ''),
         height: heightFt ? `${heightFt}'${heightIn || 0}"` : '',
@@ -112,8 +125,9 @@ const AddPatient = () => {
         city,
         gender,
         birthDate,
-      });
+      };
 
+      await patientService.createPatient(newPatient);
       history.push(routes.dashboard.path);
     } catch (err) {
       if (err.response.data) {
@@ -122,10 +136,6 @@ const AddPatient = () => {
     } finally {
       dispatch(hideSpinner());
     }
-  };
-
-  const getBirthDate = (birthDate) => {
-    return birthDate ? moment(birthDate).format('DD/MM/YYYY') : '';
   };
 
   return (
@@ -158,7 +168,6 @@ const AddPatient = () => {
                 name="email"
                 type="email"
                 innerRef={register}
-                placeholder="Enter Patient Email ID"
               />
             </Col>
           </Row>
@@ -170,7 +179,6 @@ const AddPatient = () => {
                 required
                 innerRef={register}
                 error={getErrorMessage(errors, 'firstName')}
-                placeholder="Enter Patient Full Name"
               />
             </Col>
             <Col md={{ size: 6 }}>
@@ -178,15 +186,14 @@ const AddPatient = () => {
                 title="Last Name"
                 name="lastName"
                 innerRef={register}
-                placeholder="Enter Patient Last Name (Optional)"
               />
             </Col>
           </Row>
           <Row>
-            <Col lg={{ size: 4 }} md={{ size: 3 }}>
+            <Col md={{ size: 3 }}>
               <FormGroup check row className="mx-0 pl-0 form-group">
                 <Label>Gender</Label>
-                <div className="d-flex mt-2 flex-wrap">
+                <div className="d-flex mt-3 flex-wrap">
                   {GENDER_OPTIONS.map(({ label, value }) => (
                     <RadioLabel
                       htmlFor={value}
@@ -206,28 +213,22 @@ const AddPatient = () => {
                 </div>
               </FormGroup>
             </Col>
-            <Col lg={{ size: 2 }} md={{ size: 3 }}>
+            <Col md={{ size: 4 }}>
               <Label>Date of Birth</Label>
-              <DatePicker
-                customClass="form-group"
-                name="birthDate"
-                max={getISODate(currentDate())}
-                onSelect={setBirthDate}
-                defaultDate={new Date('01/01/1990')}
-                defaultValue={getBirthDate(birthDate)}
-                showMonthAfterYear={true}
-              />
+              <SplittedDatePicker date={dateOfBirth} setDate={setDateOfBirth} />
             </Col>
             <Col md={{ size: 3 }}>
               <Label>Height</Label>
               <div className="d-flex">
-                <div className="flex-grow-1">
+                <div className="flex-grow-1 mr-2">
                   <InputField
                     type="number"
                     name="heightFt"
                     innerRef={register}
-                    customClass="measurement ft "
+                    customClass="measurement ft pr-3"
                     error={getErrorMessage(errors, 'heightFt')}
+                    min={0}
+                    max={8}
                   />
                 </div>
                 <div className="flex-grow-1">
@@ -235,18 +236,19 @@ const AddPatient = () => {
                     type="number"
                     name="heightIn"
                     innerRef={register}
-                    customClass="measurement in"
+                    customClass="measurement in pr-3"
                     error={getErrorMessage(errors, 'heightIn')}
+                    min={0}
+                    max={11}
                   />
                 </div>
               </div>
             </Col>
-            <Col md={{ size: 3 }}>
+            <Col md={{ size: 2 }}>
               <InputField
                 title="Weight"
                 name="weight"
                 innerRef={register}
-                placeholder="Enter Weight"
                 customClass="measurement kg"
               />
               <span />
@@ -258,7 +260,6 @@ const AddPatient = () => {
                 title="Address"
                 name="addressOne"
                 innerRef={register}
-                placeholder="Enter Address"
               />
             </Col>
           </Row>
@@ -303,12 +304,7 @@ const AddPatient = () => {
               </InputField>
             </Col>
             <Col md={{ size: 2 }}>
-              <InputField
-                title="Postal Code"
-                name="zip"
-                innerRef={register}
-                placeholder="Postal Code"
-              />
+              <InputField title="Postal Code" name="zip" innerRef={register} />
             </Col>
           </Row>
           <Row className="mt-3">

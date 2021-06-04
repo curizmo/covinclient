@@ -31,13 +31,13 @@ form {
       pointer-events: none;
     }
     &.kg +span:after {
-      content: 'Kg';
+      content: 'kg';
     }
     &.ft +span:after {
-      content: 'Ft';
+      content: 'ft';
     }
     &.in +span:after {
-      content: 'In';
+      content: 'in';
     }
   }
 }
