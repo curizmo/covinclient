@@ -15,6 +15,7 @@ import {
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
 import { DashboardLayout } from 'components/common/Layout';
 import { Symptoms } from 'components/CreateEncounter/Symptoms';
+import { LabResults } from 'components/CreateEncounter/LabResults';
 
 import { fetchPatient } from 'actions';
 
@@ -23,7 +24,11 @@ import { getPatient, getIsEncounterUpdated, getUser } from 'selectors';
 import { createEncounter, updatePatientRiskStatus } from 'services/patient';
 import { createOrUpdateEncounter } from 'services/appointment';
 import { fetchPatientSymptoms } from 'services/symptoms';
-import { deleteLabResult, uploadLabResult } from 'services/labResults';
+import {
+  deleteLabResult,
+  uploadLabResult,
+  fetchPatientLabs,
+} from 'services/labResults';
 
 import { getRandomKey, getTabIndex } from 'utils';
 
@@ -197,6 +202,7 @@ const Tab = styled.div`
 const VITALS_TABS = {
   vitals: 'vitals',
   symptoms: 'symptoms',
+  labResults: 'labResults',
 };
 
 function CreateEncounter() {
@@ -220,6 +226,7 @@ function CreateEncounter() {
   const [vitalsActiveTab, setVitalsActiveTab] = useState(VITALS_TABS.vitals);
   const [symptoms, setSymptoms] = useState([]);
   const [labResults, setLabResults] = useState([]);
+  const [labs, setLabs] = useState([]);
 
   useEffect(() => {
     setRiskLevel(patientData?.status);
@@ -244,7 +251,18 @@ function CreateEncounter() {
       }
     };
 
+    const fetchLabs = async (patientId) => {
+      try {
+        const response = await fetchPatientLabs(patientId);
+
+        setLabs(response.data.labs);
+      } catch (err) {
+        // TODO: Handle err.
+      }
+    };
+
     fetchSymptoms(patientId);
+    fetchLabs(patientId);
   }, [patientId]);
 
   useEffect(() => {
@@ -455,12 +473,27 @@ function CreateEncounter() {
                   active={vitalsActiveTab === VITALS_TABS.symptoms}>
                   Symptoms
                 </Tab>
+                <Tab
+                  role="button"
+                  tabIndex={getTabIndex()}
+                  onClick={() => setVitalsActiveTab(VITALS_TABS.labResults)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      setVitalsActiveTab(VITALS_TABS.labResults);
+                    }
+                  }}
+                  active={vitalsActiveTab === VITALS_TABS.labResults}>
+                  Lab Results
+                </Tab>
               </TabContainer>
               {vitalsActiveTab === VITALS_TABS.vitals && (
                 <GraphicalReadings data={patientData} />
               )}
               {vitalsActiveTab === VITALS_TABS.symptoms && (
                 <Symptoms symptoms={symptoms} />
+              )}
+              {vitalsActiveTab === VITALS_TABS.labResults && (
+                <LabResults labs={labs} />
               )}
             </Column>
             <Column>

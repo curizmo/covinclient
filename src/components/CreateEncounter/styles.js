@@ -265,8 +265,8 @@ export const LoadingIcon = styled.div`
 `;
 
 export const SymptomContainer = styled.div`
-  padding: 1rem 1.875rem;
-  background: #f8fbfe;
+  padding: 1rem 0rem;
+  margin: 0rem 1.875rem;
   border-bottom: 1px solid rgba(101, 115, 150, 0.2);
   &:last-child {
     border-bottom: none;
@@ -277,6 +277,25 @@ export const SymptomContainer = styled.div`
     border-bottom: none;
     margin-bottom: 0.5em;
   }
+`;
+
+export const Date = styled.div`
+  font-size: 12px;
+  line-height: 20px;
+  color: #657396;
+`;
+
+export const SymptomsText = styled.div`
+  color: #22335e;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+`;
+
+export const SymptomsStatus = styled.div`
+  color: #009898;
+  font-size: 14px;
+  line-height: 18px;
 `;
 
 export const UploadContainer = styled.div`
