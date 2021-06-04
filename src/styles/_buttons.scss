@@ -131,7 +131,8 @@ button.transparent-button {
   }
 }
 
-.btn-download{
+.btn-download,
+.btn-download-small {
   &:active {
     background-color: #ffffff !important;
     color: #657396 !important;
