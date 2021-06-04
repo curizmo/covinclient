@@ -3,10 +3,22 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
+import styled from 'styled-components';
+import {
+  Row,
+  Col,
+  Button,
+  Form,
+  Alert,
+  FormGroup,
+  Label,
+  CustomInput,
+} from 'reactstrap';
 
-import { Container, Row, Col, Button, Form, Alert } from 'reactstrap';
 import { DashboardLayout } from '../components/common/Layout';
 import { InputField } from '../components/common/InputField';
+import { LinkButton } from '../components/common/Button';
+import { DatePicker } from '../components/common/DatePicker';
 
 import {
   getISODate,
@@ -14,37 +26,103 @@ import {
   getErrorMessage,
   arrayObjectFixer,
 } from '../utils';
-import * as patientService from '../services/patient';
-import { GENDER_OPTIONS } from '../constants';
-import { patientValidation } from 'validations';
+import csc from 'third-party/country-state-city';
 import { hideSpinner, showSpinner } from 'actions/spinner';
+import * as patientService from '../services/patient';
+import { GENDER_OPTIONS, INDIA_COUNTRY_CODE } from '../constants';
+import { patientValidation } from 'validations';
 import { routes } from 'routers';
+import time from 'assets/images/svg-icons/clock.svg';
+import { getDate } from 'global';
+import {
+  RadioLabel,
+  RadioInput,
+  OptionName,
+  DateAndTime,
+  DateAndTimeWrap,
+  InfoWrapper,
+  TimeImage,
+  ViewName,
+} from 'global/styles';
+
+const moment = require('moment');
+
+const states = csc.getStatesOfCountry(INDIA_COUNTRY_CODE);
+
+const Headings = styled.section`
+  padding: 0 4em;
+  width: 100%;
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+`;
+const Container = styled.section`
+  margin: 0 4em;
+  padding: 4em 10em;
+  background-color: #fff;
+  @media (max-width: 768px) {
+    padding: 2em;
+    margin: 0;
+  }
+  @media (max-width: 1024px) {
+    padding: 4em;
+  }
+`;
 
 const EditPatient = () => {
   const { patientId } = useParams();
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const [serverError, setServerError] = useState('');
+  const [gender, setGender] = useState('');
+  const [initialState, setInitialState] = useState('');
+  const [state, setState] = useState('');
+  const [city, setCity] = useState('');
+  const [citiesList, setCitiesList] = useState([]);
+  const [birthDate, setBirthDate] = useState(null);
+  const [inchHeight, setInchHeight] = useState('');
+  const [feetHeight, setFeetHeight] = useState('');
+  const [height, setHeight] = useState('');
 
   const getPatient = async (patientId) => {
     try {
       const response = await patientService.fetchPatient(patientId);
-
       if (response.data) {
         const {
           familyName: lastName,
           givenName: firstName,
+          address1: addressOne,
+          dateOfBirth: birthDate,
           ...outputResponse
         } = response.data;
         const output = {
           ...outputResponse,
           firstName,
           lastName,
+          addressOne,
+          birthDate: birthDate ? moment(birthDate).format('YYYY-MM-DD') : '',
         };
+        const heightInFeet =
+          (output.height &&
+            output.height.split("'")[0].replace(/[^0-9]/g, '')) ||
+          '';
+        const heightInInch =
+          (output.height &&
+            output.height.split("'")[1].replace(/[^0-9]/g, '')) ||
+          '';
         arrayObjectFixer(output).map((data) => setValue(...data));
+        setCity(output.city);
+        setInitialState(output.state);
+        setState(output.state);
+        setGender(output.gender);
+        setBirthDate(output.birthDate);
+        setFeetHeight(heightInFeet);
+        setInchHeight(heightInInch);
       }
     } catch (err) {
       // TODO: Handle error
     }
   };
-  const history = useHistory();
 
   const { register, handleSubmit, errors, getValues, setValue } = useForm({
     resolver: yupResolver(patientValidation),
@@ -54,27 +132,53 @@ const EditPatient = () => {
   useEffect(() => {
     getPatient(patientId);
   }, [patientId]);
-  const values = getValues();
-  const dispatch = useDispatch();
 
-  const [serverError, setServerError] = useState('');
+  const values = getValues();
   const disabled = useMemo(() => {
-    if (!Object.keys(errors).length) {
-      return false;
-    }
-    return true;
+    return !(
+      values.firstName &&
+      values.phone &&
+      Object.keys(errors)?.length < 1
+    );
   }, [errors, values]);
 
-  const handleSave = async (patientInput) => {
+  useEffect(() => {
+    if (feetHeight && inchHeight) {
+      setHeight(`${feetHeight}'${inchHeight}"`);
+    } else if (feetHeight && !inchHeight) {
+      setHeight(`${feetHeight}'`);
+    } else {
+      setHeight('');
+    }
+  }, [feetHeight, inchHeight]);
+
+  useEffect(() => {
+    setCitiesList(
+      state
+        ? csc.getCitiesOfState(
+            INDIA_COUNTRY_CODE,
+            csc.getStateIsoCodeByName(state),
+          )
+        : [],
+    );
+    setCity(state === initialState ? city : '');
+  }, [state]);
+
+  const handleSave = async (patient) => {
     try {
       dispatch(showSpinner());
-
       await patientService.updatePatient(patientId, {
-        ...patientInput,
+        ...patient,
+        phone: patient.phone.replace(/\(/g, '').replace(/\)/g, ''),
+        state,
+        city,
+        gender,
+        birthDate,
+        height,
         patientId,
       });
 
-      history.push(routes.patients.path);
+      history.push(routes.dashboard.path);
     } catch (err) {
       if (err.response.data) {
         setServerError(err.response.data.message);
@@ -84,100 +188,220 @@ const EditPatient = () => {
     }
   };
 
+  const getBirthDate = (birthDate) => {
+    return birthDate ? moment(birthDate).format('DD/MM/YYYY') : '';
+  };
+
   return (
     <DashboardLayout>
+      <Headings>
+        <InfoWrapper>
+          <ViewName>Edit Patient</ViewName>
+          <DateAndTimeWrap>
+            <TimeImage src={time} />
+            <DateAndTime>{getDate()}</DateAndTime>
+          </DateAndTimeWrap>
+        </InfoWrapper>
+      </Headings>
       <Container>
-        <Row>
-          <Col md={{ size: 8, offset: 2 }}>
-            <h2 className="mb-5">Edit Patient</h2>
-
-            <Form onSubmit={handleSubmit(handleSave)}>
+        <Form onSubmit={handleSubmit(handleSave)}>
+          <Row>
+            <Col md={{ size: 6 }}>
               <InputField
-                title="First Name:"
+                title="Cell Phone"
+                name="phone"
+                required
+                error={getErrorMessage(errors, 'phone')}
+                innerRef={register}
+                defaultValue="+91-"
+              />
+            </Col>
+            <Col md={{ size: 6 }}>
+              <InputField
+                title="Patient Email"
+                name="email"
+                type="email"
+                innerRef={register}
+                placeholder="Enter Patient Email ID"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col md={{ size: 6 }}>
+              <InputField
+                title="First Name"
                 name="firstName"
                 required
                 innerRef={register}
                 error={getErrorMessage(errors, 'firstName')}
+                placeholder="Enter Patient Full Name"
               />
-
+            </Col>
+            <Col md={{ size: 6 }}>
               <InputField
-                title="Last Name:"
+                title="Last Name"
                 name="lastName"
-                required
                 innerRef={register}
-                error={getErrorMessage(errors, 'lastName')}
+                placeholder="Enter Patient Last Name (Optional)"
               />
-
-              <InputField
-                name="gender"
+            </Col>
+          </Row>
+          <Row>
+            <Col lg={{ size: 4 }} md={{ size: 3 }}>
+              <FormGroup check row className="mx-0 pl-0 form-group">
+                <Label>Gender</Label>
+                <div className="d-flex mt-2 flex-wrap">
+                  {GENDER_OPTIONS.map(({ label, value }) => (
+                    <RadioLabel
+                      htmlFor={value}
+                      key={value}
+                      onClick={() => setGender(value)}>
+                      <RadioInput
+                        type="radio"
+                        name="gender"
+                        value={value}
+                        id={value}
+                        checked={gender === value}
+                      />
+                      <OptionName checked={gender === value}>
+                        {label}
+                      </OptionName>
+                    </RadioLabel>
+                  ))}
+                </div>
+              </FormGroup>
+            </Col>
+            <Col lg={{ size: 2 }} md={{ size: 3 }}>
+              <Label>Date of Birth</Label>
+              <DatePicker
+                customClass="form-group"
+                name="birthDate"
+                max={getISODate(currentDate())}
+                onSelect={setBirthDate}
+                defaultDate={new Date('01/01/1990')}
+                showMonthAfterYear={true}
+                defaultValue={getBirthDate(birthDate)}
                 innerRef={register}
-                title="Gender:"
+              />
+            </Col>
+            <Col md={{ size: 3 }}>
+              <Label>Height</Label>
+              <div className="d-flex">
+                <div className="flex-grow-1">
+                  <InputField
+                    type="number"
+                    name="heightFt"
+                    innerRef={register}
+                    customClass="measurement ft "
+                    value={feetHeight}
+                    onChange={(e) => setFeetHeight(e.target.value)}
+                    error={getErrorMessage(errors, 'heightFt')}
+                  />
+                </div>
+                <div className="flex-grow-1">
+                  <InputField
+                    type="number"
+                    name="heightIn"
+                    innerRef={register}
+                    customClass="measurement in"
+                    value={inchHeight}
+                    onChange={(e) => setInchHeight(e.target.value)}
+                    error={getErrorMessage(errors, 'heightIn')}
+                  />
+                </div>
+              </div>
+            </Col>
+            <Col md={{ size: 3 }}>
+              <InputField
+                title="Weight"
+                name="weight"
+                innerRef={register}
+                placeholder="Enter Weight"
+                customClass="measurement kg"
+              />
+              <span />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <InputField
+                title="Address"
+                name="addressOne"
+                innerRef={register}
+                placeholder="Enter Address"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col md={{ size: 6 }}>
+              <InputField
+                tag={CustomInput}
+                onChange={(e) => setState(e.target.value)}
+                customClass="classic-dropdown"
+                defaultValue=""
+                title="State"
                 type="select"
-                placeholder="Choose gender">
-                <option value="" disabled defaultValue hidden default>
-                  Please Choose...
+                name="state"
+                innerRef={register}>
+                <option value="" disabled hidden default>
+                  {state || 'Select State'}
                 </option>
-
-                {GENDER_OPTIONS.map(({ label, value }) => (
-                  <option key={label} value={value} className="p-2">
-                    {label}
+                {states.map(({ name }) => (
+                  <option key={name} value={name}>
+                    {name}
                   </option>
                 ))}
               </InputField>
-
+            </Col>
+            <Col md={{ size: 4 }}>
               <InputField
-                title="DOB:"
-                name="birthDate"
-                innerRef={register}
-                type="date"
-                max={getISODate(currentDate())}
-              />
-
+                disabled={citiesList.length < 1}
+                tag={CustomInput}
+                customClass="classic-dropdown"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                title="City"
+                type="select"
+                name="city"
+                innerRef={register}>
+                <option value="" disabled hidden default>
+                  {'Select City'}
+                </option>
+                {citiesList.map(({ name }) => (
+                  <option key={name} value={name} onClick={() => setCity(name)}>
+                    {name}
+                  </option>
+                ))}
+              </InputField>
+            </Col>
+            <Col md={{ size: 2 }}>
               <InputField
-                title="Email:"
-                name="email"
-                type="email"
-                required
-                error={getErrorMessage(errors, 'email')}
+                title="Postal Code"
+                name="zip"
                 innerRef={register}
+                placeholder="Postal Code"
               />
-
-              <InputField
-                title="Phone:"
-                name="phone"
-                error={getErrorMessage(errors, 'phone')}
-                innerRef={register}
-              />
-
-              <InputField
-                title="Address One:"
-                name="addressOne"
-                innerRef={register}
-              />
-
-              <InputField
-                title="Address Two:"
-                name="addressTwo"
-                innerRef={register}
-              />
-
-              <InputField title="City:" name="city" innerRef={register} />
-
-              <InputField title="State:" name="state" innerRef={register} />
-
-              <InputField title="Zip:" name="zip" innerRef={register} />
-
-              <Col sm={{ size: 10, offset: 2 }}>
-                {serverError ? (
-                  <Alert color="danger">{serverError}</Alert>
-                ) : null}
-                <Button type="submit" disabled={disabled}>
-                  Update
+            </Col>
+          </Row>
+          <Row className="mt-3">
+            <Col>
+              {serverError ? <Alert color="danger">{serverError}</Alert> : null}
+              <div className="d-flex justify-content-end">
+                <LinkButton
+                  to={routes.dashboard.path}
+                  className="btn-cancel mr-2 cancel-add-patient">
+                  Cancel
+                </LinkButton>
+                <Button
+                  className="btn-covin add-patient"
+                  type="submit"
+                  disabled={disabled}>
+                  Save
                 </Button>
-              </Col>
-            </Form>
-          </Col>
-        </Row>
+              </div>
+            </Col>
+          </Row>
+        </Form>
       </Container>
     </DashboardLayout>
   );

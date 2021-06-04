@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
+import { routes } from 'routers';
 
 import { getRandomKey, rangeCheck } from 'utils';
 import { CMLine } from 'third-party/senze-graphs/dist';
@@ -82,7 +84,13 @@ const PatientCard = (props) => {
       <PatientStatusWrp>
         {!isLightVersion && <State selectedState={patient.status} />}
         <PatientName onClick={() => onPatientNameClick(patient?.fullName)}>
-          {patient?.fullName}
+          <Link
+            to={routes.editPatient.path.replace(
+              ':patientId',
+              patient.patientId,
+            )}>
+            {patient?.fullName}
+          </Link>
         </PatientName>
       </PatientStatusWrp>
       {/* patient info */}
