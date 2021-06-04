@@ -1,12 +1,17 @@
-.search-icon {
+.search-icon,
+.search-spinner {
   position: absolute;
-  top: .625rem;
   left: .625rem;
   color: #657396;
   margin: 0;
+}
+.search-icon {
+  top: .625rem;
   height: 1.3rem;
 }
-
+.search-spinner {
+  top: 1rem;
+}
 .search-input {
   padding-left: 2.2rem;
   font-size: 0.8rem;

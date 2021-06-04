@@ -40,3 +40,7 @@ export const getIsShowSidebar = ({ sidebar }) => sidebar.isShowSidebar;
 export const getPatient = ({ patient }) => patient;
 export const getIsEncounterUpdated = ({ patient }) =>
   patient?.isEncounterUpdated;
+
+export const getIsShowSearchSpinner = ({ search }) => search?.isShowSpinner;
+export const getSearchText = ({ search }) => search?.text;
+export const getSearchResult = ({ search }) => search?.result;

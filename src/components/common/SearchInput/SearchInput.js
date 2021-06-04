@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Input } from 'reactstrap';
 import { Search } from 'react-feather';
 import styled from 'styled-components';
 
+import { getIsShowSearchSpinner } from 'selectors';
 import xIcon from 'assets/images/svg-icons/x-icon.svg';
 import { ENTER } from '../../../constants';
 
@@ -34,11 +36,12 @@ export const SearchInput = ({
   customClass = '',
 }) => {
   const [searchValue, setSearchValue] = useState('');
+  const isShowSearchSpinner = useSelector(getIsShowSearchSpinner);
 
   const onChange = (e) => {
     const value = e.target.value;
     setSearchValue(value);
-    if ((value.length < 1 || value.length > 2) && searchText !== value) {
+    if (searchText !== value && (value.length < 1 || value.length > 2)) {
       setSearchText(value);
     }
   };
@@ -59,6 +62,13 @@ export const SearchInput = ({
   return (
     <div className={`search-container ${customClass}`}>
       <Search className="search-icon" />
+      {isShowSearchSpinner && (
+        <div className="lds-spinner position-absolute">
+          {[...Array(12).keys()].map((s) => (
+            <span key={s} />
+          ))}
+        </div>
+      )}
       <Input
         innerRef={searchRef}
         className="search-input"
