@@ -29,6 +29,7 @@ const GeneralInformation = ({ data, dispatch }) => {
     () => handleCallAppointment(dispatch, data?.patientId),
     [dispatch, data],
   );
+
   return (
     <div>
       <HeadersComponent text={'General'} />
@@ -41,10 +42,6 @@ const GeneralInformation = ({ data, dispatch }) => {
       <Info>
         <Label>Gender:</Label>
         <Value>{GENDER_SHORTHAND[data?.gender]}</Value>
-      </Info>
-      <Info>
-        <Label>Patient ID:</Label>
-        <Value>{data.patientId}</Value>
       </Info>
       <Info>
         <Label>Cell Number:</Label>
