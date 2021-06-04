@@ -21,7 +21,7 @@ import {
   TimeImage,
   ViewName,
 } from '../global/styles';
-import { getSearchResult, getUser } from 'selectors';
+import { getSearchResult, getSearchText, getUser } from 'selectors';
 import { usePatientsRiskData } from '../services/practitioner';
 import * as patientVitalsService from 'services/patientVitals';
 import { isLightVersion } from '../config';
@@ -29,7 +29,7 @@ import { RISK, VitalsDateFields } from '../constants';
 import { CAMEL_CASE_REGEX } from '../constants/regex';
 import { LinkButton } from 'components/common/Button';
 import { routes } from 'routers';
-import { clearSearch, requestSearch, setSearchText } from 'actions/search';
+import { clearSearch, requestSearch } from 'actions/search';
 
 const TypeHeader = styled.h3`
   margin-bottom: 0;
@@ -103,12 +103,12 @@ const HeaderSearchWrap = styled.div`
 
 const DashBoardComponent = () => {
   const dispatch = useDispatch();
-  const [lastSearchText, setLastSearchText] = useState('');
   const [selectedCases, setSelectedCases] = useState(RISK.HIGH);
   const [filteredPatients, setFilteredPatients] = useState([]);
 
   const user = useSelector(getUser);
   const patients = useSelector(getSearchResult);
+  const searchText = useSelector(getSearchText);
   const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
   const searchRef = useRef(null);
 
@@ -117,14 +117,7 @@ const DashBoardComponent = () => {
   };
 
   useEffect(() => {
-    if (searchRef?.current) {
-      searchRef.current.focus();
-    }
-    dispatch(setSearchText(lastSearchText));
-    dispatch(requestSearch());
-  }, [lastSearchText]);
-
-  useEffect(() => {
+    dispatch(requestSearch(''));
     return () => {
       dispatch(clearSearch());
     };
@@ -191,9 +184,9 @@ const DashBoardComponent = () => {
                 <CasesHeader>{selectedCases} Cases</CasesHeader>
               )}
               <SearchInput
-                setSearchText={setLastSearchText}
+                searchText={searchText}
+                requestSearch={(value) => dispatch(requestSearch(value))}
                 placeholder="Search by Name, Email or cellphone number"
-                searchText={lastSearchText}
                 searchRef={searchRef}
               />
               <div className="headsearch-btn-div">
@@ -235,9 +228,9 @@ const DashBoardComponent = () => {
               <InputContainer>
                 <SearchInput
                   customClass="w-100"
-                  setSearchText={setLastSearchText}
+                  searchText={searchText}
+                  requestSearch={(value) => dispatch(requestSearch(value))}
                   placeholder="Search by Name, Email or cellphone number"
-                  searchText={lastSearchText}
                   searchRef={searchRef}
                 />
               </InputContainer>

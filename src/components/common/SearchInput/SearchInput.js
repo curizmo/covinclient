@@ -29,7 +29,7 @@ const XIcon = styled.img`
 `;
 
 export const SearchInput = ({
-  setSearchText,
+  requestSearch,
   searchText,
   placeholder,
   searchRef,
@@ -42,13 +42,13 @@ export const SearchInput = ({
     const value = e.target.value;
     setSearchValue(value);
     if (searchText !== value && (value.length < 1 || value.length > 2)) {
-      setSearchText(value);
+      requestSearch(value);
     }
   };
 
   const onEnter = (e) => {
     if (e.key === ENTER && searchText !== searchValue) {
-      setSearchText(searchValue);
+      requestSearch(searchValue);
     }
   };
 
@@ -56,7 +56,7 @@ export const SearchInput = ({
     if (searchRef?.current?.value) {
       searchRef.current.value = '';
     }
-    setSearchText('');
+    requestSearch('');
   };
 
   return (

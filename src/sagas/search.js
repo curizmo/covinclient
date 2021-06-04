@@ -1,19 +1,20 @@
-import { all, call, select, takeLatest, delay, put } from 'redux-saga/effects';
+import { all, call, takeLatest, delay, put } from 'redux-saga/effects';
 
 import {
   SEARCH_REQUESTED,
   setSearchResult,
+  setSearchText,
   showSearchSpinner,
   hideSearchSpinner,
 } from '../actions/search';
 import { fetchPatientsWithVitals } from '../services/practitioner';
 import { fetchData } from '../services/api';
-import { getSearchText } from '../selectors';
 
-function* makeSearch() {
+function* makeSearch({ payload: searchText }) {
+  console.log(searchText);
   yield put(showSearchSpinner());
-  const searchText = yield select(getSearchText);
   yield delay(500);
+  yield put(setSearchText(searchText));
   yield call(fetchData, fetchPatientsWithVitals, setSearchResult, {
     searchText,
   });

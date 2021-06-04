@@ -19,8 +19,9 @@ export const setSearchResult = (payload) => ({
   payload,
 });
 
-export const requestSearch = () => ({
+export const requestSearch = (payload) => ({
   type: SEARCH_REQUESTED,
+  payload,
 });
 
 export const showSearchSpinner = () => ({
