@@ -67,24 +67,22 @@ const AddConfirmation = ({ newPatient, message }) => {
   };
 
   return (
-    <>
-      <ContentWrapper>
-        <TitleName>Confirmation</TitleName>
-        <ConfirmationWrapper>
-          <div className="patient-name">
-            {newPatient.firstName} {newPatient.lastName}
-          </div>
-          <div className="patient-confirm-info">{userInfo || ''}</div>
-          <div className="patient-confirm-info">{newPatient.phone}</div>
-          <div className="add-info"> {message}</div>
-          <div>
-            <Button className="back-button" onClick={onBackButtonClick}>
-              BACK TO DASHBOARD
-            </Button>
-          </div>
-        </ConfirmationWrapper>
-      </ContentWrapper>
-    </>
+    <ContentWrapper>
+      <TitleName>Confirmation</TitleName>
+      <ConfirmationWrapper>
+        <div className="patient-name">
+          {newPatient.firstName} {newPatient.lastName}
+        </div>
+        <div className="patient-confirm-info">{userInfo || ''}</div>
+        <div className="patient-confirm-info">{newPatient.phone}</div>
+        <div className="add-info"> {message}</div>
+        <div>
+          <Button className="back-button" onClick={onBackButtonClick}>
+            BACK TO DASHBOARD
+          </Button>
+        </div>
+      </ConfirmationWrapper>
+    </ContentWrapper>
   );
 };
 
