@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
@@ -51,6 +51,17 @@ const ConfirmationWrapper = styled.section`
 const AddConfirmation = ({ newPatient, message }) => {
   const history = useHistory();
 
+  const userInfo = useMemo(() => {
+    let info = [];
+    if (GENDER_SHORTHAND[newPatient.gender]) {
+      info.push(GENDER_SHORTHAND[newPatient.gender]);
+    }
+    if (newPatient.birthDate) {
+      info.push(`${moment().diff(newPatient.birthDate, 'years', false)} years`);
+    }
+    return info.join(', ');
+  }, [newPatient.gender, newPatient.birthDate]);
+
   const onBackButtonClick = () => {
     history.push(routes.dashboard.path);
   };
@@ -63,12 +74,7 @@ const AddConfirmation = ({ newPatient, message }) => {
           <div className="patient-name">
             {newPatient.firstName} {newPatient.lastName}
           </div>
-          <div className="patient-confirm-info">
-            {GENDER_SHORTHAND[newPatient.gender] || ''}
-            {newPatient.birthDate
-              ? `, ${moment().diff(newPatient.birthDate, 'years', false)} years`
-              : ''}
-          </div>
+          <div className="patient-confirm-info">{userInfo || ''}</div>
           <div className="patient-confirm-info">{newPatient.phone}</div>
           <div className="add-info"> {message}</div>
           <div>
