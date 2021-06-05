@@ -4,10 +4,10 @@
 
 .patient-name {
   font-size: 2rem;
-  margin-bottom:1rem;
+  margin-bottom: 1rem;
 }
 
-.patient-confirm-info{
+.patient-confirm-info {
   font-size: 1.2rem;
   font-weight: lighter;
   margin-bottom: 0.5rem;
@@ -18,4 +18,30 @@
 .add-info {
   font-weight: 600;
   margin: 1.5rem 0;
+}
+
+@media (max-width: 768px) {
+
+  .back-button {
+    width: 100%;
+  }
+
+  .patient-name {
+    font-size: 1.5rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .patient-confirm-info {
+    font-size: 0.9rem;
+    font-weight: lighter;
+    margin-bottom: 0.5rem;
+    background: none;
+    border: none;
+  }
+  
+  .add-info {
+    font-weight: 600;
+    margin: 1.5rem 0;
+  }
+
 }

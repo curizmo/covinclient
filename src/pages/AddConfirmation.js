@@ -7,32 +7,35 @@ import { GENDER_SHORTHAND } from '../constants';
 const moment = require('moment');
 
 const TitleName = styled.section`
-margin: 0;
+  margin: 0;
   font-size: 2rem;
   font-weight: 600;
   line-height: 2rem;
   color: #70767f;
   margin-bottom: 1rem;
   @media (max-width: 768px) {
-    font-size: 1.25rem;
-    line-height: 1.875rem;`;
+    margin-bottom: 0.7rem;
+    font-size: 1.7rem;
+  }
+`;
 
 const ContentWrapper = styled.section`
   width: 100%;
-  heigt: 1000px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   margin: 8rem auto;
+  @media (max-width: 768px) {
+    margin: 2rem 0.4rem;
+  }
 `;
 
 const ConfirmationWrapper = styled.section`
   box-shadow: rgba(14, 30, 37, 0.12) 2px 2px 16px 2px,
     rgba(14, 30, 37, 0.32) 2px 2px 16px 2px;
   background-color: #fff;
-  width: 52%;
-  heigt: 1000px;
+  width: 54%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,13 +43,9 @@ const ConfirmationWrapper = styled.section`
   padding: 3rem;
   margin: 1.5rem auto;
   border-radius: 1rem;
-  //   @media (max-width: 768px) {
-  //     padding: 2em;
-  //     margin: 0;
-  //   }
-  //   @media (max-width: 1024px) {
-  //     padding: 4em;
-  //   }
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const AddConfirmation = ({ newPatient, message }) => {
