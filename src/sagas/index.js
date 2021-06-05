@@ -6,6 +6,7 @@ import { watchUser } from './user';
 import { watchLobby } from './lobby';
 import { watchPractitioner } from './practitioner';
 import { watchAppointments } from './appointments';
+import { watchSearch } from './search';
 
 export function* rootSaga() {
   yield all([
@@ -16,5 +17,6 @@ export function* rootSaga() {
     watchLobby(),
     watchPractitioner(),
     watchAppointments(),
+    watchSearch(),
   ]);
 }

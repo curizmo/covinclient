@@ -164,7 +164,7 @@ const AddPatient = () => {
             </Col>
             <Col md={{ size: 6 }}>
               <InputField
-                title="Patient Email"
+                title="Contact Email"
                 name="email"
                 type="email"
                 innerRef={register}
@@ -246,8 +246,11 @@ const AddPatient = () => {
             </Col>
             <Col md={{ size: 2 }}>
               <InputField
+                type="number"
+                step="0.01"
                 title="Weight"
                 name="weight"
+                error={getErrorMessage(errors, 'weight')}
                 innerRef={register}
                 customClass="measurement kg"
               />

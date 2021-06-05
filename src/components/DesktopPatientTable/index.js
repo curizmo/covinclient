@@ -1,14 +1,23 @@
 import React, { useCallback } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'reactstrap';
 
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
 import { getFormatedTimeDate, handleCallAppointment } from 'utils';
+import { exportToCSV } from 'utils/vitalsDownload';
+
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
+import excel from 'assets/images/svg-icons/excel.svg';
+import xicon from 'assets/images/x-icon.png';
+import * as patientVitalsService from '../../services/patientVitals';
 import { isLightVersion } from '../../config';
-import { GENDER_SHORTHAND } from '../../constants';
+import { GENDER_SHORTHAND, VitalsDateFields } from '../../constants';
+import { CAMEL_CASE_REGEX } from '../../constants/regex';
+import { setDate, setDateTime } from '../../global';
+import { getUser } from '../../selectors';
+
 import './index.css';
 import { routes } from 'routers';
 
@@ -52,6 +61,13 @@ const Info = styled.div`
   width: ${(props) => props.width};
 `;
 
+const ButtonWrap = styled.div`
+  position: absolute;
+  right: 92px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+`;
+
 const Label = styled.span`
   color: ${(props) => (props.label === 'name' ? '#01518D' : '#657396')};
   font-size: ${(props) => (props.label === 'name' ? '1.25rem' : '0.875rem')};
@@ -88,10 +104,42 @@ const desktopViewLabelsForPatientsWithCurrentStats = css`
 const DesktopPatientTable = (props) => {
   const { selectedCaseData } = props;
   const dispatch = useDispatch();
+  const user = useSelector(getUser);
   const onCall = useCallback(
     (patientId) => () => handleCallAppointment(dispatch, patientId),
     [dispatch],
   );
+
+  const exportVitals = async (patientId) => {
+    const vitals = await patientVitalsService.getIndividualPatientVitals(
+      user.PractitionerID,
+      patientId,
+    );
+
+    let vitalDetails = vitals.data.map((vital) => {
+      for (const key in vital) {
+        const result = key.replace(CAMEL_CASE_REGEX, ' $1');
+        const title = result.charAt(0).toUpperCase() + result.slice(1);
+        if (title !== key) {
+          vital[title] = vital[key];
+          delete vital[key];
+        }
+      }
+      return {
+        ...vital,
+        [VitalsDateFields.updated]: setDateTime(
+          vital[VitalsDateFields.updated],
+        ),
+        [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
+        [VitalsDateFields.patientSince]: setDate(
+          vital[VitalsDateFields.patientSince],
+        ),
+        [VitalsDateFields.doseOne]: setDate(vital[VitalsDateFields.doseOne]),
+        [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
+      };
+    });
+    exportToCSV(vitalDetails);
+  };
 
   return (
     <Wrapper>
@@ -124,7 +172,6 @@ const DesktopPatientTable = (props) => {
                     </p>
                   </Link>
                 )}
-
                 <Info className="min-width-20 mr-2">
                   <Button
                     className="d-flex"
@@ -150,6 +197,27 @@ const DesktopPatientTable = (props) => {
                   <Label>Last updated:</Label>
                   <Value>{getFormatedTimeDate(patient?.lastUpdated)}</Value>
                 </Info>
+                <ButtonWrap className="ml-2 ">
+                  <Button
+                    className="btn btn-download-small"
+                    onClick={() => {
+                      exportVitals(patient.patientId);
+                    }}>
+                    <span className="excel-image-wrap-small">
+                      <img
+                        src={excel}
+                        alt="Covin"
+                        className="logo download-excel-icon-small"
+                      />
+                      <img
+                        src={xicon}
+                        alt="Covin"
+                        className="logo x-icon-small"
+                      />
+                    </span>
+                    DOWNLOAD (Xls)
+                  </Button>
+                </ButtonWrap>
               </InfoWrapper>
               <div className="desktop-view-vitals-wrp display-flex-direction">
                 <GraphicalRepresentation

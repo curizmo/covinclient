@@ -13,7 +13,6 @@ export const SplittedDatePicker = ({ date, setDate }) => {
           defaultValue={'Month'}
           short // default is full name
           year={date?.year} // mandatory
-          required={true} // default is false
           value={date.month} // mandatory
           onChange={setDatePart('month')}
           id={'month'}
@@ -26,7 +25,6 @@ export const SplittedDatePicker = ({ date, setDate }) => {
           defaultValue={'Day'}
           year={date?.year} // mandatory
           month={date?.month} // mandatory
-          required={true} // default is false
           value={date?.day} // mandatory
           onChange={setDatePart('day')}
           id={'day'}
@@ -37,7 +35,6 @@ export const SplittedDatePicker = ({ date, setDate }) => {
       <div id="dropdown-year" className="flex-grow-1">
         <YearPicker
           defaultValue={'Year'}
-          required={true} // default is false
           value={date?.year} // mandatory
           onChange={setDatePart('year')}
           id={'year'}
