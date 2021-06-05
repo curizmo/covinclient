@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -110,35 +110,45 @@ const DesktopPatientTable = (props) => {
     [dispatch],
   );
 
-  const exportVitals = async (patientId) => {
-    const vitals = await patientVitalsService.getIndividualPatientVitals(
-      user.PractitionerID,
-      patientId,
-    );
+  const [downloadingPatientId, setDownloadingPatientId] = useState(null);
 
-    let vitalDetails = vitals.data.map((vital) => {
-      for (const key in vital) {
-        const result = key.replace(CAMEL_CASE_REGEX, ' $1');
-        const title = result.charAt(0).toUpperCase() + result.slice(1);
-        if (title !== key) {
-          vital[title] = vital[key];
-          delete vital[key];
+  const exportVitals = async (patientId) => {
+    try {
+      setDownloadingPatientId(patientId);
+
+      const vitals = await patientVitalsService.getIndividualPatientVitals(
+        user.PractitionerID,
+        patientId,
+      );
+
+      let vitalDetails = vitals.data.map((vital) => {
+        for (const key in vital) {
+          const result = key.replace(CAMEL_CASE_REGEX, ' $1');
+          const title = result.charAt(0).toUpperCase() + result.slice(1);
+          if (title !== key) {
+            vital[title] = vital[key];
+            delete vital[key];
+          }
         }
-      }
-      return {
-        ...vital,
-        [VitalsDateFields.updated]: setDateTime(
-          vital[VitalsDateFields.updated],
-        ),
-        [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
-        [VitalsDateFields.patientSince]: setDate(
-          vital[VitalsDateFields.patientSince],
-        ),
-        [VitalsDateFields.doseOne]: setDate(vital[VitalsDateFields.doseOne]),
-        [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
-      };
-    });
-    exportToCSV(vitalDetails);
+        return {
+          ...vital,
+          [VitalsDateFields.updated]: setDateTime(
+            vital[VitalsDateFields.updated],
+          ),
+          [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
+          [VitalsDateFields.patientSince]: setDate(
+            vital[VitalsDateFields.patientSince],
+          ),
+          [VitalsDateFields.doseOne]: setDate(vital[VitalsDateFields.doseOne]),
+          [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
+        };
+      });
+      exportToCSV(vitalDetails);
+    } catch (err) {
+      // TODO: Handle error
+    } finally {
+      setDownloadingPatientId(null);
+    }
   };
 
   return (
@@ -200,6 +210,7 @@ const DesktopPatientTable = (props) => {
                 <ButtonWrap className="ml-2 ">
                   <Button
                     className="btn btn-download-small"
+                    disabled={downloadingPatientId === patient.patientId}
                     onClick={() => {
                       exportVitals(patient.patientId);
                     }}>
@@ -216,6 +227,13 @@ const DesktopPatientTable = (props) => {
                       />
                     </span>
                     DOWNLOAD (Xls)
+                    {downloadingPatientId === patient.patientId && (
+                      <div className="lds-spinner position-absolute">
+                        {[...Array(12).keys()].map((i) => (
+                          <span key={i} />
+                        ))}
+                      </div>
+                    )}
                   </Button>
                 </ButtonWrap>
               </InfoWrapper>

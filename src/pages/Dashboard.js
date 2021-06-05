@@ -105,6 +105,7 @@ const DashBoardComponent = () => {
   const dispatch = useDispatch();
   const [selectedCases, setSelectedCases] = useState(RISK.HIGH);
   const [filteredPatients, setFilteredPatients] = useState([]);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const user = useSelector(getUser);
   const patients = useSelector(getSearchResult);
@@ -130,33 +131,41 @@ const DashBoardComponent = () => {
   }, [patients, selectedCases]);
 
   const exportVitals = async () => {
-    const vitals = await patientVitalsService.getPatientVitals(
-      user.PractitionerID,
-    );
+    try {
+      setIsDownloading(true);
 
-    let vitalDetails = vitals.data.map((vital) => {
-      for (var key in vital) {
-        var result = key.replace(CAMEL_CASE_REGEX, ' $1');
-        var title = result.charAt(0).toUpperCase() + result.slice(1);
-        if (title !== key) {
-          vital[title] = vital[key];
-          delete vital[key];
+      const vitals = await patientVitalsService.getPatientVitals(
+        user.PractitionerID,
+      );
+
+      let vitalDetails = vitals.data.map((vital) => {
+        for (var key in vital) {
+          var result = key.replace(CAMEL_CASE_REGEX, ' $1');
+          var title = result.charAt(0).toUpperCase() + result.slice(1);
+          if (title !== key) {
+            vital[title] = vital[key];
+            delete vital[key];
+          }
         }
-      }
-      return {
-        ...vital,
-        [VitalsDateFields.updated]: setDateTime(
-          vital[VitalsDateFields.updated],
-        ),
-        [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
-        [VitalsDateFields.patientSince]: setDate(
-          vital[VitalsDateFields.patientSince],
-        ),
-        [VitalsDateFields.doseOne]: setDate(vital[VitalsDateFields.doseOne]),
-        [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
-      };
-    });
-    exportToCSV(vitalDetails);
+        return {
+          ...vital,
+          [VitalsDateFields.updated]: setDateTime(
+            vital[VitalsDateFields.updated],
+          ),
+          [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
+          [VitalsDateFields.patientSince]: setDate(
+            vital[VitalsDateFields.patientSince],
+          ),
+          [VitalsDateFields.doseOne]: setDate(vital[VitalsDateFields.doseOne]),
+          [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
+        };
+      });
+      exportToCSV(vitalDetails);
+    } catch (err) {
+      // TODO: Handle error.
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -190,7 +199,10 @@ const DashBoardComponent = () => {
                 searchRef={searchRef}
               />
               <div className="headsearch-btn-div">
-                <Button className="btn btn-download m-2" onClick={exportVitals}>
+                <Button
+                  className="btn btn-download m-2"
+                  disabled={isDownloading}
+                  onClick={exportVitals}>
                   <span className="excel-image-wrap">
                     <img
                       src={excel}
@@ -198,8 +210,15 @@ const DashBoardComponent = () => {
                       className="logo download-excel-icon"
                     />
                     <img src={xicon} alt="Covin" className="logo x-icon" />
-                  </span>{' '}
+                  </span>
                   DOWNLOAD (Xls)
+                  {isDownloading && (
+                    <div className="lds-spinner position-absolute">
+                      {[...Array(12).keys()].map((i) => (
+                        <span key={i} />
+                      ))}
+                    </div>
+                  )}
                 </Button>
                 <LinkButton
                   className="btn btn-covin my-2"
@@ -235,7 +254,10 @@ const DashBoardComponent = () => {
                 />
               </InputContainer>
               <div className="headsearch-btn-div">
-                <Button className="btn btn-download m-2" onClick={exportVitals}>
+                <Button
+                  className="btn btn-download m-2"
+                  disabled={isDownloading}
+                  onClick={exportVitals}>
                   <span className="excel-image-wrap">
                     <img
                       src={excel}
@@ -243,8 +265,15 @@ const DashBoardComponent = () => {
                       className="logo download-excel-icon"
                     />
                     <img src={xicon} alt="Covin" className="logo x-icon" />
-                  </span>{' '}
+                  </span>
                   DOWNLOAD (Xls)
+                  {isDownloading && (
+                    <span className="lds-spinner position-absolute">
+                      {[...Array(12).keys()].map((i) => (
+                        <span key={i} />
+                      ))}
+                    </span>
+                  )}
                 </Button>
                 <LinkButton
                   className="btn btn-covin my-2"
