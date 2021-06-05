@@ -14,3 +14,4 @@ export * from './sidebar';
 export * from './spinner';
 export * from './twilio';
 export * from './user';
+export * from './search';

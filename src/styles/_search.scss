@@ -1,11 +1,17 @@
-.search-icon {
+.search-icon,
+.search-spinner {
   position: absolute;
-  left: 4px;
-  top: 0.3rem;
-  margin: 0.1rem;
+  left: .625rem;
+  color: #657396;
+  margin: 0;
+}
+.search-icon {
+  top: .625rem;
   height: 1.3rem;
 }
-
+.search-spinner {
+  top: 1rem;
+}
 .search-input {
   padding-left: 2.2rem;
   font-size: 0.8rem;
@@ -35,14 +41,14 @@
     }
     .search-input.form-control {
       padding-left: 0;
-      padding-right: 34px;
+      padding-right: 37px;
     }
   }
 }
 
 .search-input.form-control {
   height: 2.625rem;
-  padding-left: 34px;
+  padding-left: 37px;
   outline: none;
   border: 1px solid #d6dde8;
   border-radius: 3px;

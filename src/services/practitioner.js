@@ -2,7 +2,6 @@ import { BEApi, api } from './api';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import camelcaseKeys from 'camelcase-keys';
 import practitionersData from '../mocks/practitioners.json';
-import { hideSpinner, showSpinner } from 'actions';
 
 /**
  * @returns {Promise<object>}
@@ -151,17 +150,15 @@ export function createBooking(data) {
  *
  * @returns {Promise<object>}
  */
-export async function fetchPatientsWithVitals(searchText, dispatch) {
-  dispatch(showSpinner());
+export async function fetchPatientsWithVitals({ searchText }) {
   const query = `?${searchText ? `searchText=${searchText}` : ''}`;
   const { data } = await BEApi.get(`/patients/vitals/${query}`);
-  dispatch(hideSpinner());
   return data?.patients;
 }
 
-export const usePatientsVitals = (searchText, dispatch) => {
+export const usePatientsVitals = (searchText) => {
   return useQuery(['patientsVitals'], () =>
-    fetchPatientsWithVitals(searchText, dispatch),
+    fetchPatientsWithVitals(searchText),
   );
 };
 

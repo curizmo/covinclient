@@ -12,6 +12,7 @@ import { appointments } from './appointments';
 import { twilio } from './twilio';
 import { sidebar } from './sidebar';
 import { patient } from './patient';
+import { search } from './search';
 
 import questions from './questions';
 import physicianQuestion from './physicianQuestion';
@@ -36,6 +37,7 @@ export const createRootReducer = combineReducers({
   twilio,
   sidebar,
   patient,
+  search,
 });
 
 export const appReducer = (state, action) => {

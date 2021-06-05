@@ -228,11 +228,10 @@ const EditPatient = () => {
             </Col>
             <Col md={{ size: 6 }}>
               <InputField
-                title="Patient Email"
+                title="Contact Email"
                 name="email"
                 type="email"
                 innerRef={register}
-                placeholder="Enter Patient Email ID"
               />
             </Col>
           </Row>
@@ -244,7 +243,6 @@ const EditPatient = () => {
                 required
                 innerRef={register}
                 error={getErrorMessage(errors, 'firstName')}
-                placeholder="Enter Patient Full Name"
               />
             </Col>
             <Col md={{ size: 6 }}>
@@ -252,7 +250,6 @@ const EditPatient = () => {
                 title="Last Name"
                 name="lastName"
                 innerRef={register}
-                placeholder="Enter Patient Last Name (Optional)"
               />
             </Col>
           </Row>
@@ -323,7 +320,7 @@ const EditPatient = () => {
                 title="Weight"
                 name="weight"
                 innerRef={register}
-                placeholder="Enter Weight"
+                error={getErrorMessage(errors, 'weight')}
                 customClass="measurement kg"
               />
               <span />
@@ -335,7 +332,6 @@ const EditPatient = () => {
                 title="Address"
                 name="addressOne"
                 innerRef={register}
-                placeholder="Enter Address"
               />
             </Col>
           </Row>
@@ -382,12 +378,7 @@ const EditPatient = () => {
               </InputField>
             </Col>
             <Col md={{ size: 2 }}>
-              <InputField
-                title="Postal Code"
-                name="zip"
-                innerRef={register}
-                placeholder="Postal Code"
-              />
+              <InputField title="Postal Code" name="zip" innerRef={register} />
             </Col>
           </Row>
           <Row className="mt-3">
