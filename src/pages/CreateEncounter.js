@@ -15,6 +15,7 @@ import {
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
 import { DashboardLayout } from 'components/common/Layout';
 import { Symptoms } from 'components/CreateEncounter/Symptoms';
+import { LabResults } from 'components/CreateEncounter/LabResults';
 
 import { fetchPatient } from 'actions';
 
@@ -23,18 +24,16 @@ import { getPatient, getIsEncounterUpdated, getUser } from 'selectors';
 import { createEncounter, updatePatientRiskStatus } from 'services/patient';
 import { createOrUpdateEncounter } from 'services/appointment';
 import { fetchPatientSymptoms } from 'services/symptoms';
-import { deleteLabResult, uploadLabResult } from 'services/labResults';
+import {
+  deleteLabResult,
+  uploadLabResult,
+  fetchPatientLabs,
+} from 'services/labResults';
 
 import { getRandomKey, getTabIndex } from 'utils';
 
 import { routes } from 'routers';
 
-import notesIcon from 'assets/images/svg-icons/notesIcon.svg';
-import lineGraphIcon from 'assets/images/svg-icons/lineGraphIcon.svg';
-import prescriptionIcon from 'assets/images/svg-icons/prescriptionIcon.svg';
-import notesSelectedIcon from 'assets/images/svg-icons/notes-selected.svg';
-import lineGraphSelectedIcon from 'assets/images/svg-icons/reading-selected.svg';
-import prescriptionSelectedIcon from 'assets/images/svg-icons/orders-selected.svg';
 import time from 'assets/images/svg-icons/clock.svg';
 import {
   DateAndTime,
@@ -52,28 +51,30 @@ import {
 import { getDate } from 'global';
 import { isLightVersion } from 'config';
 import GeneralInformation from 'components/CreateEncounter/GeneralInformation';
+import { ColumnContainer } from 'components/CreateEncounter/styles';
 
 const PATIENT_DETAILS_TABS = {
   READINGS: 'Readings',
   NOTES: 'Notes',
-  PRESCRIPTION: 'Prescription',
+  SYMPTOMS: 'Symptoms',
+  LAB_RESULTS: 'Lab Results',
 };
 
 const tabMenu = [
   {
     name: PATIENT_DETAILS_TABS.NOTES,
-    icon: notesIcon,
-    selectedIcon: notesSelectedIcon,
   },
   {
     name: PATIENT_DETAILS_TABS.PRESCRIPTION,
-    icon: prescriptionIcon,
-    selectedIcon: prescriptionSelectedIcon,
   },
   {
     name: PATIENT_DETAILS_TABS.READINGS,
-    icon: lineGraphIcon,
-    selectedIcon: lineGraphSelectedIcon,
+  },
+  {
+    name: PATIENT_DETAILS_TABS.SYMPTOMS,
+  },
+  {
+    name: PATIENT_DETAILS_TABS.LAB_RESULTS,
   },
 ];
 
@@ -93,6 +94,7 @@ const MedInfoWrap = styled.div`
     display: none;
   }
 `;
+
 const Column = styled.div`
   width: 33.33%;
   border-right: 1px solid rgba(101, 115, 150, 0.2);
@@ -115,20 +117,21 @@ const MobileViewMedInfoWrap = styled.div`
 const TabWrap = styled.div`
   display: flex;
   height: 3.125rem;
-  width: 100%;
+  overflow-x: scroll;
   @media (max-width: 768px) {
     margin-top: 1.25rem;
   }
 `;
 
 const EachTab = styled.div`
-  width: 33.33%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${(props) => (props.selected ? '#22335E' : '#F2F5F8')};
-  color: ${(props) => (props.selected ? '#fff' : '#22335E')};
+  border-bottom: ${(props) => (props.selected ? '2px solid #22335E' : 'none')};
+  color: ${(props) => (props.selected ? '#22335E' : '#657396')};
   cursor: pointer;
+  padding: 0rem 0.5rem;
+  white-space: nowrap;
 `;
 
 const TabName = styled.span`
@@ -168,11 +171,6 @@ const infoExtraCss = css`
   }
 `;
 
-const Icon = styled.img`
-  height: 16px;
-  margin-right: 0.5rem;
-`;
-
 const TabContainer = styled.div`
   display: flex;
   align-items: center;
@@ -197,6 +195,7 @@ const Tab = styled.div`
 const VITALS_TABS = {
   vitals: 'vitals',
   symptoms: 'symptoms',
+  labResults: 'labResults',
 };
 
 function CreateEncounter() {
@@ -220,6 +219,7 @@ function CreateEncounter() {
   const [vitalsActiveTab, setVitalsActiveTab] = useState(VITALS_TABS.vitals);
   const [symptoms, setSymptoms] = useState([]);
   const [labResults, setLabResults] = useState([]);
+  const [labs, setLabs] = useState([]);
 
   useEffect(() => {
     setRiskLevel(patientData?.status);
@@ -244,7 +244,18 @@ function CreateEncounter() {
       }
     };
 
+    const fetchLabs = async (patientId) => {
+      try {
+        const response = await fetchPatientLabs(patientId);
+
+        setLabs(response.data.labs);
+      } catch (err) {
+        // TODO: Handle err.
+      }
+    };
+
     fetchSymptoms(patientId);
+    fetchLabs(patientId);
   }, [patientId]);
 
   useEffect(() => {
@@ -455,13 +466,30 @@ function CreateEncounter() {
                   active={vitalsActiveTab === VITALS_TABS.symptoms}>
                   Symptoms
                 </Tab>
+                <Tab
+                  role="button"
+                  tabIndex={getTabIndex()}
+                  onClick={() => setVitalsActiveTab(VITALS_TABS.labResults)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      setVitalsActiveTab(VITALS_TABS.labResults);
+                    }
+                  }}
+                  active={vitalsActiveTab === VITALS_TABS.labResults}>
+                  Lab Results
+                </Tab>
               </TabContainer>
-              {vitalsActiveTab === VITALS_TABS.vitals && (
-                <GraphicalReadings data={patientData} />
-              )}
-              {vitalsActiveTab === VITALS_TABS.symptoms && (
-                <Symptoms symptoms={symptoms} />
-              )}
+              <ColumnContainer>
+                {vitalsActiveTab === VITALS_TABS.vitals && (
+                  <GraphicalReadings data={patientData} />
+                )}
+                {vitalsActiveTab === VITALS_TABS.symptoms && (
+                  <Symptoms symptoms={symptoms} />
+                )}
+                {vitalsActiveTab === VITALS_TABS.labResults && (
+                  <LabResults labs={labs} />
+                )}
+              </ColumnContainer>
             </Column>
             <Column>
               <PatientNotes
@@ -501,13 +529,7 @@ function CreateEncounter() {
                     key={getRandomKey()}
                     onClick={() => setSelectedTab(tab?.name)}
                     selected={isSelected}>
-                    <TabName>
-                      <Icon
-                        src={isSelected ? tab.selectedIcon : tab.icon}
-                        alt="icon"
-                      />
-                      {tab?.name}
-                    </TabName>
+                    <TabName>{tab?.name}</TabName>
                   </EachTab>
                 );
               })}
@@ -569,18 +591,11 @@ function CreateEncounter() {
                   handleRemoveFile={handleRemoveFile}
                 />
               )}
-              {selectedTab === PATIENT_DETAILS_TABS.PRESCRIPTION && (
-                <PatientPrescription
-                  patientData={patientData}
-                  prescriptionList={prescriptionList}
-                  setPrescriptionList={setPrescriptionList}
-                  pastPrescriptions={patientData.pastPrescriptions}
-                  labsList={labsList}
-                  setLabsList={setLabsList}
-                  appointmentId={appointmentId}
-                  setAppointmentId={setAppointmentId}
-                  patientId={patientId}
-                />
+              {selectedTab === PATIENT_DETAILS_TABS.SYMPTOMS && (
+                <Symptoms symptoms={symptoms} />
+              )}
+              {selectedTab === PATIENT_DETAILS_TABS.LAB_RESULTS && (
+                <LabResults labs={labs} />
               )}
             </ContentWrap>
           </MobileViewMedInfoWrap>

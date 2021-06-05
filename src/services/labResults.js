@@ -26,3 +26,10 @@ export function deleteLabResult(appointmentId, labResults) {
     labResults,
   );
 }
+
+/**
+ * @returns {Promise<object>}
+ */
+export function fetchPatientLabs(patientId) {
+  return BEApi.get(`/patient-labs/patient/${patientId}`);
+}

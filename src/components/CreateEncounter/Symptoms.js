@@ -1,6 +1,11 @@
 import React from 'react';
 
-import { SymptomContainer } from './styles';
+import {
+  DateText,
+  SymptomContainer,
+  SymptomsStatus,
+  SymptomsText,
+} from './styles';
 
 const Symptoms = ({ symptoms }) => {
   return (
@@ -8,9 +13,9 @@ const Symptoms = ({ symptoms }) => {
       {symptoms?.map((symptom) => {
         return (
           <SymptomContainer key={symptom.recordedAt}>
-            <div className="mb-1">{symptom.recordedAt}:</div>
-            <div>{symptom.symptom}</div>
-            <div>Status: {symptom.status || '-'}</div>
+            <DateText className="mb-1">{symptom.recordedAt}:</DateText>
+            <SymptomsText className="mb-2">{symptom.symptom}</SymptomsText>
+            <SymptomsStatus>Status: {symptom.status || '-'}</SymptomsStatus>
           </SymptomContainer>
         );
       })}
