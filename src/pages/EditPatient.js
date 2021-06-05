@@ -419,7 +419,7 @@ const EditPatient = () => {
         ) : (
           <Confirmation
             newPatient={newPatient}
-            message={'is now updated in the patient registry'}
+            message={'is now saved in the patient registry'}
           />
         )}
       </Container>
