@@ -11,7 +11,7 @@ import { TopMenu } from 'components/common/TopMenu';
 import { routes } from '../';
 import { useInitScroll } from 'hooks/useInitScroll';
 import { clearMessage, hideSpinner } from 'actions';
-import { getIsShowSpinner, getUser } from 'selectors';
+import { getIsLoginInProgress, getIsShowSpinner, getUser } from 'selectors';
 import { getAuthData } from 'utils/auth';
 
 const RouterSwitch = () => {
@@ -20,6 +20,7 @@ const RouterSwitch = () => {
   const isShowSpinner = useSelector(getIsShowSpinner);
   const user = useSelector(getUser);
   const dispatch = useDispatch();
+  const isLoginInProgress = useSelector(getIsLoginInProgress);
 
   useEffect(() => {
     dispatch(clearMessage());
@@ -35,7 +36,7 @@ const RouterSwitch = () => {
         const redirectPath =
           isPrivate && !isLoggedIn && user
             ? routes.login.path
-            : !user.isPractitioner
+            : !user.isPractitioner && !isLoginInProgress
             ? routes.nonPhysician.path
             : null;
 
