@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
-import { Button } from 'reactstrap';
-import { useHistory } from 'react-router-dom';
+import { LinkButton } from '../components/common/Button';
 import { routes } from 'routers';
 import { GENDER_SHORTHAND } from '../constants';
 const moment = require('moment');
@@ -49,8 +48,6 @@ const ConfirmationWrapper = styled.section`
 `;
 
 const AddConfirmation = ({ newPatient, message }) => {
-  const history = useHistory();
-
   const userInfo = useMemo(() => {
     let info = [];
     if (GENDER_SHORTHAND[newPatient.gender]) {
@@ -61,10 +58,6 @@ const AddConfirmation = ({ newPatient, message }) => {
     }
     return info.join(', ');
   }, [newPatient.gender, newPatient.birthDate]);
-
-  const onBackButtonClick = () => {
-    history.push(routes.dashboard.path);
-  };
 
   return (
     <ContentWrapper>
@@ -77,9 +70,9 @@ const AddConfirmation = ({ newPatient, message }) => {
         <div className="patient-confirm-info">{newPatient.phone}</div>
         <div className="add-info"> {message}</div>
         <div>
-          <Button className="back-button" onClick={onBackButtonClick}>
+          <LinkButton to={routes.dashboard.path} className="back-button">
             BACK TO DASHBOARD
-          </Button>
+          </LinkButton>
         </div>
       </ConfirmationWrapper>
     </ContentWrapper>
