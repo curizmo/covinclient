@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { Button } from 'reactstrap';
 import { useHistory } from 'react-router-dom';
 import { routes } from 'routers';
+import { GENDER_SHORTHAND } from '../constants';
+const moment = require('moment');
 
 const TitleName = styled.section`
 margin: 0;
@@ -47,7 +49,7 @@ const ConfirmationWrapper = styled.section`
   //   }
 `;
 
-const AddConfirmation = () => {
+const AddConfirmation = ({ newPatient, message }) => {
   const history = useHistory();
 
   const onBackButtonClick = () => {
@@ -59,10 +61,17 @@ const AddConfirmation = () => {
       <ContentWrapper>
         <TitleName>Confirmation</TitleName>
         <ConfirmationWrapper>
-          <div className="patient-name">Amit Singh</div>
-          <div className="patient-confirm-info"> M, 48 years</div>
-          <div className="patient-confirm-info">+91-849908992</div>
-          <div className="add-info"> is now added to the patient registry</div>
+          <div className="patient-name">
+            {newPatient.firstName} {newPatient.lastName}
+          </div>
+          <div className="patient-confirm-info">
+            {GENDER_SHORTHAND[newPatient.gender] || ''}
+            {newPatient.birthDate
+              ? `, ${moment().diff(newPatient.birthDate, 'years', false)} years`
+              : ''}
+          </div>
+          <div className="patient-confirm-info">{newPatient.phone}</div>
+          <div className="add-info"> {message}</div>
           <div>
             <Button className="back-button" onClick={onBackButtonClick}>
               BACK TO DASHBOARD
