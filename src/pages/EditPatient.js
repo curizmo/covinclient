@@ -57,7 +57,7 @@ const Container = styled.section`
   padding: 2em 10em;
   background-color: #fff;
   overflow-y: scroll;
-  height: calc(90% - 70px);
+  height: calc(87% - 70px);
   ::-webkit-scrollbar {
     width: 3px;
   }
