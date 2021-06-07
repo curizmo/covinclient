@@ -76,7 +76,7 @@ const AddPatient = () => {
     day: '',
   });
   const [newPatient, setnewPatient] = useState({});
-  const [isConfirmed, setIsConfirmed] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(true);
   const { register, handleSubmit, errors, getValues } = useForm({
     resolver: yupResolver(patientValidation),
     mode: 'onBlur',
@@ -346,6 +346,10 @@ const AddPatient = () => {
           <Confirmation
             newPatient={newPatient}
             message={'is now added to the patient registry'}
+            confirmation={
+              'will soon receive SMS requesting to record their symptoms and vitals'
+            }
+            confirmationType={'addPatient'}
           />
         )}
       </Container>
