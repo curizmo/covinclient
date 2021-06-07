@@ -214,25 +214,28 @@ const DesktopPatientTable = (props) => {
                     onClick={() => {
                       exportVitals(patient.patientId);
                     }}>
-                    <span className="excel-image-wrap-small">
-                      <img
-                        src={excel}
-                        alt="Covin"
-                        className="logo download-excel-icon-small"
-                      />
-                      <img
-                        src={xicon}
-                        alt="Covin"
-                        className="logo x-icon-small"
-                      />
-                    </span>
-                    DOWNLOAD (Xls)
-                    {downloadingPatientId === patient.patientId && (
+                    {downloadingPatientId === patient.patientId ? (
                       <div className="lds-spinner position-absolute">
                         {[...Array(12).keys()].map((i) => (
                           <span key={i} />
                         ))}
                       </div>
+                    ) : (
+                      <>
+                        <span className="excel-image-wrap-small">
+                          <img
+                            src={excel}
+                            alt="Covin"
+                            className="logo download-excel-icon-small"
+                          />
+                          <img
+                            src={xicon}
+                            alt="Covin"
+                            className="logo x-icon-small"
+                          />
+                        </span>
+                        DOWNLOAD(Xls)
+                      </>
                     )}
                   </Button>
                 </ButtonWrap>
