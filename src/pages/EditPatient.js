@@ -281,7 +281,7 @@ const EditPatient = () => {
               </Col>
             </Row>
             <Row className="justify-content-between">
-              <Col md={{ size: 2 }}>
+              <Col className="gender-input">
                 <FormGroup check row className="mx-0 pl-0 form-group">
                   <Label>Gender</Label>
                   <div className="d-flex mt-3 flex-wrap">
