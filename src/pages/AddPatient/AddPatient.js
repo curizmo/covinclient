@@ -76,6 +76,7 @@ const Container = styled.section`
   @media (max-width: 768px) {
     padding: 2em;
     margin: 0;
+    height: calc(100% - 70px);
   }
   @media (max-width: 1024px) {
     padding: 4em;
