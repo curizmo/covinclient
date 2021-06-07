@@ -257,8 +257,8 @@ const EditPatient = () => {
                 />
               </Col>
             </Row>
-            <Row>
-              <Col md={{ size: 3 }}>
+            <Row className="justify-content-between">
+              <Col md={{ size: 2 }}>
                 <FormGroup check row className="mx-0 pl-0 form-group">
                   <Label>Gender</Label>
                   <div className="d-flex mt-3 flex-wrap">
@@ -289,10 +289,10 @@ const EditPatient = () => {
                   setDate={setDateOfBirth}
                 />
               </Col>
-              <Col md={{ size: 3 }}>
+              <Col md={{ size: 2 }}>
                 <Label>Height</Label>
                 <div className="d-flex">
-                  <div className="flex-grow-1 mr-2">
+                  <div className="flex-grow-1 w-50 mr-1">
                     <InputField
                       type="number"
                       name="heightFt"
@@ -305,7 +305,7 @@ const EditPatient = () => {
                       max={8}
                     />
                   </div>
-                  <div className="flex-grow-1">
+                  <div className="flex-grow-1 w-50 ml-1">
                     <InputField
                       type="number"
                       name="heightIn"
@@ -320,7 +320,7 @@ const EditPatient = () => {
                   </div>
                 </div>
               </Col>
-              <Col md={{ size: 2 }}>
+              <Col md={{ size: 1 }}>
                 <InputField
                   type="number"
                   step="0.01"
