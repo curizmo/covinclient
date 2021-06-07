@@ -13,21 +13,21 @@ form {
   }
 }
 .form-control {
-  border: 1px solid #e0e3ea;
-  box-shadow: 0 2px 0 #e0e3ea;
+  border: 1px solid #E0E3EA;
+  box-shadow: 0 2px 0 #E0E3EA;
   border-radius: 3px;
-  color: #22335e;
+  color: #22335E;
   &::placeholder {
-    color: #22335e;
-    opacity: 0.4;
+    color: #22335E;
+    opacity: .4;
   }
   &.measurement {
     position: relative;
     & + span:after {
       position: absolute;
-      right: 0.7rem;
-      top: 0.6rem;
-      color: rgba(#22335e, 0.5);
+      right: .7rem;
+      top: .6rem;
+      color: rgba(#22335E, .5);
       pointer-events: none;
     }
     &.kg + span:after {
