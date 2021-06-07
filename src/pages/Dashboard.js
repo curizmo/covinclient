@@ -118,11 +118,15 @@ const DashBoardComponent = () => {
   };
 
   useEffect(() => {
+    if (!(user && user.isPractitioner)) {
+      return;
+    }
+
     dispatch(requestSearch(''));
     return () => {
       dispatch(clearSearch());
     };
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     setFilteredPatients(
@@ -203,21 +207,24 @@ const DashBoardComponent = () => {
                   className="btn btn-download m-2"
                   disabled={isDownloading}
                   onClick={exportVitals}>
-                  <span className="excel-image-wrap">
-                    <img
-                      src={excel}
-                      alt="Covin"
-                      className="logo download-excel-icon"
-                    />
-                    <img src={xicon} alt="Covin" className="logo x-icon" />
-                  </span>
-                  DOWNLOAD (Xls)
-                  {isDownloading && (
+                  {isDownloading ? (
                     <div className="lds-spinner position-absolute">
                       {[...Array(12).keys()].map((i) => (
                         <span key={i} />
                       ))}
                     </div>
+                  ) : (
+                    <>
+                      <span className="excel-image-wrap">
+                        <img
+                          src={excel}
+                          alt="Covin"
+                          className="logo download-excel-icon"
+                        />
+                        <img src={xicon} alt="Covin" className="logo x-icon" />
+                      </span>
+                      DOWNLOAD (Xls)
+                    </>
                   )}
                 </Button>
                 <LinkButton
@@ -258,21 +265,24 @@ const DashBoardComponent = () => {
                   className="btn btn-download m-2"
                   disabled={isDownloading}
                   onClick={exportVitals}>
-                  <span className="excel-image-wrap">
-                    <img
-                      src={excel}
-                      alt="Covin"
-                      className="logo download-excel-icon"
-                    />
-                    <img src={xicon} alt="Covin" className="logo x-icon" />
-                  </span>
-                  DOWNLOAD (Xls)
-                  {isDownloading && (
+                  {isDownloading ? (
                     <span className="lds-spinner position-absolute">
                       {[...Array(12).keys()].map((i) => (
                         <span key={i} />
                       ))}
                     </span>
+                  ) : (
+                    <>
+                      <span className="excel-image-wrap">
+                        <img
+                          src={excel}
+                          alt="Covin"
+                          className="logo download-excel-icon"
+                        />
+                        <img src={xicon} alt="Covin" className="logo x-icon" />
+                      </span>
+                      DOWNLOAD (Xls)
+                    </>
                   )}
                 </Button>
                 <LinkButton
