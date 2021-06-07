@@ -173,6 +173,10 @@ const DesktopPatientTable = (props) => {
     }
   };
 
+  if (selectedCaseData?.length < 1 && !isShowSpinner) {
+    return null;
+  }
+
   return (
     <Wrapper isShowSpinner={isShowSpinner}>
       <TableWrapper className="dashboard-container">
