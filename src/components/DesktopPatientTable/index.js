@@ -255,7 +255,7 @@ const DesktopPatientTable = (props) => {
                             className="logo x-icon-small"
                           />
                         </span>
-                        DOWNLOAD(Xls)
+                        DOWNLOAD (Xls)
                       </>
                     )}
                   </Button>
