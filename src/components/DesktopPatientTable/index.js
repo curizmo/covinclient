@@ -29,7 +29,7 @@ const Wrapper = styled.section`
   position: relative;
   padding: 0 4rem;
   width: 100%;
-  height: 100%;
+  height: calc(100% - 110px);
   overflow: ${(props) => (props?.isShowSpinner ? 'hidden' : 'scroll')};
 `;
 
@@ -180,7 +180,7 @@ const DesktopPatientTable = (props) => {
   return (
     <Wrapper isShowSpinner={isShowSpinner}>
       <TableWrapper className="dashboard-container">
-        {selectedCaseData.map((patient, index) => {
+        {selectedCaseData?.map((patient, index) => {
           return (
             <InfoAndGraphWrapper key={index} className="mb-3">
               <InfoWrapper>

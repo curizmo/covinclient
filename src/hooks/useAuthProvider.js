@@ -50,12 +50,12 @@ export const useAuthProvider = () => {
 
   useEffect(() => {
     if (isLoginFinished) {
-      if (!user || user?.isFirstTimeSignUp) {
-        history.push(routes.nonPhysician.path);
-      } else if (user) {
-        history.push(routes.dashboard.path);
-      } else {
+      if (!user) {
         history.push(routes.login.path);
+      } else if (user?.isFirstTimeSignUp || !user?.isPractitioner) {
+        history.push(routes.nonPhysician.path);
+      } else {
+        history.push(routes.dashboard.path);
       }
       setIsLoginFinished(true);
     }
@@ -140,6 +140,7 @@ export const useAuthProvider = () => {
     dispatch(clearUser());
     await msalApp.logout();
     onSignIn();
+    history.push(routes.login.path);
   };
 
   return {
