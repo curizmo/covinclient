@@ -50,12 +50,12 @@ export const useAuthProvider = () => {
 
   useEffect(() => {
     if (isLoginFinished) {
-      if (!user || user?.isFirstTimeSignUp) {
-        history.push(routes.nonPhysician.path);
-      } else if (user) {
-        history.push(routes.dashboard.path);
-      } else {
+      if (!user) {
         history.push(routes.login.path);
+      } else if (user?.isFirstTimeSignUp || !user?.isPractitioner) {
+        history.push(routes.nonPhysician.path);
+      } else {
+        history.push(routes.dashboard.path);
       }
       setIsLoginFinished(true);
     }
