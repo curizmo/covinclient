@@ -76,7 +76,7 @@ const AddPatient = () => {
     day: '',
   });
   const [newPatient, setnewPatient] = useState({});
-  const [isConfirmed, setIsConfirmed] = useState(true);
+  const [isConfirmed, setIsConfirmed] = useState(false);
   const { register, handleSubmit, errors, getValues } = useForm({
     resolver: yupResolver(patientValidation),
     mode: 'onBlur',
