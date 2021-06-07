@@ -81,7 +81,6 @@ const AddConfirmation = ({
         <div className={`${confirmationType}`}> {message}</div>
         {confirmationType === 'addPatient' && (
           <div className="add-info">
-            {' '}
             {newPatient.firstName} {confirmation}
           </div>
         )}
