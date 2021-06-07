@@ -152,8 +152,9 @@ export function createBooking(data) {
  */
 export async function fetchPatientsWithVitals({ searchText }) {
   const query = `?${searchText ? `searchText=${searchText}` : ''}`;
-  const { data } = await BEApi.get(`/patients/vitals/${query}`);
-  return data?.patients;
+  const response = await BEApi.get(`/patients/vitals/${query}`);
+
+  return response?.data?.patients;
 }
 
 export const usePatientsVitals = (searchText) => {

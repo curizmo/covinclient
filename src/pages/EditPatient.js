@@ -420,6 +420,7 @@ const EditPatient = () => {
           <Confirmation
             newPatient={newPatient}
             message={'is now saved in the patient registry'}
+            confirmationType={'editPatient'}
           />
         )}
       </Container>

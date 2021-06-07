@@ -9,6 +9,7 @@ import { getAuthData, msalApp } from 'utils/auth';
 
 import { store } from 'store';
 import { logout } from 'actions/auth';
+import { startLogin } from 'actions';
 
 export const api = create({
   baseURL: process.env.REACT_APP_API_HOSTNAME,
@@ -47,10 +48,9 @@ api.interceptors.response.use(
   (response) => {
     return response;
   },
-  (err) => {
+  async (err) => {
     if (err && err.response && err.response.status === 401) {
-      store && store.dispatch(logout());
-      msalApp.logout();
+      await handleLogout();
 
       return;
     }
@@ -81,10 +81,9 @@ BEApi.interceptors.response.use(
   (response) => {
     return response;
   },
-  (err) => {
+  async (err) => {
     if (err && err.response && err.response.status === 401) {
-      store && store.dispatch(logout());
-      msalApp.logout();
+      await handleLogout();
 
       return;
     }
@@ -92,6 +91,13 @@ BEApi.interceptors.response.use(
     throw err;
   },
 );
+
+const handleLogout = () => {
+  store && store.dispatch(logout());
+  store && store.dispatch(startLogin());
+
+  return msalApp.logout();
+};
 
 /**
  * @typedef {object} ApiConfig

@@ -24,9 +24,9 @@ const ContentWrapper = styled.section`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin: 8rem auto;
+  margin: 0.8rem auto 1.5rem auto;
   @media (max-width: 768px) {
-    margin: 2rem 0.4rem;
+    margin: 0.6rem 0.4rem;
   }
 `;
 
@@ -34,7 +34,7 @@ const ConfirmationWrapper = styled.section`
   box-shadow: rgba(14, 30, 37, 0.12) 2px 2px 16px 2px,
     rgba(14, 30, 37, 0.32) 2px 2px 16px 2px;
   background-color: #fff;
-  width: 54%;
+  width: 52%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,7 +47,12 @@ const ConfirmationWrapper = styled.section`
   }
 `;
 
-const AddConfirmation = ({ newPatient, message }) => {
+const AddConfirmation = ({
+  newPatient,
+  message,
+  confirmation,
+  confirmationType,
+}) => {
   const userInfo = useMemo(() => {
     let info = [];
     if (GENDER_SHORTHAND[newPatient.gender]) {
@@ -66,9 +71,19 @@ const AddConfirmation = ({ newPatient, message }) => {
         <div className="patient-name">
           {newPatient.firstName} {newPatient.lastName}
         </div>
-        <div className="patient-confirm-info">{userInfo || ''}</div>
-        <div className="patient-confirm-info">{newPatient.phone}</div>
-        <div className="add-info"> {message}</div>
+        <div className="patient-confirm-info">
+          <span>{userInfo || ''}</span>
+          <span>
+            {userInfo && ' | '}
+            {newPatient.phone}
+          </span>
+        </div>
+        <div className={`${confirmationType}`}> {message}</div>
+        {confirmationType === 'addPatient' && (
+          <div className="add-info">
+            {newPatient.firstName} {confirmation}
+          </div>
+        )}
         <div>
           <LinkButton to={routes.dashboard.path} className="back-button">
             BACK TO DASHBOARD

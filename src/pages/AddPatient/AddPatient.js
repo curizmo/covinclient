@@ -346,6 +346,10 @@ const AddPatient = () => {
           <Confirmation
             newPatient={newPatient}
             message={'is now added to the patient registry'}
+            confirmation={
+              'will soon receive a message requesting to record their symptoms and vitals'
+            }
+            confirmationType={'addPatient'}
           />
         )}
       </Container>
