@@ -212,29 +212,27 @@ const AddPatient = () => {
               </Col>
             </Row>
             <Row className="justify-content-between">
-              <Col md={{ size: 3 }}>
-                <FormGroup check row className="mx-0 pl-0 form-group">
-                  <Label>Gender</Label>
-                  <div className="d-flex mt-3 flex-wrap justify-content-between">
-                    {GENDER_OPTIONS.map(({ label, value }) => (
-                      <RadioLabel
-                        htmlFor={value}
-                        key={value}
-                        onClick={() => setGender(value)}>
-                        <RadioInput
-                          type="radio"
-                          name="gender"
-                          value={value}
-                          id={value}
-                        />
-                        <OptionName checked={checkedGender === value}>
-                          {label}
-                        </OptionName>
-                      </RadioLabel>
-                    ))}
-                  </div>
-                </FormGroup>
-              </Col>
+              <FormGroup check row className="mx-0 px-3 form-group">
+                <Label>Gender</Label>
+                <div className="d-flex mt-3 flex-wrap">
+                  {GENDER_OPTIONS.map(({ label, value }) => (
+                    <RadioLabel
+                      htmlFor={value}
+                      key={value}
+                      onClick={() => setGender(value)}>
+                      <RadioInput
+                        type="radio"
+                        name="gender"
+                        value={value}
+                        id={value}
+                      />
+                      <OptionName checked={checkedGender === value}>
+                        {label}
+                      </OptionName>
+                    </RadioLabel>
+                  ))}
+                </div>
+              </FormGroup>
               <Col md={{ size: 4 }}>
                 <Label>Date of Birth</Label>
                 <SplittedDatePicker
