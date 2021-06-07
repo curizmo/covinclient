@@ -35,7 +35,7 @@ export const SearchInput = ({
   searchRef,
   customClass = '',
   clearSearchInput,
-  disabled,
+  isInitLoading,
 }) => {
   const [searchValue, setSearchValue] = useState('');
   const isShowSearchSpinner = useSelector(getIsShowSearchSpinner);
@@ -57,7 +57,7 @@ export const SearchInput = ({
   return (
     <div className={`search-container ${customClass}`}>
       <Search className="search-icon" />
-      {isShowSearchSpinner && !disabled && (
+      {!isInitLoading && isShowSearchSpinner && (
         <div className="lds-spinner position-absolute">
           {[...Array(12).keys()].map((s) => (
             <span key={s} />
@@ -71,7 +71,6 @@ export const SearchInput = ({
         placeholder={placeholder}
         onChange={onChange}
         onKeyPress={onEnter}
-        disabled={disabled}
       />
       {searchRef?.current?.value?.length > 0 && (
         <XButton onClick={clearSearchInput}>

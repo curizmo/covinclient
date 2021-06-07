@@ -120,7 +120,8 @@ const DashBoardComponent = () => {
   const [selectedCases, setSelectedCases] = useState(RISK.HIGH);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [isShowSpinner, setIsShowSpinner] = useState(false);
+  const [isInitLoading, setIsInitLoading] = useState(true);
+  const [isFirstFetchStarted, setIsFirstFetchStarted] = useState(false);
 
   const user = useSelector(getUser);
   const patients = useSelector(getSearchResult);
@@ -150,15 +151,17 @@ const DashBoardComponent = () => {
     }
 
     dispatch(requestSearch(''));
-    setIsShowSpinner(true);
+    setIsFirstFetchStarted(true);
     return () => {
       dispatch(clearSearch());
     };
   }, [user]);
 
   useEffect(() => {
-    if (!searchRef?.current?.value || !isShowSearchSpinner) {
-      setIsShowSpinner(isShowSearchSpinner);
+    console.log(isShowSearchSpinner, isFirstFetchStarted);
+    console.log(isInitLoading);
+    if (isFirstFetchStarted && !isShowSearchSpinner) {
+      setIsInitLoading(false);
     }
   }, [isShowSearchSpinner]);
 
@@ -236,7 +239,7 @@ const DashBoardComponent = () => {
                 placeholder="Search by Name, Email or cellphone number"
                 searchRef={searchRef}
                 clearSearchInput={clearSearchInput}
-                disabled={isShowSpinner}
+                isInitLoading={isInitLoading}
               />
               <div className="headsearch-btn-div">
                 <Button
@@ -304,7 +307,7 @@ const DashBoardComponent = () => {
               placeholder="Search by Name, Email or cellphone number"
               searchRef={searchRef}
               clearSearchInput={clearSearchInput}
-              disabled={isShowSpinner}
+              isInitLoading={isInitLoading}
             />
           </InputContainer>
           <div className="headsearch-btn-div">
@@ -341,7 +344,7 @@ const DashBoardComponent = () => {
           <DesktopPatientTable
             selectedCaseData={isLightVersion ? patients : filteredPatients}
             selectedCases={selectedCases}
-            isShowSpinner={isShowSpinner}
+            isShowSpinner={isInitLoading}
           />
         ) : (
           searchText?.length > 0 && (

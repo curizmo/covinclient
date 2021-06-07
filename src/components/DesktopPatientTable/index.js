@@ -5,23 +5,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'reactstrap';
 
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
+import { SpinnerComponent } from 'components/common/SpinnerPortal/Spinner';
+
 import { getFormatedTimeDate, handleCallAppointment } from 'utils';
 import { exportToCSV } from 'utils/vitalsDownload';
-
+import * as patientVitalsService from 'services/patientVitals';
+import { getUser } from 'selectors';
+import { isLightVersion } from 'config';
+import { GENDER_SHORTHAND, VitalsDateFields } from '../../constants';
+import { CAMEL_CASE_REGEX } from '../../constants/regex';
+import { setDate, setDateTime } from 'global';
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
 import excel from 'assets/images/svg-icons/excel.svg';
 import xicon from 'assets/images/x-icon.png';
-import * as patientVitalsService from '../../services/patientVitals';
-import { isLightVersion } from '../../config';
-import { GENDER_SHORTHAND, VitalsDateFields } from '../../constants';
-import { CAMEL_CASE_REGEX } from '../../constants/regex';
-import { setDate, setDateTime } from '../../global';
-import { getUser } from '../../selectors';
 
 import './index.css';
 import { routes } from 'routers';
 
 const Wrapper = styled.section`
+  position: relative;
   padding: 0 4rem;
   width: 100%;
 `;
@@ -102,7 +104,7 @@ const desktopViewLabelsForPatientsWithCurrentStats = css`
 `;
 
 const DesktopPatientTable = (props) => {
-  const { selectedCaseData } = props;
+  const { selectedCaseData, isShowSpinner } = props;
   const dispatch = useDispatch();
   const user = useSelector(getUser);
   const onCall = useCallback(
@@ -264,6 +266,7 @@ const DesktopPatientTable = (props) => {
           );
         })}
       </TableWrapper>
+      {isShowSpinner && <SpinnerComponent isFullScreen={false} />}
     </Wrapper>
   );
 };
