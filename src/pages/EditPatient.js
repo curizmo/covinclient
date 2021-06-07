@@ -23,7 +23,7 @@ import { getErrorMessage, arrayObjectFixer } from '../utils';
 import csc from 'third-party/country-state-city';
 import { hideSpinner, showSpinner } from 'actions/spinner';
 import * as patientService from '../services/patient';
-import { GENDER_OPTIONS, INDIA_COUNTRY_CODE } from '../constants';
+import { GENDER_OPTIONS, INDIA_COUNTRY_CODE, RISK } from '../constants';
 import { patientValidation } from 'validations';
 import { routes } from 'routers';
 import time from 'assets/images/svg-icons/clock.svg';
@@ -54,7 +54,7 @@ const Headings = styled.section`
 `;
 const Container = styled.section`
   margin: 0 4em;
-  padding: 4em 10em;
+  padding: 2em 10em;
   background-color: #fff;
   @media (max-width: 768px) {
     padding: 2em;
@@ -82,6 +82,7 @@ const EditPatient = () => {
     month: '',
     day: '',
   });
+  const [status, setStatus] = useState('');
   const [newPatient, setnewPatient] = useState({});
   const [isConfirmed, setIsConfirmed] = useState(false);
 
@@ -116,6 +117,7 @@ const EditPatient = () => {
         setInitialState(output.state);
         setState(output.state);
         setGender(output.gender);
+        setStatus(output.status);
         setDateOfBirth({
           year: moment(birthDate).year(),
           month: moment(birthDate).month(),
@@ -192,6 +194,7 @@ const EditPatient = () => {
         birthDate,
         height,
         patientId,
+        status,
       };
       setnewPatient(newPatient);
       await patientService.updatePatient(patientId, newPatient);
@@ -220,7 +223,7 @@ const EditPatient = () => {
         {!isConfirmed ? (
           <Form onSubmit={handleSubmit(handleSave)}>
             <Row>
-              <Col md={{ size: 6 }}>
+              <Col md={{ size: 4 }}>
                 <InputField
                   title="Cell Phone"
                   name="phone"
@@ -230,13 +233,33 @@ const EditPatient = () => {
                   defaultValue="+91-"
                 />
               </Col>
-              <Col md={{ size: 6 }}>
+              <Col md={{ size: 5 }}>
                 <InputField
                   title="Contact Email"
                   name="email"
                   type="email"
                   innerRef={register}
                 />
+              </Col>
+              <Col md={{ size: 3 }}>
+                <InputField
+                  tag={CustomInput}
+                  onChange={(e) => setStatus(e.target.value)}
+                  customClass="classic-dropdown"
+                  defaultValue=""
+                  title="Status"
+                  type="select"
+                  name="status"
+                  innerRef={register}>
+                  <option value="" disabled hidden default>
+                    {status || 'Select status'}
+                  </option>
+                  {Object.keys(RISK).map((key) => (
+                    <option key={key} value={RISK[key]}>
+                      {RISK[key]}
+                    </option>
+                  ))}
+                </InputField>
               </Col>
             </Row>
             <Row>
@@ -257,8 +280,8 @@ const EditPatient = () => {
                 />
               </Col>
             </Row>
-            <Row>
-              <Col md={{ size: 3 }}>
+            <Row className="justify-content-between">
+              <Col md={{ size: 2 }}>
                 <FormGroup check row className="mx-0 pl-0 form-group">
                   <Label>Gender</Label>
                   <div className="d-flex mt-3 flex-wrap">
@@ -289,10 +312,10 @@ const EditPatient = () => {
                   setDate={setDateOfBirth}
                 />
               </Col>
-              <Col md={{ size: 3 }}>
+              <Col md={{ size: 2 }}>
                 <Label>Height</Label>
                 <div className="d-flex">
-                  <div className="flex-grow-1 mr-2">
+                  <div className="flex-grow-1 w-50 mr-1">
                     <InputField
                       type="number"
                       name="heightFt"
@@ -305,7 +328,7 @@ const EditPatient = () => {
                       max={8}
                     />
                   </div>
-                  <div className="flex-grow-1">
+                  <div className="flex-grow-1 w-50 ml-1">
                     <InputField
                       type="number"
                       name="heightIn"
@@ -320,7 +343,7 @@ const EditPatient = () => {
                   </div>
                 </div>
               </Col>
-              <Col md={{ size: 2 }}>
+              <Col md={{ size: 1 }}>
                 <InputField
                   type="number"
                   step="0.01"

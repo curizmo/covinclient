@@ -125,7 +125,7 @@ export const InitiateCovidScreening = styled.div`
 
 export const RadioLabel = styled.label`
   display: flex;
-  margin-right: 1rem;
+  margin-right: 1.2rem;
   align-items: center;
 `;
 export const RadioInput = styled.input`
