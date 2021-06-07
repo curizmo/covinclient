@@ -191,12 +191,13 @@ const AddPatient = () => {
               </Col>
             </Row>
             <Row className="justify-content-between">
-              <Col md={{ size: 2 }}>
+              <Col md={{ size: 2 }} className="gender-wrapper">
                 <FormGroup check row className="mx-0 pl-0 form-group">
                   <Label>Gender</Label>
                   <div className="d-flex mt-3 flex-wrap">
                     {GENDER_OPTIONS.map(({ label, value }) => (
                       <RadioLabel
+                        className="gender-label"
                         htmlFor={value}
                         key={value}
                         onClick={() => setGender(value)}>
