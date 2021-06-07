@@ -5,29 +5,32 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'reactstrap';
 
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
+import { SpinnerComponent } from 'components/common/SpinnerPortal/Spinner';
+
+import * as patientVitalsService from 'services/patientVitals';
+import { getUser } from 'selectors';
 import { getFormatedTimeDate, handleCallAppointment } from 'utils';
 import { exportIndividualVitalsToCSV } from 'utils/vitalsDownload';
-
-import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
-import excel from 'assets/images/svg-icons/excel.svg';
-import xicon from 'assets/images/x-icon.png';
-import * as patientVitalsService from '../../services/patientVitals';
-import { isLightVersion } from '../../config';
+import { isLightVersion } from 'config';
 import {
   GENDER_SHORTHAND,
   VitalsDateFields,
   LabDateFields,
 } from '../../constants';
 import { CAMEL_CASE_REGEX } from '../../constants/regex';
-import { setDate, setDateTime } from '../../global';
-import { getUser } from '../../selectors';
-
-import './index.css';
+import { setDate, setDateTime } from 'global';
 import { routes } from 'routers';
+import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
+import excel from 'assets/images/svg-icons/excel.svg';
+import xicon from 'assets/images/x-icon.png';
+import './index.css';
 
 const Wrapper = styled.section`
+  position: relative;
   padding: 0 4rem;
   width: 100%;
+  height: 100%;
+  overflow: ${(props) => (props?.isShowSpinner ? 'hidden' : 'scroll')};
 `;
 
 const TableWrapper = styled.div``;
@@ -106,7 +109,7 @@ const desktopViewLabelsForPatientsWithCurrentStats = css`
 `;
 
 const DesktopPatientTable = (props) => {
-  const { selectedCaseData } = props;
+  const { selectedCaseData, isShowSpinner } = props;
   const dispatch = useDispatch();
   const user = useSelector(getUser);
   const onCall = useCallback(
@@ -171,7 +174,7 @@ const DesktopPatientTable = (props) => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper isShowSpinner={isShowSpinner}>
       <TableWrapper className="dashboard-container">
         {selectedCaseData.map((patient, index) => {
           return (
@@ -283,6 +286,12 @@ const DesktopPatientTable = (props) => {
           );
         })}
       </TableWrapper>
+      {isShowSpinner && (
+        <SpinnerComponent
+          customClasses="position-absolute"
+          isFullScreen={false}
+        />
+      )}
     </Wrapper>
   );
 };
