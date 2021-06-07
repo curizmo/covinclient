@@ -11,7 +11,6 @@ import { fetchPatientsWithVitals } from '../services/practitioner';
 import { fetchData } from '../services/api';
 
 function* makeSearch({ payload: searchText }) {
-  console.log(searchText);
   yield put(showSearchSpinner());
   yield delay(500);
   yield put(setSearchText(searchText));
