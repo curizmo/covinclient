@@ -143,7 +143,7 @@ const PatientCard = (props) => {
         ...lab,
         [LabDateFields.updated]: setDateTime(lab[LabDateFields.updated]),
         [LabDateFields.specimenDrawnDate]: setDate(
-          lab[VitalsDateFields.specimenDrawnDate],
+          lab[LabDateFields.specimenDrawnDate],
         ),
       };
     });
