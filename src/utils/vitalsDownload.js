@@ -1,6 +1,10 @@
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx-js-style';
-import { excelTitleCell, excelLabTitleCell } from '../constants/index';
+import {
+  excelTitleCell,
+  excelLabTitleCell,
+  LabHeaders,
+} from '../constants/index';
 
 const Headerstyle = {
   font: { sz: 12, bold: true, color: '#FF00FF' },
@@ -52,8 +56,11 @@ export const exportIndividualVitalsToCSV = (csvVitalsData, csvLabData) => {
     excelTitleCell.map((cell) => {
       ws[cell].s = Headerstyle;
     });
-    const wsLab = XLSX.utils.json_to_sheet(csvLabData);
-    if (csvLabData.length !== 0) {
+    console.log(ws);
+    const wsLab = XLSX.utils.json_to_sheet(
+      csvLabData.length !== 0 ? csvLabData : LabHeaders,
+    );
+    if (csvLabData.length !== 0 || LabHeaders) {
       excelLabTitleCell.map((cell) => {
         wsLab[cell].s = Headerstyle;
       });

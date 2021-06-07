@@ -67,6 +67,30 @@ export const excelLabTitleCell = [
   'S1',
 ];
 
+export const LabHeaders = [
+  {
+    Doctor: '',
+    Patient: '',
+    'Patient Phone': '',
+    'Data Updated At': '',
+    'Lab Specimen drawn On': '',
+    'FBS (mg/dL)': '',
+    'PPBS (mg/dL)': '',
+    'CRP (mg/L)': '',
+    'ESR (mm/h)': '',
+    'D-Dimer (ng/ml)': '',
+    'Ferritin (ng/ml)': '',
+    'LDH (U/L)': '',
+    'WBC (/mm3)': '',
+    'Neutrophil (%)': '',
+    'Lymphocytes (%)': '',
+    'Eosinophils (%)': '',
+    'Basophils (%)': '',
+    'Platelets (%)': '',
+    'Other Information': '',
+  },
+];
+
 export const VitalsDateFields = {
   updated: 'Last Vitals Update',
   dob: 'Date Of Birth',
