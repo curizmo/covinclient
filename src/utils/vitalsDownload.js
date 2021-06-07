@@ -28,10 +28,17 @@ export const exportToCSV = (csvData) => {
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const fileExtension = '.xlsx';
     const ws = XLSX.utils.json_to_sheet(csvData);
+    const wsLab = XLSX.utils.json_to_sheet(csvData);
     excelTitleCell.map((cell) => {
       ws[cell].s = Headerstyle;
     });
-    const wb = { Sheets: { vitals: ws }, SheetNames: ['vitals'] };
+    excelTitleCell.map((cell) => {
+      wsLab[cell].s = Headerstyle;
+    });
+    const wb = {
+      Sheets: { vitals: ws, LabResults: wsLab },
+      SheetNames: ['vitals', 'LabResults'],
+    };
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     const vitals = new Blob([excelBuffer], { type: fileType });
     FileSaver.saveAs(vitals, fileName + fileExtension);
