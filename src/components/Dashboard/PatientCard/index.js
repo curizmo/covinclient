@@ -12,12 +12,16 @@ import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
 import excel from 'assets/images/svg-icons/excel.svg';
 import xicon from 'assets/images/x-icon.png';
 import { isLightVersion } from '../../../config';
-import { GENDER_SHORTHAND, VitalsDateFields } from '../../../constants';
+import {
+  GENDER_SHORTHAND,
+  VitalsDateFields,
+  LabDateFields,
+} from '../../../constants';
 import { CAMEL_CASE_REGEX } from '../../../constants/regex';
 import { getUser } from '../../../selectors';
 
 import { setDate, setDateTime } from '../../../global';
-import { exportToCSV } from 'utils/vitalsDownload';
+import { exportIndividualVitalsToCSV } from 'utils/vitalsDownload';
 
 import './index.css';
 
@@ -100,10 +104,13 @@ const PatientCard = (props) => {
   };
 
   const exportVitals = async (patientId) => {
-    const vitals = await patientVitalsService.getIndividualPatientVitals(
-      user.PractitionerID,
-      patientId,
-    );
+    const [vitals, lab] = await Promise.all([
+      patientVitalsService.getIndividualPatientVitals(
+        user.PractitionerID,
+        patientId,
+      ),
+      patientVitalsService.getLabResults(user.PractitionerID, patientId),
+    ]);
 
     let vitalDetails = vitals.data.map((vital) => {
       for (const key in vital) {
@@ -114,6 +121,7 @@ const PatientCard = (props) => {
           delete vital[key];
         }
       }
+
       return {
         ...vital,
         [VitalsDateFields.updated]: setDateTime(
@@ -127,7 +135,18 @@ const PatientCard = (props) => {
         [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
       };
     });
-    exportToCSV(vitalDetails);
+
+    let labResults = lab.data.map((lab) => {
+      return {
+        ...lab,
+        [LabDateFields.updated]: setDateTime(lab[LabDateFields.updated]),
+        [LabDateFields.specimenDrawnDate]: setDate(
+          lab[LabDateFields.specimenDrawnDate],
+        ),
+      };
+    });
+
+    exportIndividualVitalsToCSV(vitalDetails, labResults);
   };
 
   return (

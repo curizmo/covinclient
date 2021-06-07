@@ -45,12 +45,63 @@ export const excelTitleCell = [
   'V1',
 ];
 
+export const excelLabTitleCell = [
+  'A1',
+  'B1',
+  'C1',
+  'D1',
+  'E1',
+  'F1',
+  'G1',
+  'H1',
+  'I1',
+  'J1',
+  'K1',
+  'L1',
+  'M1',
+  'N1',
+  'O1',
+  'P1',
+  'Q1',
+  'R1',
+  'S1',
+];
+
+export const LabHeaders = [
+  {
+    Doctor: '',
+    Patient: '',
+    'Patient Phone': '',
+    'Data Updated At': '',
+    'Lab Specimen drawn On': '',
+    'FBS (mg/dL)': '',
+    'PPBS (mg/dL)': '',
+    'CRP (mg/L)': '',
+    'ESR (mm/h)': '',
+    'D-Dimer (ng/ml)': '',
+    'Ferritin (ng/ml)': '',
+    'LDH (U/L)': '',
+    'WBC (/mm3)': '',
+    'Neutrophil (%)': '',
+    'Lymphocytes (%)': '',
+    'Eosinophils (%)': '',
+    'Basophils (%)': '',
+    'Platelets (%)': '',
+    'Other Information': '',
+  },
+];
+
 export const VitalsDateFields = {
   updated: 'Last Vitals Update',
   dob: 'Date Of Birth',
   patientSince: 'Patient Since',
   doseOne: 'Dose1 Vaccination On',
   doseTwo: 'Dose2 Vaccination On',
+};
+
+export const LabDateFields = {
+  updated: 'Data Updated At',
+  specimenDrawnDate: 'Lab Specimen drawn On',
 };
 
 export const DIAL = [

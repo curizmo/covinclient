@@ -7,3 +7,9 @@ export async function getPatientVitals(practitionerId) {
 export async function getIndividualPatientVitals(practitionerId, patientId) {
   return api.get(`/Practitioner/${practitionerId}/patient/${patientId}/vitals`);
 }
+
+export async function getLabResults(practitionerId, patientId) {
+  return api.get(
+    `/Practitioner/${practitionerId}/patient/${patientId}/labresults`,
+  );
+}
