@@ -21,7 +21,12 @@ import {
   TimeImage,
   ViewName,
 } from '../global/styles';
-import { getSearchResult, getSearchText, getUser } from 'selectors';
+import {
+  getSearchResult,
+  getSearchText,
+  getUser,
+  getIsShowSearchSpinner,
+} from 'selectors';
 import { usePatientsRiskData } from '../services/practitioner';
 import * as patientVitalsService from 'services/patientVitals';
 import { isLightVersion } from '../config';
@@ -45,7 +50,6 @@ const FirstRow = styled.section`
   }
 `;
 const Headings = styled.div`
-  padding: 0rem 0rem 1rem 0rem;
   @media (max-width: 768px) {
     padding: 3px 0px;
     max-width: auto;
@@ -101,17 +105,40 @@ const HeaderSearchWrap = styled.div`
   align-items: center;
 `;
 
+const NoPatientsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10rem;
+  width: 100%;
+  height: 100%;
+  font-size: 1.1rem;
+`;
+
 const DashBoardComponent = () => {
   const dispatch = useDispatch();
   const [selectedCases, setSelectedCases] = useState(RISK.HIGH);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isShowSpinner, setIsShowSpinner] = useState(false);
 
   const user = useSelector(getUser);
   const patients = useSelector(getSearchResult);
   const searchText = useSelector(getSearchText);
+  const isShowSearchSpinner = useSelector(getIsShowSearchSpinner);
   const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
   const searchRef = useRef(null);
+
+  const makeSearchRequest = (value) => {
+    dispatch(requestSearch(value));
+  };
+
+  const clearSearchInput = () => {
+    if (searchRef?.current?.value) {
+      searchRef.current.value = '';
+    }
+    makeSearchRequest('');
+  };
 
   const changesCases = (sel) => {
     setSelectedCases(sel);
@@ -119,10 +146,17 @@ const DashBoardComponent = () => {
 
   useEffect(() => {
     dispatch(requestSearch(''));
+    setIsShowSpinner(true);
     return () => {
       dispatch(clearSearch());
     };
   }, []);
+
+  useEffect(() => {
+    if (!searchRef?.current?.value || !isShowSearchSpinner) {
+      setIsShowSpinner(isShowSearchSpinner);
+    }
+  }, [isShowSearchSpinner]);
 
   useEffect(() => {
     setFilteredPatients(
@@ -194,13 +228,15 @@ const DashBoardComponent = () => {
               )}
               <SearchInput
                 searchText={searchText}
-                requestSearch={(value) => dispatch(requestSearch(value))}
+                requestSearch={makeSearchRequest}
                 placeholder="Search by Name, Email or cellphone number"
                 searchRef={searchRef}
+                clearSearchInput={clearSearchInput}
+                disabled={isShowSpinner}
               />
               <div className="headsearch-btn-div">
                 <Button
-                  className="btn btn-download m-2"
+                  className="btn btn-download mx-2"
                   disabled={isDownloading}
                   onClick={exportVitals}>
                   <span className="excel-image-wrap">
@@ -221,7 +257,7 @@ const DashBoardComponent = () => {
                   )}
                 </Button>
                 <LinkButton
-                  className="btn btn-covin my-2"
+                  className="btn btn-covin"
                   to={routes.addPatient.path}>
                   + New Patient
                 </LinkButton>
@@ -233,61 +269,82 @@ const DashBoardComponent = () => {
 
       {/* Doctors View - Patients List along with current conditions */}
       <PatientsWrapper>
-        {patients?.map((patient) => (
-          <PatientCard key={patient.patientId} patient={patient} />
-        ))}
+        {patients?.length > 0
+          ? patients?.map((patient) => (
+              <PatientCard key={patient.patientId} patient={patient} />
+            ))
+          : searchText?.length > 0 && (
+              <NoPatientsWrapper>
+                <p>
+                  <strong>No results found</strong>
+                </p>
+                <Button onClick={clearSearchInput} className="link-button">
+                  Back to dashboard
+                </Button>
+              </NoPatientsWrapper>
+            )}
       </PatientsWrapper>
       <DeskTopViewPatient>
-        {patients ? (
-          <>
-            <HeaderSearchWrap className="w-100 mb-3">
-              {!isLightVersion && (
-                <TypeHeader>{selectedCases} Risk Cases</TypeHeader>
-              )}
-              <InputContainer>
-                <SearchInput
-                  customClass="w-100"
-                  searchText={searchText}
-                  requestSearch={(value) => dispatch(requestSearch(value))}
-                  placeholder="Search by Name, Email or cellphone number"
-                  searchRef={searchRef}
-                />
-              </InputContainer>
-              <div className="headsearch-btn-div">
-                <Button
-                  className="btn btn-download m-2"
-                  disabled={isDownloading}
-                  onClick={exportVitals}>
-                  <span className="excel-image-wrap">
-                    <img
-                      src={excel}
-                      alt="Covin"
-                      className="logo download-excel-icon"
-                    />
-                    <img src={xicon} alt="Covin" className="logo x-icon" />
-                  </span>
-                  DOWNLOAD (Xls)
-                  {isDownloading && (
-                    <span className="lds-spinner position-absolute">
-                      {[...Array(12).keys()].map((i) => (
-                        <span key={i} />
-                      ))}
-                    </span>
-                  )}
-                </Button>
-                <LinkButton
-                  className="btn btn-covin my-2"
-                  to={routes.addPatient.path}>
-                  + New Patient
-                </LinkButton>
-              </div>
-            </HeaderSearchWrap>
-            <DesktopPatientTable
-              selectedCaseData={isLightVersion ? patients : filteredPatients}
-              selectedCases={selectedCases}
+        <HeaderSearchWrap className="w-100 mb-3">
+          {!isLightVersion && (
+            <TypeHeader>{selectedCases} Risk Cases</TypeHeader>
+          )}
+          <InputContainer>
+            <SearchInput
+              customClass="w-100"
+              searchText={searchText}
+              requestSearch={makeSearchRequest}
+              placeholder="Search by Name, Email or cellphone number"
+              searchRef={searchRef}
+              clearSearchInput={clearSearchInput}
+              disabled={isShowSpinner}
             />
-          </>
-        ) : null}
+          </InputContainer>
+          <div className="headsearch-btn-div">
+            <Button
+              className="btn btn-download mx-2"
+              disabled={isDownloading}
+              onClick={exportVitals}>
+              <span className="excel-image-wrap">
+                <img
+                  src={excel}
+                  alt="Covin"
+                  className="logo download-excel-icon"
+                />
+                <img src={xicon} alt="Covin" className="logo x-icon" />
+              </span>
+              DOWNLOAD (Xls)
+              {isDownloading && (
+                <span className="lds-spinner position-absolute">
+                  {[...Array(12).keys()].map((i) => (
+                    <span key={i} />
+                  ))}
+                </span>
+              )}
+            </Button>
+            <LinkButton className="btn btn-covin" to={routes.addPatient.path}>
+              + New Patient
+            </LinkButton>
+          </div>
+        </HeaderSearchWrap>
+        {patients?.length > 0 ? (
+          <DesktopPatientTable
+            selectedCaseData={isLightVersion ? patients : filteredPatients}
+            selectedCases={selectedCases}
+            isShowSpinner={isShowSpinner}
+          />
+        ) : (
+          searchText?.length > 0 && (
+            <NoPatientsWrapper>
+              <p>
+                <strong>No results found</strong>
+              </p>
+              <Button onClick={clearSearchInput} className="link-button">
+                Back to dashboard
+              </Button>
+            </NoPatientsWrapper>
+          )
+        )}
       </DeskTopViewPatient>
     </DashboardLayout>
   );

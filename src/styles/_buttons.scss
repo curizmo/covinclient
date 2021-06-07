@@ -1,3 +1,12 @@
+@mixin transparent_button {
+  border: none !important;
+  background: none !important;
+  &:active,
+  &:focus {
+    box-shadow: none !important;
+  }
+}
+
 .btn-icon {
   display: flex;
   justify-content: center;
@@ -122,12 +131,15 @@
   }
 }
 
-button.transparent-button {
-  border: none !important;
-  background: none !important;
-  &:active,
-  &:focus {
-    box-shadow: none !important;
+button {
+  &.transparent-button {
+    @include transparent_button;
+  }
+  &.link-button {
+    @include transparent_button;
+    font-size: 1.1rem;
+    color: #0264c0;
+    text-decoration: underline;
   }
 }
 
