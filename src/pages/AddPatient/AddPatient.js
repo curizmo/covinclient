@@ -194,7 +194,7 @@ const AddPatient = () => {
               <Col md={{ size: 3 }}>
                 <FormGroup check row className="mx-0 pl-0 form-group">
                   <Label>Gender</Label>
-                  <div className="d-flex mt-3 flex-wrap">
+                  <div className="d-flex mt-3 flex-wrap justify-content-between">
                     {GENDER_OPTIONS.map(({ label, value }) => (
                       <RadioLabel
                         htmlFor={value}
@@ -248,7 +248,7 @@ const AddPatient = () => {
                   </div>
                 </div>
               </Col>
-              <Col md={{ size: 1 }}>
+              <Col md={{ size: 2 }}>
                 <InputField
                   type="number"
                   step="0.01"

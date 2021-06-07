@@ -23,20 +23,20 @@ form {
   }
   &.measurement {
     position: relative;
-    & +span:after {
+    & + span:after {
       position: absolute;
       right: .7rem;
       top: .6rem;
       color: rgba(#22335E, .5);
       pointer-events: none;
     }
-    &.kg +span:after {
+    &.kg + span:after {
       content: 'kg';
     }
-    &.ft +span:after {
+    &.ft + span:after {
       content: 'ft';
     }
-    &.in +span:after {
+    &.in + span:after {
       content: 'in';
     }
   }
@@ -46,8 +46,8 @@ form {
   margin-bottom: 2rem;
 }
 
-.field_with_errors input+span:after {
-  content: "*"
+.field_with_errors input + span:after {
+  content: '*';
 }
 
 input::-webkit-outer-spin-button,
@@ -57,6 +57,6 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
