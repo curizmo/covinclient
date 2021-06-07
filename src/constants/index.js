@@ -77,7 +77,7 @@ export const VitalsDateFields = {
 
 export const LabDateFields = {
   updated: 'Data Updated At',
-  specimenDrawnDate: 'Lab Specimen Drawn On',
+  specimenDrawnDate: 'Lab Specimen drawn On',
 };
 
 export const DIAL = [

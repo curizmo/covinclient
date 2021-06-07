@@ -155,15 +155,6 @@ const DesktopPatientTable = (props) => {
       });
 
       let labResults = lab.data.map((lab) => {
-        for (const key in lab) {
-          const result = key.replace(CAMEL_CASE_REGEX, ' $1');
-          const title = result.charAt(0).toUpperCase() + result.slice(1);
-          if (title !== key) {
-            lab[title] = lab[key];
-            delete lab[key];
-          }
-        }
-
         return {
           ...lab,
           [LabDateFields.updated]: setDateTime(lab[LabDateFields.updated]),
