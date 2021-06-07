@@ -5,6 +5,11 @@
   &:focus {
     box-shadow: none !important;
   }
+  &:hover,
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active {
+    color: #22335e;
+  }
 }
 
 .btn-icon {

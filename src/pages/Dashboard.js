@@ -349,23 +349,20 @@ const DashBoardComponent = () => {
             </LinkButton>
           </div>
         </HeaderSearchWrap>
-        {patients?.length > 0 ? (
-          <DesktopPatientTable
-            selectedCaseData={isLightVersion ? patients : filteredPatients}
-            selectedCases={selectedCases}
-            isShowSpinner={isInitLoading}
-          />
-        ) : (
-          searchText?.length > 0 && (
-            <NoPatientsWrapper>
-              <p>
-                <strong>No results found</strong>
-              </p>
-              <Button onClick={clearSearchInput} className="link-button">
-                Back to dashboard
-              </Button>
-            </NoPatientsWrapper>
-          )
+        <DesktopPatientTable
+          selectedCaseData={isLightVersion ? patients : filteredPatients}
+          selectedCases={selectedCases}
+          isShowSpinner={isInitLoading}
+        />
+        {patients?.length < 1 && searchText?.length > 0 && (
+          <NoPatientsWrapper>
+            <p>
+              <strong>No results found</strong>
+            </p>
+            <Button onClick={clearSearchInput} className="link-button">
+              Back to dashboard
+            </Button>
+          </NoPatientsWrapper>
         )}
       </DeskTopViewPatient>
     </DashboardLayout>

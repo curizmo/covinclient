@@ -162,3 +162,27 @@ export const OptionName = styled.span`
   font-size: 1rem;
   line-height: 1.25rem;
 `;
+
+export const ScrollContainer = styled.section`
+  height: 100%;
+  overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+`;
