@@ -12,12 +12,16 @@ import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
 import excel from 'assets/images/svg-icons/excel.svg';
 import xicon from 'assets/images/x-icon.png';
 import { isLightVersion } from '../../../config';
-import { GENDER_SHORTHAND, VitalsDateFields } from '../../../constants';
+import {
+  GENDER_SHORTHAND,
+  VitalsDateFields,
+  LabDateFields,
+} from '../../../constants';
 import { CAMEL_CASE_REGEX } from '../../../constants/regex';
 import { getUser } from '../../../selectors';
 
 import { setDate, setDateTime } from '../../../global';
-import { exportToCSV } from 'utils/vitalsDownload';
+import { exportIndividualVitalsToCSV } from 'utils/vitalsDownload';
 
 import './index.css';
 
@@ -105,6 +109,11 @@ const PatientCard = (props) => {
       patientId,
     );
 
+    const lab = await patientVitalsService.getLabResults(
+      user.PractitionerID,
+      patientId,
+    );
+
     let vitalDetails = vitals.data.map((vital) => {
       for (const key in vital) {
         const result = key.replace(CAMEL_CASE_REGEX, ' $1');
@@ -114,6 +123,7 @@ const PatientCard = (props) => {
           delete vital[key];
         }
       }
+
       return {
         ...vital,
         [VitalsDateFields.updated]: setDateTime(
@@ -127,7 +137,27 @@ const PatientCard = (props) => {
         [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
       };
     });
-    exportToCSV(vitalDetails);
+
+    let labResults = lab.data.map((lab) => {
+      for (const key in lab) {
+        const result = key.replace(CAMEL_CASE_REGEX, ' $1');
+        const title = result.charAt(0).toUpperCase() + result.slice(1);
+        if (title !== key) {
+          lab[title] = lab[key];
+          delete lab[key];
+        }
+      }
+
+      return {
+        ...lab,
+        [LabDateFields.updated]: setDateTime(lab[LabDateFields.updated]),
+        [LabDateFields.specimenDrawnDate]: setDate(
+          lab[VitalsDateFields.specimenDrawnDate],
+        ),
+      };
+    });
+
+    exportIndividualVitalsToCSV(vitalDetails, labResults);
   };
 
   return (

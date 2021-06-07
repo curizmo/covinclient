@@ -164,7 +164,7 @@ const DashBoardComponent = () => {
           [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
         };
       });
-      exportToCSV(vitalDetails, vitalDetails);
+      exportToCSV(vitalDetails);
     } catch (err) {
       // TODO: Handle error.
     } finally {
