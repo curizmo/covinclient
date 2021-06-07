@@ -24,7 +24,7 @@ const ContentWrapper = styled.section`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin: 8rem auto;
+  margin: 1.5rem auto;
   @media (max-width: 768px) {
     margin: 2rem 0.4rem;
   }
