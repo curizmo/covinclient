@@ -140,6 +140,7 @@ export const useAuthProvider = () => {
     dispatch(clearUser());
     await msalApp.logout();
     onSignIn();
+    history.push(routes.login.path);
   };
 
   return {

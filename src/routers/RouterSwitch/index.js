@@ -34,9 +34,9 @@ const RouterSwitch = () => {
       {routesKeys.map((key) => {
         const { isPrivate, component: Component, exact } = routes[key];
         const redirectPath =
-          isPrivate && !isLoggedIn && user
+          isPrivate && (!isLoggedIn || !user)
             ? routes.login.path
-            : !user.isPractitioner && !isLoginInProgress
+            : !isLoginInProgress && user && !user.isPractitioner
             ? routes.nonPhysician.path
             : null;
 

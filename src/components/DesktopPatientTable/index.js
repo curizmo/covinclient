@@ -180,7 +180,7 @@ const DesktopPatientTable = (props) => {
   return (
     <Wrapper isShowSpinner={isShowSpinner}>
       <TableWrapper className="dashboard-container">
-        {selectedCaseData.map((patient, index) => {
+        {selectedCaseData?.map((patient, index) => {
           return (
             <InfoAndGraphWrapper key={index} className="mb-3">
               <InfoWrapper>
