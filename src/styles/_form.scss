@@ -50,19 +50,6 @@ form {
   content: '*';
 }
 
-.gender-wrapper {
-  padding-right: 0;
-}
-
-#other,
-#female {
-  margin-left: 1rem;  
-}
-
-.gender-label {
-  margin-right: 0 !important;
-}
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -73,23 +60,3 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
-
-@media (max-width: 1582px) {
-  #other,
-  #female {
-    margin-left: 0;  
-  }
-  .gender-label {
-    margin-right: 1.2rem !important;
-  }
-  }
-
-  @media (min-width: 1700px) {
-    #other,
-    #female {
-      margin-left: 2.2rem;  
-    }
-    .gender-label {
-      margin-right: 0 !important;
-    }
-    }  
