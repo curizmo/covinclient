@@ -54,7 +54,7 @@ const Headings = styled.section`
 `;
 const Container = styled.section`
   margin: 0 4em;
-  padding: 4em 10em;
+  padding: 2em 10em;
   background-color: #fff;
   @media (max-width: 768px) {
     padding: 2em;
