@@ -118,11 +118,15 @@ const DashBoardComponent = () => {
   };
 
   useEffect(() => {
+    if (!(user && user.isPractitioner)) {
+      return;
+    }
+
     dispatch(requestSearch(''));
     return () => {
       dispatch(clearSearch());
     };
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     setFilteredPatients(
