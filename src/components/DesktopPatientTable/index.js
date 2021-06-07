@@ -120,15 +120,13 @@ const DesktopPatientTable = (props) => {
     try {
       setDownloadingPatientId(patientId);
 
-      const vitals = await patientVitalsService.getIndividualPatientVitals(
-        user.PractitionerID,
-        patientId,
-      );
-
-      const lab = await patientVitalsService.getLabResults(
-        user.PractitionerID,
-        patientId,
-      );
+      const [vitals, lab] = await Promise.all([
+        patientVitalsService.getIndividualPatientVitals(
+          user.PractitionerID,
+          patientId,
+        ),
+        patientVitalsService.getLabResults(user.PractitionerID, patientId),
+      ]);
 
       let vitalDetails = vitals.data.map((vital) => {
         for (const key in vital) {
