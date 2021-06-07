@@ -56,9 +56,30 @@ const Container = styled.section`
   margin: 0 4em;
   padding: 2em 10em;
   background-color: #fff;
+  overflow-y: scroll;
+  height: calc(87% - 70px);
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
   @media (max-width: 768px) {
     padding: 2em;
     margin: 0;
+    height: calc(100% - 70px);
   }
   @media (max-width: 1024px) {
     padding: 4em;
