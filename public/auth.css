@@ -201,6 +201,10 @@ button:focus {
 
 .buttons {
   margin-bottom: 2rem;
+  cursor: pointer;
+}
+.buttons:active {
+  background-color: #22335e;
 }
 .buttons #next,
 .buttons #continue,

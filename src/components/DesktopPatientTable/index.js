@@ -7,20 +7,23 @@ import { Button } from 'reactstrap';
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
 import { SpinnerComponent } from 'components/common/SpinnerPortal/Spinner';
 
-import { getFormatedTimeDate, handleCallAppointment } from 'utils';
-import { exportToCSV } from 'utils/vitalsDownload';
 import * as patientVitalsService from 'services/patientVitals';
 import { getUser } from 'selectors';
+import { getFormatedTimeDate, handleCallAppointment } from 'utils';
+import { exportIndividualVitalsToCSV } from 'utils/vitalsDownload';
 import { isLightVersion } from 'config';
-import { GENDER_SHORTHAND, VitalsDateFields } from '../../constants';
+import {
+  GENDER_SHORTHAND,
+  VitalsDateFields,
+  LabDateFields,
+} from '../../constants';
 import { CAMEL_CASE_REGEX } from '../../constants/regex';
 import { setDate, setDateTime } from 'global';
+import { routes } from 'routers';
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
 import excel from 'assets/images/svg-icons/excel.svg';
 import xicon from 'assets/images/x-icon.png';
-
 import './index.css';
-import { routes } from 'routers';
 
 const Wrapper = styled.section`
   position: relative;
@@ -118,10 +121,13 @@ const DesktopPatientTable = (props) => {
     try {
       setDownloadingPatientId(patientId);
 
-      const vitals = await patientVitalsService.getIndividualPatientVitals(
-        user.PractitionerID,
-        patientId,
-      );
+      const [vitals, lab] = await Promise.all([
+        patientVitalsService.getIndividualPatientVitals(
+          user.PractitionerID,
+          patientId,
+        ),
+        patientVitalsService.getLabResults(user.PractitionerID, patientId),
+      ]);
 
       let vitalDetails = vitals.data.map((vital) => {
         for (const key in vital) {
@@ -132,6 +138,7 @@ const DesktopPatientTable = (props) => {
             delete vital[key];
           }
         }
+
         return {
           ...vital,
           [VitalsDateFields.updated]: setDateTime(
@@ -145,7 +152,18 @@ const DesktopPatientTable = (props) => {
           [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
         };
       });
-      exportToCSV(vitalDetails);
+
+      let labResults = lab.data.map((lab) => {
+        return {
+          ...lab,
+          [LabDateFields.updated]: setDateTime(lab[LabDateFields.updated]),
+          [LabDateFields.specimenDrawnDate]: setDate(
+            lab[LabDateFields.specimenDrawnDate],
+          ),
+        };
+      });
+
+      exportIndividualVitalsToCSV(vitalDetails, labResults);
     } catch (err) {
       // TODO: Handle error
     } finally {
@@ -236,7 +254,7 @@ const DesktopPatientTable = (props) => {
                             className="logo x-icon-small"
                           />
                         </span>
-                        DOWNLOAD(Xls)
+                        DOWNLOAD (Xls)
                       </>
                     )}
                   </Button>
