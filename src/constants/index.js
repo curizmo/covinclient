@@ -361,7 +361,8 @@ export const SORT_ORDER = Object.freeze({
 export const RISK = {
   HIGH: 'High',
   MODERATE: 'Moderate',
-  LOW: 'Low',
+  MILD: 'Mild',
+  DISCHARGED: 'Discharged',
 };
 
 export const PATIENT_CURRENT_STATUS = {
