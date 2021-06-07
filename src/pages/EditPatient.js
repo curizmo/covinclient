@@ -59,7 +59,7 @@ const Container = styled.section`
   overflow-y: scroll;
   height: calc(87% - 70px);
   ::-webkit-scrollbar {
-    width: 3px;
+    width: 4px;
   }
 
   /* Track */
