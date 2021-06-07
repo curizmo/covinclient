@@ -347,7 +347,7 @@ const AddPatient = () => {
             newPatient={newPatient}
             message={'is now added to the patient registry'}
             confirmation={
-              'will soon receive SMS requesting to record their symptoms and vitals'
+              'will soon receive a message requesting to record their symptoms and vitals'
             }
             confirmationType={'addPatient'}
           />
