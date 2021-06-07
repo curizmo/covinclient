@@ -29,6 +29,8 @@ const Wrapper = styled.section`
   position: relative;
   padding: 0 4rem;
   width: 100%;
+  height: 100%;
+  overflow: ${(props) => (props?.isShowSpinner ? 'hidden' : 'scroll')};
 `;
 
 const TableWrapper = styled.div``;
@@ -172,7 +174,7 @@ const DesktopPatientTable = (props) => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper isShowSpinner={isShowSpinner}>
       <TableWrapper className="dashboard-container">
         {selectedCaseData.map((patient, index) => {
           return (
@@ -284,7 +286,12 @@ const DesktopPatientTable = (props) => {
           );
         })}
       </TableWrapper>
-      {isShowSpinner && <SpinnerComponent isFullScreen={false} />}
+      {isShowSpinner && (
+        <SpinnerComponent
+          customClasses="position-absolute"
+          isFullScreen={false}
+        />
+      )}
     </Wrapper>
   );
 };

@@ -73,7 +73,7 @@ export const SearchInput = ({
         onKeyPress={onEnter}
       />
       {searchRef?.current?.value?.length > 0 && (
-        <XButton onClick={clearSearchInput}>
+        <XButton onClick={clearSearchInput} className="x-button">
           <XIcon src={xIcon} alt="x-icon" />
         </XButton>
       )}

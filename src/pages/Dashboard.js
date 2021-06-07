@@ -35,6 +35,7 @@ import { CAMEL_CASE_REGEX } from '../constants/regex';
 import { LinkButton } from 'components/common/Button';
 import { routes } from 'routers';
 import { clearSearch, requestSearch } from 'actions/search';
+import { SpinnerComponent } from 'components/common/SpinnerPortal/Spinner';
 
 const TypeHeader = styled.h3`
   margin-bottom: 0;
@@ -58,8 +59,11 @@ const Headings = styled.div`
 const PatientsWrapper = styled.div`
   display: none;
   @media (max-width: 768px) {
+    position: relative;
     display: flex;
     flex-direction: column;
+    height: calc(100% - 200px);
+    overflow: ${(props) => (props?.isInitLoading ? 'hidden' : 'scroll')};
   }
 `;
 
@@ -67,7 +71,7 @@ const SearchWrapper = styled.div`
   display: none;
   @media (max-width: 768px) {
     display: block;
-    padding: 1.25rem;
+    padding: 0.75rem;
     background: #fff;
   }
 `;
@@ -87,8 +91,9 @@ const DeskTopViewPatient = styled.section`
   @media (min-width: 768px) {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     width: 100%;
+    height: 100%;
   }
   display: none;
 `;
@@ -129,6 +134,7 @@ const DashBoardComponent = () => {
   const isShowSearchSpinner = useSelector(getIsShowSearchSpinner);
   const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
   const searchRef = useRef(null);
+  const searchRefMobile = useRef(null);
 
   const makeSearchRequest = (value) => {
     dispatch(requestSearch(value));
@@ -137,6 +143,9 @@ const DashBoardComponent = () => {
   const clearSearchInput = () => {
     if (searchRef?.current?.value) {
       searchRef.current.value = '';
+    }
+    if (searchRefMobile?.current?.value) {
+      searchRefMobile.current.value = '';
     }
     makeSearchRequest('');
   };
@@ -158,8 +167,6 @@ const DashBoardComponent = () => {
   }, [user]);
 
   useEffect(() => {
-    console.log(isShowSearchSpinner, isFirstFetchStarted);
-    console.log(isInitLoading);
     if (isFirstFetchStarted && !isShowSearchSpinner) {
       setIsInitLoading(false);
     }
@@ -234,16 +241,17 @@ const DashBoardComponent = () => {
                 <CasesHeader>{selectedCases} Cases</CasesHeader>
               )}
               <SearchInput
+                customClass="mb-2 mt-0 right"
                 searchText={searchText}
                 requestSearch={makeSearchRequest}
                 placeholder="Search by Name, Email or cellphone number"
-                searchRef={searchRef}
+                searchRef={searchRefMobile}
                 clearSearchInput={clearSearchInput}
                 isInitLoading={isInitLoading}
               />
               <div className="headsearch-btn-div">
                 <Button
-                  className="btn btn-download mx-2"
+                  className="btn btn-download mr-2"
                   disabled={isDownloading}
                   onClick={exportVitals}>
                   {isDownloading ? (
@@ -278,7 +286,7 @@ const DashBoardComponent = () => {
       </FirstRow>
 
       {/* Doctors View - Patients List along with current conditions */}
-      <PatientsWrapper>
+      <PatientsWrapper isInitLoading={isInitLoading}>
         {patients?.length > 0
           ? patients?.map((patient) => (
               <PatientCard key={patient.patientId} patient={patient} />
@@ -293,8 +301,9 @@ const DashBoardComponent = () => {
                 </Button>
               </NoPatientsWrapper>
             )}
+        {isInitLoading && <SpinnerComponent isFullScreen={false} />}
       </PatientsWrapper>
-      <DeskTopViewPatient>
+      <DeskTopViewPatient isInitLoading={isInitLoading}>
         <HeaderSearchWrap className="w-100 mb-3">
           {!isLightVersion && (
             <TypeHeader>{selectedCases} Risk Cases</TypeHeader>
