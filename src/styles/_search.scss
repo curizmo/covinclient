@@ -39,9 +39,18 @@
       left: auto;
       right: .625rem;
     }
+    .lds-spinner {
+      left: auto;
+      right: 3px;
+    }
     .search-input.form-control {
-      padding-left: 0;
-      padding-right: 37px;
+      padding-right: 2.3rem;
+      padding-left: .625rem;
+      text-align: right;
+    }
+    .x-button {
+      right: auto;
+      left: .625rem;
     }
   }
 }
