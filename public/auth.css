@@ -237,7 +237,7 @@ button {
 .attrEntry label {
   font-size: 14px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: bold;
   line-height: 21px;
   letter-spacing: 0em;
   text-align: left;
@@ -362,7 +362,7 @@ input {
 .sendButton {
   font-size: 14px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: bold;
   line-height: 21px;
   letter-spacing: 0em;
   text-align: center;
@@ -402,6 +402,10 @@ input {
   .login-screen {
     grid-template-columns: none;
     width: 100%;
+    min-height: auto;
+  }
+  #api {
+    width: 100%;
   }
   .hero-section {
     display: none;
@@ -419,18 +423,30 @@ input {
   .welcome-screen {
     width: 100%;
     min-height: auto;
-    height: 30vh;
+    height: 50vh;
     position: relative;
-    background-position-y: -4rem;
   }
-  .signup-screen {
+  .login-section .logo, .signup-screen .logo {
     width: 100%;
+  }
+  .login-section .logo {
+    padding: 2rem 0 2rem;
+  }
+  .signup-screen .logo {
+    padding: 4rem 0 0;
   }
   .welcome-screen .items {
     display: none;
   }
+  .intro p {
+    text-align: left;
+  }
+  .signup-screen {
+    width: 80%;
+    margin: 0 auto;
+  }
   .signup-screen .buttons:not(.verify) {
-    padding-left: 10px;
+    padding-left: 0;
   }
   .buttons #continue {
     width: 100%;
