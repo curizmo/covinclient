@@ -13,6 +13,7 @@ export const initialState = {
   isShowSpinner: false,
   text: '',
   result: [],
+  hasNext: true,
 };
 
 /**
@@ -25,7 +26,8 @@ const search = (state = initialState, { type, payload }) => {
     case SET_SEARCH_RESULT:
       return {
         ...state,
-        result: payload,
+        result: payload.patients,
+        hasNext: payload.hasNext,
       };
     case SET_SEARCH_TEXT:
       return {
