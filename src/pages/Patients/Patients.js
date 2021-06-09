@@ -87,6 +87,15 @@ const Patients = () => {
   });
 
   const [disableLoadMore, setDisableLoadMore] = useState(false);
+  const riskStatusCount = useMemo(() => {
+    return riskNames.reduce((result, riskName) => {
+      return {
+        ...result,
+        [riskName]: patients?.filter((p) => p.status === riskName)?.length,
+      };
+    }, {});
+  }, [patients]);
+
   const isMobile = useCheckIsMobile();
 
   const pageCount = useMemo(
@@ -107,9 +116,14 @@ const Patients = () => {
     setCurrentPage(selected);
   };
 
-  const handleSearchText = (e) => {
+  const handleSearchText = (value) => {
     setCurrentPage(0);
-    setSearchText(e.target.value);
+    setSearchText(value);
+  };
+
+  const clearSearchInput = () => {
+    setCurrentPage(0);
+    setSearchText('');
   };
 
   const fetchPatients = useCallback(
@@ -184,9 +198,11 @@ const Patients = () => {
           <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
           <SearchInput
             placeholder="Search your patient"
-            onChange={handleSearchText}
+            requestSearch={handleSearchText}
             searchText={searchText}
             searchRef={searchRef}
+            clearSearchInput={clearSearchInput}
+            isInitLoading={isFetching}
             customClass="my-2"
           />
         </InfoColumn>
@@ -197,8 +213,7 @@ const Patients = () => {
                 <Fragment key={getRandomKey()}>
                   <StatusIndicator status={risk} />
                   <InfoValue className="ml-2">
-                    {risk} ({patients?.filter((p) => p.status === risk)?.length}
-                    )
+                    {risk} ({riskStatusCount[risk]})
                   </InfoValue>
                 </Fragment>
               );
@@ -293,7 +308,7 @@ const Patients = () => {
 
   const MobileView = () => (
     <div className="mobileview">
-      <div className="header d-flex justify-content-between px-3 pt-2 align-items-center">
+      <div className="header d-flex justify-content-between px-3 py-2 align-items-center">
         <ViewName>Patients</ViewName>
         <LinkButton className="mr-2 btn btn-covin" to={routes.addPatient.path}>
           + New
@@ -306,10 +321,12 @@ const Patients = () => {
         <div className="filter-container">
           <SearchInput
             placeholder="Search your patient"
-            onChange={handleSearchText}
+            requestSearch={handleSearchText}
             searchText={searchText}
             searchRef={searchRef}
+            clearSearchInput={clearSearchInput}
             customClass="right"
+            isInitLoading={isFetching}
           />
         </div>
       </InfoColumn>
@@ -392,7 +409,7 @@ const Patients = () => {
         )}
       </div>
       {!isFetching && (
-        <div className="load-more-container mx-3">
+        <div className="load-more-container m-3">
           <Button
             onClick={handleLoadMore}
             disabled={disableLoadMore}

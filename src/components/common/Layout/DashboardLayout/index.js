@@ -6,7 +6,7 @@ const DashboardLayout = ({ children }) => {
   return (
     <>
       <main>
-        <div className="content">{children}</div>
+        <div className="content overflow-auto">{children}</div>
       </main>
       <CallDialog />
     </>
