@@ -230,6 +230,131 @@ const DashBoardComponent = () => {
     }
   };
 
+  const MobileView = () => {
+    return (
+      <PatientsWrapper isInitLoading={isInitLoading}>
+        {patients?.length > 0
+          ? patients?.map((patient) => (
+              <PatientCard key={patient.patientId} patient={patient} />
+            ))
+          : searchText?.length > 0 && (
+              <NoPatientsWrapper>
+                <p>
+                  <strong>No results found</strong>
+                </p>
+                <Button onClick={clearSearchInput} className="link-button">
+                  Back to dashboard
+                </Button>
+              </NoPatientsWrapper>
+            )}
+        {isInitLoading && <SpinnerComponent isFullScreen={false} />}
+        {hasNext ? (
+          <div className="load-more-container m-3">
+            <Button
+              onClick={incrementPage}
+              disabled={isInitLoading || isShowSearchSpinner}
+              className="btn-load-more btn btn-covin">
+              {isInitLoading || isShowSearchSpinner ? (
+                <div className="lds-spinner">
+                  {[...Array(12).keys()].map((i) => (
+                    <span key={i} />
+                  ))}
+                </div>
+              ) : (
+                <>Load More</>
+              )}
+            </Button>
+          </div>
+        ) : null}
+      </PatientsWrapper>
+    );
+  };
+
+  const DesktopView = () => {
+    return (
+      <DeskTopViewPatient isInitLoading={isInitLoading}>
+        <HeaderSearchWrap className="w-100 mb-3">
+          {!isLightVersion && (
+            <TypeHeader>{selectedCases} Risk Cases</TypeHeader>
+          )}
+          <InputContainer>
+            <SearchInput
+              customClass="w-100"
+              searchText={searchText}
+              requestSearch={makeSearchRequest}
+              placeholder="Search by Name, Email or cellphone number"
+              searchRef={searchRef}
+              clearSearchInput={clearSearchInput}
+              isInitLoading={isInitLoading}
+            />
+          </InputContainer>
+          <div className="headsearch-btn-div">
+            <Button
+              className="btn btn-download mx-2"
+              disabled={isDownloading}
+              onClick={exportVitals}>
+              {isDownloading ? (
+                <span className="lds-spinner position-absolute">
+                  {[...Array(12).keys()].map((i) => (
+                    <span key={i} />
+                  ))}
+                </span>
+              ) : (
+                <>
+                  <span className="excel-image-wrap">
+                    <img
+                      src={excel}
+                      alt="Covin"
+                      className="logo download-excel-icon"
+                    />
+                    <img src={xicon} alt="Covin" className="logo x-icon" />
+                  </span>
+                  DOWNLOAD (Xls)
+                </>
+              )}
+            </Button>
+            <LinkButton className="btn btn-covin" to={routes.addPatient.path}>
+              + New Patient
+            </LinkButton>
+          </div>
+        </HeaderSearchWrap>
+        <DesktopPatientTable
+          selectedCaseData={patients}
+          selectedCases={selectedCases}
+          isShowSpinner={isInitLoading}
+        />
+        {hasNext ? (
+          <div className="load-more-container m-3 justify-content-center">
+            <Button
+              onClick={incrementPage}
+              disabled={isInitLoading || isShowSearchSpinner}
+              className="btn-load-more btn btn-covin w-25 desktop">
+              {isInitLoading || isShowSearchSpinner ? (
+                <div className="lds-spinner">
+                  {[...Array(12).keys()].map((i) => (
+                    <span key={i} />
+                  ))}
+                </div>
+              ) : (
+                <>Load More</>
+              )}
+            </Button>
+          </div>
+        ) : null}
+        {patients?.length < 1 && searchText?.length > 0 && (
+          <NoPatientsWrapper>
+            <p>
+              <strong>No results found</strong>
+            </p>
+            <Button onClick={clearSearchInput} className="link-button">
+              Back to dashboard
+            </Button>
+          </NoPatientsWrapper>
+        )}
+      </DeskTopViewPatient>
+    );
+  };
+
   return (
     <DashboardLayout>
       <FirstRow className="mb-4">
@@ -298,126 +423,7 @@ const DashBoardComponent = () => {
           </div>
         </Headings>
       </FirstRow>
-
-      {/* Doctors View - Patients List along with current conditions */}
-      {isMobile ? (
-        <PatientsWrapper isInitLoading={isInitLoading}>
-          {patients?.length > 0
-            ? patients?.map((patient) => (
-                <PatientCard key={patient.patientId} patient={patient} />
-              ))
-            : searchText?.length > 0 && (
-                <NoPatientsWrapper>
-                  <p>
-                    <strong>No results found</strong>
-                  </p>
-                  <Button onClick={clearSearchInput} className="link-button">
-                    Back to dashboard
-                  </Button>
-                </NoPatientsWrapper>
-              )}
-          {isInitLoading && <SpinnerComponent isFullScreen={false} />}
-          {hasNext ? (
-            <div className="load-more-container m-3">
-              <Button
-                onClick={incrementPage}
-                disabled={isInitLoading || isShowSearchSpinner}
-                className="btn-load-more btn btn-covin">
-                {isInitLoading || isShowSearchSpinner ? (
-                  <div className="lds-spinner">
-                    {[...Array(12).keys()].map((i) => (
-                      <span key={i} />
-                    ))}
-                  </div>
-                ) : (
-                  <>Load More</>
-                )}
-              </Button>
-            </div>
-          ) : null}
-        </PatientsWrapper>
-      ) : (
-        <DeskTopViewPatient isInitLoading={isInitLoading}>
-          <HeaderSearchWrap className="w-100 mb-3">
-            {!isLightVersion && (
-              <TypeHeader>{selectedCases} Risk Cases</TypeHeader>
-            )}
-            <InputContainer>
-              <SearchInput
-                customClass="w-100"
-                searchText={searchText}
-                requestSearch={makeSearchRequest}
-                placeholder="Search by Name, Email or cellphone number"
-                searchRef={searchRef}
-                clearSearchInput={clearSearchInput}
-                isInitLoading={isInitLoading}
-              />
-            </InputContainer>
-            <div className="headsearch-btn-div">
-              <Button
-                className="btn btn-download mx-2"
-                disabled={isDownloading}
-                onClick={exportVitals}>
-                {isDownloading ? (
-                  <span className="lds-spinner position-absolute">
-                    {[...Array(12).keys()].map((i) => (
-                      <span key={i} />
-                    ))}
-                  </span>
-                ) : (
-                  <>
-                    <span className="excel-image-wrap">
-                      <img
-                        src={excel}
-                        alt="Covin"
-                        className="logo download-excel-icon"
-                      />
-                      <img src={xicon} alt="Covin" className="logo x-icon" />
-                    </span>
-                    DOWNLOAD (Xls)
-                  </>
-                )}
-              </Button>
-              <LinkButton className="btn btn-covin" to={routes.addPatient.path}>
-                + New Patient
-              </LinkButton>
-            </div>
-          </HeaderSearchWrap>
-          <DesktopPatientTable
-            selectedCaseData={patients}
-            selectedCases={selectedCases}
-            isShowSpinner={isInitLoading}
-          />
-          {hasNext ? (
-            <div className="load-more-container m-3 justify-content-center">
-              <Button
-                onClick={incrementPage}
-                disabled={isInitLoading || isShowSearchSpinner}
-                className="btn-load-more btn btn-covin w-25 desktop">
-                {isInitLoading || isShowSearchSpinner ? (
-                  <div className="lds-spinner">
-                    {[...Array(12).keys()].map((i) => (
-                      <span key={i} />
-                    ))}
-                  </div>
-                ) : (
-                  <>Load More</>
-                )}
-              </Button>
-            </div>
-          ) : null}
-          {patients?.length < 1 && searchText?.length > 0 && (
-            <NoPatientsWrapper>
-              <p>
-                <strong>No results found</strong>
-              </p>
-              <Button onClick={clearSearchInput} className="link-button">
-                Back to dashboard
-              </Button>
-            </NoPatientsWrapper>
-          )}
-        </DeskTopViewPatient>
-      )}
+      {isMobile ? <MobileView /> : <DesktopView />}
     </DashboardLayout>
   );
 };
