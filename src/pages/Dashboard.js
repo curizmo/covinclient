@@ -231,7 +231,7 @@ const DashBoardComponent = () => {
   };
 
   return (
-    <DashboardLayout style="content-overflow">
+    <DashboardLayout>
       <FirstRow className="mb-4">
         <Headings>
           <InfoWrapper>

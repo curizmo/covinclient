@@ -411,9 +411,7 @@ const Patients = () => {
   );
 
   return (
-    <DashboardLayout style="content-overflow">
-      {isMobile ? <MobileView /> : <WebView />}
-    </DashboardLayout>
+    <DashboardLayout>{isMobile ? <MobileView /> : <WebView />}</DashboardLayout>
   );
 };
 
