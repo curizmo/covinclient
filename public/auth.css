@@ -187,12 +187,10 @@ button {
   color: #646464;
   text-align: center;
 }
-button:hover {
-  box-shadow: 0 0 5px var(--gray-color);
-}
+button:hover,
+button:active,
 button:focus {
-  outline-color: var(--gray-color);
-  box-shadow: none;
+  outline: 3px solid var(--light-gray-color);
 }
 
 .buttons {
