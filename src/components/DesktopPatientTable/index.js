@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,7 +27,7 @@ import './index.css';
 
 const Wrapper = styled.section`
   position: relative;
-  padding: 0 4rem;
+  padding: 0 4rem 2rem;
   width: 100%;
   height: calc(100% - 250px);
   overflow: ${(props) => (props?.isShowSpinner ? 'hidden' : 'scroll')};
@@ -108,22 +108,36 @@ const desktopViewLabelsForPatientsWithCurrentStats = css`
   width: 11rem;
 `;
 
+const isScrolledToEnd = () =>
+  window.innerHeight + document.documentElement.scrollTop ===
+  document.scrollingElement.scrollHeight;
+
 const DesktopPatientTable = (props) => {
-  const {
-    selectedCaseData,
-    isShowSpinner,
-    hasNext,
-    isShowSearchSpinner,
-    incrementPage,
-  } = props;
+  const { selectedCaseData, isShowSpinner, incrementPage, hasNext } = props;
   const dispatch = useDispatch();
   const user = useSelector(getUser);
+  const wrapperRef = useRef(null);
+  const [downloadingPatientId, setDownloadingPatientId] = useState(null);
+
   const onCall = useCallback(
     (patientId) => () => handleCallAppointment(dispatch, patientId),
     [dispatch],
   );
 
-  const [downloadingPatientId, setDownloadingPatientId] = useState(null);
+  const loadMore = () => {
+    if (!isShowSpinner && hasNext && isScrolledToEnd()) {
+      incrementPage();
+    }
+  };
+
+  useEffect(() => {
+    if (wrapperRef?.current) {
+      wrapperRef.current.addEventListener('scroll', loadMore);
+      return () => {
+        wrapperRef.current.removeEventListener('scroll', loadMore);
+      };
+    }
+  }, [wrapperRef]);
 
   const exportVitals = async (patientId) => {
     try {
@@ -184,11 +198,11 @@ const DesktopPatientTable = (props) => {
   }
 
   return (
-    <Wrapper isShowSpinner={isShowSpinner}>
+    <Wrapper isShowSpinner={isShowSpinner} ref={wrapperRef}>
       <TableWrapper className="dashboard-container">
-        {selectedCaseData?.map((patient, index) => {
+        {selectedCaseData?.map((patient) => {
           return (
-            <InfoAndGraphWrapper key={index} className="mb-3">
+            <InfoAndGraphWrapper key={patient.patientId} className="mb-3">
               <InfoWrapper>
                 {!isLightVersion ? (
                   <>
@@ -296,24 +310,6 @@ const DesktopPatientTable = (props) => {
           );
         })}
       </TableWrapper>
-      {hasNext ? (
-        <div className="load-more-container m-3 justify-content-center">
-          <Button
-            onClick={incrementPage}
-            disabled={isShowSpinner || isShowSearchSpinner}
-            className="btn-load-more btn btn-covin w-25 desktop">
-            {isShowSpinner || isShowSearchSpinner ? (
-              <div className="lds-spinner">
-                {[...Array(12).keys()].map((i) => (
-                  <span key={i} />
-                ))}
-              </div>
-            ) : (
-              <>Load More</>
-            )}
-          </Button>
-        </div>
-      ) : null}
       {isShowSpinner && (
         <SpinnerComponent
           customClasses="position-absolute"
