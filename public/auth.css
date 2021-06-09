@@ -65,7 +65,7 @@ h4 {
 .welcome-screen {
   width: 50%;
   min-height: 100vh;
-  background: url('./practitioner.png');
+  background: url('./COVIN_Splash.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -79,7 +79,6 @@ h4 {
 }
 
 .welcome-screen .welcome-text {
-  font-family: Helvetica Neue;
   font-style: normal;
   font-weight: bold;
   font-size: 18px;
@@ -93,7 +92,6 @@ h4 {
 
 .welcome-screen .title {
   height: 73px;
-  font-family: Helvetica Neue;
   font-style: normal;
   font-size: 60px;
   text-align: right;
@@ -109,7 +107,6 @@ h4 {
 
 .welcome-screen .items {
   margin-top: 10rem;
-  font-family: Helvetica Neue;
   font-style: normal;
   font-weight: 300;
   font-size: 24px;
@@ -146,16 +143,17 @@ section {
 
 .login-section .logo,
 .signup-screen .logo {
-  padding-top: 5rem;
-  text-align: center;
+  padding: 5rem 0 3rem;
+  text-align: left;
+  width: 80%;
+  margin: 0 auto;
 }
 
 .logo img {
-  height: 2rem;
+  height: 4rem;
 }
 
 .login-section .signin-text {
-  font-family: Helvetica;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
@@ -191,28 +189,25 @@ button {
   color: #646464;
   text-align: center;
 }
-button:hover {
-  box-shadow: 0 0 5px var(--gray-color);
-}
-button:focus {
-  outline-color: var(--gray-color);
-  box-shadow: none;
+.buttons button:hover,
+.buttons button:active,
+.buttons button:focus {
+  outline: 3px solid var(--light-gray-color);
 }
 
 .buttons {
   margin-bottom: 2rem;
   cursor: pointer;
 }
-.buttons:active {
-  background-color: #22335e;
-}
+
 .buttons #next,
 .buttons #continue,
 .buttons button {
   background-color: #00bebe;
   text-align: center;
-  font: 400 16px / 1.5 Helvetica;
+  font: 400 16px / 1.5 sans-serif;
   color: white;
+  cursor: pointer;
 }
 .buttons #next,
 .buttons #continue {
@@ -235,12 +230,11 @@ button:focus {
   border-radius: 3px;
   width: 100%;
   border: 1px solid #d5dae1;
-  margin: 3rem 0rem;
+  margin: .5rem 0rem;
 }
 
 .entry label,
 .attrEntry label {
-  font-family: Helvetica;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -259,7 +253,6 @@ section.login-section,
   position: relative;
   text-transform: lowercase;
   font-size: 0.85rem;
-  font-weight: 400;
 }
 .divider h2:before,
 .divider h2:after {
@@ -287,14 +280,21 @@ input {
 .entry-item {
   margin-bottom: 1rem;
 }
+.entry-item label {
+  font-weight: bold;
+}
 
+.password-label {
+ display: flex;
+ justify-content: space-between;
+}
 #createAccount,
 #forgotPassword,
 .tiny {
   margin-left: .25rem;
   text-align: center;
   text-decoration: none;
-  font: 700 16px / 1.3 Helvetica Neue;
+  font: 700 14px / 1.3 sans-serif;
   color: #00bebe;
 }
 
@@ -303,14 +303,16 @@ input {
   margin: 10px 0;
   border: 1px solid #00bebe;
   text-align: left;
-  font: 700 16px / 1.3 Helvetica Neue;
+  font: 700 14px / 1.3 sans-serif;
   text-decoration: none;
   color: #00bebe;
   background: white;
 }
 
+.login-screen .intro h2 {
+  display: none;
+}
 .signup-screen .intro {
-  font-family: Helvetica;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
@@ -337,33 +339,27 @@ input {
 }
 
 .disclaimer h2 {
-  font: 600 18px / 1.5 Helvetica;
+  font: 600 18px / 1.5 sans-serif;
 }
 
 .disclaimer p {
-  font: 400 14px / 1.5 Helvetica;
+  font: 400 14px / 1.5 sans-serif;
 }
 
 .disclaimer p a {
   color: #00bebe;
-  font: 400 14px / 1.5 Helvetica;
+  font: 400 14px / 1.5 sans-serif;
   text-align: left;
   text-decoration: none;
 }
 
 .create p {
-  font-family: Helvetica Neue;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19px;
-  letter-spacing: 0em;
-  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
   color: #01518d;
 }
 
 .sendButton {
-  font-family: Helvetica;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -476,9 +472,5 @@ input {
     text-align: right;
     width: 100%;
     margin-bottom: 1rem;
-  }
-  .login-section .logo,
-  .signup-screen .logo {
-    padding-top: 0.5rem;
   }
 }
