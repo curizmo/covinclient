@@ -143,12 +143,14 @@ section {
 
 .login-section .logo,
 .signup-screen .logo {
-  padding-top: 5rem;
-  text-align: center;
+  padding: 5rem 0 3rem;
+  text-align: left;
+  width: 80%;
+  margin: 0 auto;
 }
 
 .logo img {
-  height: 2rem;
+  height: 4rem;
 }
 
 .login-section .signin-text {
@@ -187,9 +189,9 @@ button {
   color: #646464;
   text-align: center;
 }
-button:hover,
-button:active,
-button:focus {
+.buttons button:hover,
+.buttons button:active,
+.buttons button:focus {
   outline: 3px solid var(--light-gray-color);
 }
 
@@ -197,9 +199,7 @@ button:focus {
   margin-bottom: 2rem;
   cursor: pointer;
 }
-.buttons:active {
-  background-color: #22335e;
-}
+
 .buttons #next,
 .buttons #continue,
 .buttons button {
@@ -207,6 +207,7 @@ button:focus {
   text-align: center;
   font: 400 16px / 1.5 sans-serif;
   color: white;
+  cursor: pointer;
 }
 .buttons #next,
 .buttons #continue {
@@ -471,9 +472,5 @@ input {
     text-align: right;
     width: 100%;
     margin-bottom: 1rem;
-  }
-  .login-section .logo,
-  .signup-screen .logo {
-    padding-top: 0.5rem;
   }
 }
