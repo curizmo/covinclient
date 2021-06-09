@@ -74,7 +74,7 @@ const PatientsWrapper = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-    height: calc(100% - 200px);
+    height: calc(100% - 450px);
     overflow: ${(props) => (props?.isInitLoading ? 'hidden' : 'scroll')};
   }
 `;
@@ -322,25 +322,10 @@ const DashBoardComponent = () => {
           selectedCaseData={patients}
           selectedCases={selectedCases}
           isShowSpinner={isInitLoading}
+          hasNext={hasNext}
+          isShowSearchSpinner={isShowSearchSpinner}
+          incrementPage={incrementPage}
         />
-        {hasNext ? (
-          <div className="load-more-container m-3 justify-content-center">
-            <Button
-              onClick={incrementPage}
-              disabled={isInitLoading || isShowSearchSpinner}
-              className="btn-load-more btn btn-covin w-25 desktop">
-              {isInitLoading || isShowSearchSpinner ? (
-                <div className="lds-spinner">
-                  {[...Array(12).keys()].map((i) => (
-                    <span key={i} />
-                  ))}
-                </div>
-              ) : (
-                <>Load More</>
-              )}
-            </Button>
-          </div>
-        ) : null}
         {patients?.length < 1 && searchText?.length > 0 && (
           <NoPatientsWrapper>
             <p>
