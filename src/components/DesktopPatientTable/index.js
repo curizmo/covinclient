@@ -29,7 +29,7 @@ const Wrapper = styled.section`
   position: relative;
   padding: 0 4rem;
   width: 100%;
-  height: calc(100% - 110px);
+  height: calc(100% - 250px);
   overflow: ${(props) => (props?.isShowSpinner ? 'hidden' : 'scroll')};
 `;
 
@@ -109,7 +109,13 @@ const desktopViewLabelsForPatientsWithCurrentStats = css`
 `;
 
 const DesktopPatientTable = (props) => {
-  const { selectedCaseData, isShowSpinner } = props;
+  const {
+    selectedCaseData,
+    isShowSpinner,
+    hasNext,
+    isShowSearchSpinner,
+    incrementPage,
+  } = props;
   const dispatch = useDispatch();
   const user = useSelector(getUser);
   const onCall = useCallback(
@@ -290,6 +296,24 @@ const DesktopPatientTable = (props) => {
           );
         })}
       </TableWrapper>
+      {hasNext ? (
+        <div className="load-more-container m-3 justify-content-center">
+          <Button
+            onClick={incrementPage}
+            disabled={isShowSpinner || isShowSearchSpinner}
+            className="btn-load-more btn btn-covin w-25 desktop">
+            {isShowSpinner || isShowSearchSpinner ? (
+              <div className="lds-spinner">
+                {[...Array(12).keys()].map((i) => (
+                  <span key={i} />
+                ))}
+              </div>
+            ) : (
+              <>Load More</>
+            )}
+          </Button>
+        </div>
+      ) : null}
       {isShowSpinner && (
         <SpinnerComponent
           customClasses="position-absolute"

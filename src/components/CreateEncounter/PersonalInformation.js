@@ -214,9 +214,7 @@ export const PersonalInformation = ({
                   checked={riskLevel === radio}
                   onChange={() => handleRiskLevelChange(radio)}
                 />
-                <OptionName checked={riskLevel === radio}>
-                  {radio} Risk
-                </OptionName>
+                <OptionName checked={riskLevel === radio}>{radio}</OptionName>
               </RadioLabel>
             );
           })}

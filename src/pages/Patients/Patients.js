@@ -251,7 +251,7 @@ const Patients = () => {
                 <tr
                   key={getRandomKey()}
                   className={patient.isSelected ? 'bg-light' : ''}>
-                  <td>{index + 1}</td>
+                  <td>{currentPage * PER_PAGE + index + 1}</td>
                   <td className="pt-3">
                     <StatusIndicator status={patient.status} size={12} />
                   </td>
@@ -408,16 +408,22 @@ const Patients = () => {
           <p className="pl-4 pb-3">No patients</p>
         )}
       </div>
-      {!isFetching && (
-        <div className="load-more-container m-3">
-          <Button
-            onClick={handleLoadMore}
-            disabled={disableLoadMore}
-            className="btn-load-more btn btn-covin">
-            Load More
-          </Button>
-        </div>
-      )}
+      <div className="load-more-container m-3">
+        <Button
+          onClick={handleLoadMore}
+          disabled={disableLoadMore || isFetching}
+          className="btn-load-more btn btn-covin">
+          {isFetching ? (
+            <div className="lds-spinner">
+              {[...Array(12).keys()].map((i) => (
+                <span key={i} />
+              ))}
+            </div>
+          ) : (
+            <>Load More</>
+          )}
+        </Button>
+      </div>
     </div>
   );
 

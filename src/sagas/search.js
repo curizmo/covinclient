@@ -10,12 +10,14 @@ import {
 import { fetchPatientsWithVitals } from '../services/practitioner';
 import { fetchData } from '../services/api';
 
-function* makeSearch({ payload: searchText }) {
+function* makeSearch({ payload }) {
   yield put(showSearchSpinner());
   yield delay(500);
-  yield put(setSearchText(searchText));
+  yield put(setSearchText(payload.searchText));
   yield call(fetchData, fetchPatientsWithVitals, setSearchResult, {
-    searchText,
+    searchText: payload.searchText,
+    selectedCases: payload.selectedCases,
+    page: payload.page,
   });
   yield put(hideSearchSpinner());
 }
