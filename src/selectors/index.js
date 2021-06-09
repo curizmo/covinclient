@@ -44,3 +44,4 @@ export const getIsEncounterUpdated = ({ patient }) =>
 export const getIsShowSearchSpinner = ({ search }) => search?.isShowSpinner;
 export const getSearchText = ({ search }) => search?.text;
 export const getSearchResult = ({ search }) => search?.result;
+export const getPatientsHasNext = ({ search }) => search?.hasNext;

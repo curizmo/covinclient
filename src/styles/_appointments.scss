@@ -3,17 +3,17 @@
   font-style: normal;
   font-weight: 600;
   line-height: 1.2;
-  color: #3182FB;
+  color: #3182fb;
   &:hover {
-    color: #3182FB;
+    color: #3182fb;
   }
   &--small {
     @extend .patient-link;
-    font-size: .9rem;
+    font-size: 0.9rem;
     font-weight: 400;
-    color: #01518D;
+    color: #01518d;
     &:hover {
-      color: #01518D;
+      color: #01518d;
     }
   }
 }
@@ -180,8 +180,13 @@
 
 .btn-load-more {
   flex-grow: 1;
+
+  &.desktop {
+    flex: 0 0 25%;
+  }
 }
-.date-picker-input{
+
+.date-picker-input {
   position: relative;
 }
 

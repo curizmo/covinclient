@@ -391,21 +391,29 @@ const Patients = () => {
           <p className="pl-4 pb-3">No patients</p>
         )}
       </div>
-      {!isFetching && (
-        <div className="load-more-container mx-3">
-          <Button
-            onClick={handleLoadMore}
-            disabled={disableLoadMore}
-            className="btn-load-more btn btn-covin">
-            Load More
-          </Button>
-        </div>
-      )}
+      <div className="load-more-container m-3">
+        <Button
+          onClick={handleLoadMore}
+          disabled={disableLoadMore || isFetching}
+          className="btn-load-more btn btn-covin">
+          {isFetching ? (
+            <div className="lds-spinner">
+              {[...Array(12).keys()].map((i) => (
+                <span key={i} />
+              ))}
+            </div>
+          ) : (
+            <>Load More</>
+          )}
+        </Button>
+      </div>
     </div>
   );
 
   return (
-    <DashboardLayout>{isMobile ? <MobileView /> : <WebView />}</DashboardLayout>
+    <DashboardLayout style="content-overflow">
+      {isMobile ? <MobileView /> : <WebView />}
+    </DashboardLayout>
   );
 };
 

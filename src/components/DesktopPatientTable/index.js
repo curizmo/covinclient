@@ -29,7 +29,7 @@ const Wrapper = styled.section`
   position: relative;
   padding: 0 4rem;
   width: 100%;
-  height: calc(100% - 110px);
+  height: calc(100% - 250px);
   overflow: ${(props) => (props?.isShowSpinner ? 'hidden' : 'scroll')};
 `;
 
