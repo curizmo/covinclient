@@ -47,12 +47,7 @@ const ConfirmationWrapper = styled.section`
   }
 `;
 
-const AddConfirmation = ({
-  newPatient,
-  message,
-  confirmation,
-  confirmationType,
-}) => {
+const AddConfirmation = ({ newPatient, message, confirmationType }) => {
   const userInfo = useMemo(() => {
     let info = [];
     if (GENDER_SHORTHAND[newPatient.gender]) {
@@ -81,7 +76,8 @@ const AddConfirmation = ({
         <div className={`${confirmationType}`}> {message}</div>
         {confirmationType === 'addPatient' && (
           <div className="add-info">
-            {newPatient.firstName} {confirmation}
+            <div>{newPatient.firstName} will soon receive a message </div>
+            <div>requesting to record symptoms and vitals</div>
           </div>
         )}
         <div>
