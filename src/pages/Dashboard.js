@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from 'reactstrap';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -139,9 +139,10 @@ const DashBoardComponent = () => {
   const [isInitLoading, setIsInitLoading] = useState(true);
   const [isFirstFetchStarted, setIsFirstFetchStarted] = useState(false);
   const [page, setPage] = useState(0);
+  const [patients, setPatients] = useState([]);
 
   const user = useSelector(getUser);
-  const patients = useSelector(getSearchResult);
+  const fetchedPatients = useSelector(getSearchResult);
   const hasNext = useSelector(getPatientsHasNext);
   const searchText = useSelector(getSearchText);
   const isShowSearchSpinner = useSelector(getIsShowSearchSpinner);
@@ -149,6 +150,14 @@ const DashBoardComponent = () => {
   const searchRef = useRef(null);
   const searchRefMobile = useRef(null);
   const isMobile = useCheckIsMobile();
+
+  useEffect(() => {
+    if (page > 0) {
+      setPatients((patients) => [...patients, ...fetchedPatients]);
+    } else {
+      setPatients(fetchedPatients);
+    }
+  }, [fetchedPatients]);
 
   const makeSearchRequest = (value) => {
     dispatch(requestSearch({ searchText: value, selectedCases, page }));
@@ -165,7 +174,10 @@ const DashBoardComponent = () => {
   };
 
   const changesCases = (sel) => {
+    setIsInitLoading(true);
+    const page = 0;
     setSelectedCases(sel);
+    setPage(page);
     dispatch(requestSearch({ searchText, selectedCases: sel, page }));
   };
 
@@ -188,6 +200,7 @@ const DashBoardComponent = () => {
   }, [isShowSearchSpinner]);
 
   const incrementPage = () => {
+    setIsInitLoading(true);
     setPage((prevState) => prevState + 1);
     dispatch(requestSearch({ searchText, selectedCases, page: page + 1 }));
   };
@@ -320,11 +333,9 @@ const DashBoardComponent = () => {
         </HeaderSearchWrap>
         <DesktopPatientTable
           selectedCaseData={patients}
-          selectedCases={selectedCases}
-          isShowSpinner={isInitLoading}
-          hasNext={hasNext}
-          isShowSearchSpinner={isShowSearchSpinner}
+          isShowSpinner={isInitLoading || isShowSearchSpinner}
           incrementPage={incrementPage}
+          hasNext={hasNext}
         />
         {patients?.length < 1 && searchText?.length > 0 && (
           <NoPatientsWrapper>
