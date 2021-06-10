@@ -12,4 +12,16 @@ const SpinnerComponent = ({ isFullScreen = true, customClasses = '' }) => {
   );
 };
 
-export { SpinnerComponent };
+const DotFlashingSpinner = ({ customClasses = '', isShow }) => {
+  return (
+    <div className={`dot-flashing-wrapper ${customClasses}`}>
+      <div className="snippet" data-title=".dot-flashing">
+        <div className="stage">
+          {isShow && <div className="dot-flashing"></div>}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export { SpinnerComponent, DotFlashingSpinner };

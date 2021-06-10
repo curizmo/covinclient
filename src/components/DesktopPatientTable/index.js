@@ -5,7 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'reactstrap';
 
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
-import { SpinnerComponent } from 'components/common/SpinnerPortal/Spinner';
+import {
+  SpinnerComponent,
+  DotFlashingSpinner,
+} from 'components/common/SpinnerPortal/Spinner';
 
 import * as patientVitalsService from 'services/patientVitals';
 import { getUser } from 'selectors';
@@ -27,7 +30,7 @@ import './index.css';
 
 const Wrapper = styled.section`
   position: relative;
-  padding: 0 4rem 2rem;
+  padding: 0 4rem;
   width: 100%;
   height: 600px;
   overflow: scroll;
@@ -94,18 +97,20 @@ const Value = styled.span`
 `;
 
 const spacingAroundComponent = css`
-  height: 7rem;
+  height: 12.5rem;
   background: #f2f5f8;
   padding: 0.5rem;
   margin: 1rem 0.2rem 0.3125rem;
   display: flex;
+  flex-direction: column;
 `;
 
 const desktopViewLabelsForPatientsWithCurrentStats = css`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
-  width: 11rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
 `;
 
 const DesktopPatientTable = (props) => {
@@ -123,6 +128,7 @@ const DesktopPatientTable = (props) => {
   const user = useSelector(getUser);
   const wrapperRef = useRef(null);
   const [downloadingPatientId, setDownloadingPatientId] = useState(null);
+  const [isShowLoadMoreSpinner, setIsShowLoadMoreSpinner] = useState(true);
 
   const onCall = useCallback(
     (patientId) => () => handleCallAppointment(dispatch, patientId),
@@ -131,14 +137,15 @@ const DesktopPatientTable = (props) => {
 
   const loadMore = useCallback(() => {
     if (hasNext && isScrolledToEnd()) {
+      setIsShowLoadMoreSpinner(true);
       incrementPage();
     }
   }, [hasNext, selectedCases, page, searchText]);
 
   const isScrolledToEnd = () => {
     return (
-      wrapperRef.current.scrollTop >
-      wrapperRef.current.scrollHeight - wrapperRef.current.offsetHeight
+      wrapperRef?.current?.scrollTop >
+      wrapperRef?.current?.scrollHeight - wrapperRef?.current?.offsetHeight
     );
   };
 
@@ -146,10 +153,17 @@ const DesktopPatientTable = (props) => {
     if (wrapperRef?.current) {
       wrapperRef.current.addEventListener('scroll', loadMore);
       return () => {
-        wrapperRef.current.removeEventListener('scroll', loadMore);
+        wrapperRef.current &&
+          wrapperRef.current.removeEventListener('scroll', loadMore);
       };
     }
   }, [wrapperRef?.current, loadMore]);
+
+  useEffect(() => {
+    if (!isShowSpinner) {
+      setIsShowLoadMoreSpinner(false);
+    }
+  }, [isShowSpinner]);
 
   const exportVitals = async (patientId) => {
     try {
@@ -321,12 +335,10 @@ const DesktopPatientTable = (props) => {
             </InfoAndGraphWrapper>
           );
         })}
+        <DotFlashingSpinner isShow={isShowLoadMoreSpinner} />
       </TableWrapper>
-      {isShowSpinner && (
-        <SpinnerComponent
-          customClasses="position-absolute"
-          isFullScreen={true}
-        />
+      {isShowSpinner && !isShowLoadMoreSpinner && (
+        <SpinnerComponent customClasses="position-absolute" />
       )}
     </Wrapper>
   );

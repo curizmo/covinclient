@@ -25,7 +25,7 @@ const DeskTopViewPatient = styled.section`
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 253px);
   }
   display: none;
 `;
@@ -58,7 +58,6 @@ const DesktopView = ({
   selectedCases,
   searchRef,
   clearSearchInput,
-  isInitLoading,
   isDownloading,
   exportVitals,
   patients,
@@ -79,7 +78,7 @@ const DesktopView = ({
             placeholder="Search by Name, Email or cellphone number"
             searchRef={searchRef}
             clearSearchInput={clearSearchInput}
-            isInitLoading={isInitLoading}
+            isShow={isShowSearchSpinner}
           />
         </InputContainer>
         <div className="headsearch-btn-div">
@@ -114,7 +113,7 @@ const DesktopView = ({
       </HeaderSearchWrap>
       <DesktopPatientTable
         selectedCaseData={patients}
-        isShowSpinner={isInitLoading || isShowSearchSpinner}
+        isShowSpinner={isShowSearchSpinner}
         incrementPage={incrementPage}
         hasNext={hasNext}
         page={page}
