@@ -65,7 +65,7 @@ h4 {
 .welcome-screen {
   width: 50%;
   min-height: 100vh;
-  background: url('./COVIN_Splash.png');
+  background: url('./COVIN_Splash.svg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
