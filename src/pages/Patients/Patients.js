@@ -36,7 +36,7 @@ import { getISODate } from 'utils/dateTime';
 import { getRandomKey, handleCallAppointment } from 'utils';
 import useCheckIsMobile from 'hooks/useCheckIsMobile';
 import { getDate } from 'global';
-import { GENDER_SHORTHAND, PER_PAGE, RISK, SORT_ORDER } from '../../constants';
+import { GENDER_SHORTHAND, PER_PAGE, SORT_ORDER } from '../../constants';
 import phoneSvg from 'assets/images/svg-icons/icon-phone.svg';
 import time from 'assets/images/svg-icons/clock.svg';
 
@@ -75,7 +75,6 @@ const InfoColumn = styled.div`
 const Patients = () => {
   const dispatch = useDispatch();
   const searchRef = useRef(null);
-  const riskNames = Object.values(RISK);
   const user = useSelector(getUser);
 
   const [patients, setPatients] = useState([]);
@@ -321,14 +320,14 @@ const Patients = () => {
       </InfoColumn>
       <InfoColumn className="bg-white">
         <RiskLevelWrap className="m-0 py-4 px-3 justify-content-between w-100">
-          {riskNames.map((risk) => {
+          {patientRiskData?.map((risk) => {
             return (
-              <div className="d-flex" key={getRandomKey()}>
-                <StatusIndicator status={risk} />
+              <Fragment key={getRandomKey()}>
+                <StatusIndicator status={risk.riskType} />
                 <InfoValue className="ml-2">
-                  {risk} ({patients?.filter((p) => p.status === risk)?.length})
+                  {risk.riskType} ({risk.numberOfCases})
                 </InfoValue>
-              </div>
+              </Fragment>
             );
           })}
         </RiskLevelWrap>
