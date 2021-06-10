@@ -7,7 +7,10 @@ import React, {
   Fragment,
 } from 'react';
 import { Table, Button, Card, CardBody } from 'reactstrap';
-import { useDispatch } from 'react-redux';
+import {
+  useDispatch,
+  //  useSelector
+} from 'react-redux';
 import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import styled from 'styled-components';
@@ -27,8 +30,10 @@ import {
   ViewName,
   WebViewWrap,
 } from 'global/styles';
+// import { getUser } from 'selectors';
 
 import * as patientService from 'services/patient';
+// import { usePatientsRiskData } from 'services/practitioner';
 import { routes } from 'routers';
 import { getISODate } from 'utils/dateTime';
 import { getRandomKey, handleCallAppointment } from 'utils';
@@ -74,12 +79,15 @@ const Patients = () => {
   const dispatch = useDispatch();
   const searchRef = useRef(null);
   const riskNames = Object.values(RISK);
+  // const user = useSelector(getUser);
 
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchText, setSearchText] = useState('');
   const [isFetching, setIsFetching] = useState(true);
+  // const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
+  // const [allPatients, setAllPatients] = useState([]);
 
   const [sortField, setSortField] = useState({
     colName: tableHeader[0]?.colName,
@@ -141,6 +149,27 @@ const Patients = () => {
     },
     [currentPage, sortField],
   );
+
+  // const fetchAllPatientsDetails = async () => {
+  //   const response = await patientService.fetchPatients({
+  //     offset: 0,
+  //     searchText:'',
+  //     sortField,
+  //   });
+  //   let patients = response.data;
+  //   patients = patients.map((patient) => ({
+  //     ...patient,
+  //     gender: GENDER_SHORTHAND[patient.gender],
+  //     isSelected: false,
+  //   }));
+  //   setAllPatients(patients);
+  // };
+
+  // console.log(allPatients);
+
+  // useEffect(() => {
+  //   fetchAllPatientsDetails();
+  // }, []);
 
   useEffect(() => {
     fetchPatients();
@@ -265,8 +294,8 @@ const Patients = () => {
                       </Button>
                     )}
                   </td>
-                  <td>{GENDER_SHORTHAND[patient.gender]}</td>
-                  <td>{patient.age}</td>
+                  <td>{patient.gender || '-'}</td>
+                  <td>{patient.age || '-'}</td>
                   <td>{patient.address}</td>
                   <td>{getISODate(patient.lastModifiedDate)}</td>
                 </tr>
