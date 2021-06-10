@@ -33,8 +33,7 @@
 .dashboard-container {
   width: 100%;
   outline: none !important;
-  overflow-y: hidden;
-  overflow-x: scroll;
+  overflow: auto;
 
   .header {
     padding: 1rem;

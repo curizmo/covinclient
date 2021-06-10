@@ -29,8 +29,8 @@ const Wrapper = styled.section`
   position: relative;
   padding: 0 4rem 2rem;
   width: 100%;
-  height: calc(100% - 250px);
-  overflow: ${(props) => (props?.isShowSpinner ? 'hidden' : 'scroll')};
+  height: 600px;
+  overflow: scroll;
 `;
 
 const TableWrapper = styled.div``;
@@ -108,12 +108,17 @@ const desktopViewLabelsForPatientsWithCurrentStats = css`
   width: 11rem;
 `;
 
-const isScrolledToEnd = () =>
-  window.innerHeight + document.documentElement.scrollTop ===
-  document.scrollingElement.scrollHeight;
-
 const DesktopPatientTable = (props) => {
-  const { selectedCaseData, isShowSpinner, incrementPage, hasNext } = props;
+  const {
+    selectedCaseData,
+    isShowSpinner,
+    incrementPage,
+    hasNext,
+    selectedCases,
+    page,
+    searchText,
+  } = props;
+
   const dispatch = useDispatch();
   const user = useSelector(getUser);
   const wrapperRef = useRef(null);
@@ -124,10 +129,17 @@ const DesktopPatientTable = (props) => {
     [dispatch],
   );
 
-  const loadMore = () => {
-    if (!isShowSpinner && hasNext && isScrolledToEnd()) {
+  const loadMore = useCallback(() => {
+    if (hasNext && isScrolledToEnd()) {
       incrementPage();
     }
+  }, [hasNext, selectedCases, page, searchText]);
+
+  const isScrolledToEnd = () => {
+    return (
+      wrapperRef.current.scrollTop >
+      wrapperRef.current.scrollHeight - wrapperRef.current.offsetHeight
+    );
   };
 
   useEffect(() => {
@@ -137,7 +149,7 @@ const DesktopPatientTable = (props) => {
         wrapperRef.current.removeEventListener('scroll', loadMore);
       };
     }
-  }, [wrapperRef]);
+  }, [wrapperRef?.current, loadMore]);
 
   const exportVitals = async (patientId) => {
     try {
@@ -193,12 +205,12 @@ const DesktopPatientTable = (props) => {
     }
   };
 
-  if (selectedCaseData?.length < 1 && !isShowSpinner) {
+  if (selectedCaseData?.length < 1) {
     return null;
   }
 
   return (
-    <Wrapper isShowSpinner={isShowSpinner} ref={wrapperRef}>
+    <Wrapper ref={wrapperRef}>
       <TableWrapper className="dashboard-container">
         {selectedCaseData?.map((patient) => {
           return (
@@ -313,7 +325,7 @@ const DesktopPatientTable = (props) => {
       {isShowSpinner && (
         <SpinnerComponent
           customClasses="position-absolute"
-          isFullScreen={false}
+          isFullScreen={true}
         />
       )}
     </Wrapper>
