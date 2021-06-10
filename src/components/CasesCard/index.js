@@ -1,11 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { CMLine } from '../../third-party/senze-graphs/dist';
-import {
-  mildPreferences,
-  moderatePreferences,
-  severePreferences,
-} from '../../global';
 
 const CasesWrapper = styled.div`
   display: flex;
@@ -106,14 +100,6 @@ const NumberAndGraphWrap = styled.div`
   }
 `;
 
-const GraphAndValueWrap = styled.div`
-  @media (min-width: 768px) {
-    display: flex;
-    align-items: center;
-    width: 45%;
-  }
-`;
-
 const Value = styled.h6`
   font-size: 2.25rem;
   margin: 0.3125rem 0;
@@ -129,23 +115,6 @@ const Value = styled.h6`
     font-size: 1.875rem;
     line-height: 1.875rem;
   }
-`;
-
-const CurrentRise = styled.span`
-  @media (max-width: 768px) {
-    display: block;
-    font-weight: bold;
-    font-size: 0.875rem;
-    line-height: 0.625rem;
-    text-align: center;
-    letter-spacing: 0.15em;
-    color: #657396;
-  }
-`;
-
-const GraphWrapper = styled.div`
-  width: 100%;
-  height: 2.75rem;
 `;
 
 const CasesCardComponent = (props) => {
@@ -167,22 +136,6 @@ const CasesCardComponent = (props) => {
               <Value type={item?.riskType?.toLowerCase()}>
                 {item.numberOfCases}
               </Value>
-              <GraphAndValueWrap>
-                <CurrentRise>{item?.rises}</CurrentRise>
-                <GraphWrapper>
-                  <CMLine
-                    className="custom-class"
-                    data={item?.riskDays}
-                    preferences={
-                      item?.riskType?.toLowerCase() === 'high'
-                        ? severePreferences
-                        : item?.riskType?.toLowerCase() === 'moderate'
-                        ? moderatePreferences
-                        : mildPreferences
-                    }
-                  />
-                </GraphWrapper>
-              </GraphAndValueWrap>
             </NumberAndGraphWrap>
             {selectedCases?.toLowerCase() === item?.riskType?.toLowerCase() && (
               <Arrow />
