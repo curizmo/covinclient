@@ -123,41 +123,38 @@ const Patients = () => {
     setCurrentPage(selected);
   };
 
-  const fetchPatients = useCallback(
-    async (searchText = '') => {
-      setIsFetching(true);
-      setIsInitLoading(searchText);
-      try {
-        const response = await patientService.fetchPatients({
-          offset: isMobile ? 0 : currentPage * PER_PAGE,
-          rowsCount: isMobile ? (currentPage + 1) * PER_PAGE : PER_PAGE,
-          searchText,
-          sortField,
-        });
+  const fetchPatients = async () => {
+    setIsFetching(true);
+    setIsInitLoading(searchText);
+    try {
+      const response = await patientService.fetchPatients({
+        offset: isMobile ? 0 : currentPage * PER_PAGE,
+        rowsCount: isMobile ? (currentPage + 1) * PER_PAGE : PER_PAGE,
+        searchText: searchText,
+        sortField,
+      });
 
-        let patients = response.data;
+      let patients = response.data;
 
-        patients = patients.map((patient) => ({
-          ...patient,
-          gender: GENDER_SHORTHAND[patient.gender],
-          isSelected: false,
-        }));
+      patients = patients.map((patient) => ({
+        ...patient,
+        gender: GENDER_SHORTHAND[patient.gender],
+        isSelected: false,
+      }));
 
-        setPatients(patients);
-        setFilteredPatients(patients);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsFetching(false);
-        setIsInitLoading(false);
-      }
-    },
-    [currentPage, sortField],
-  );
+      setPatients(patients);
+      setFilteredPatients(patients);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsFetching(false);
+      setIsInitLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchPatients();
-  }, [fetchPatients]);
+  }, []);
 
   useEffect(() => {
     searchRef.current.focus();
@@ -167,7 +164,7 @@ const Patients = () => {
     return () => {
       debounced.cancel();
     };
-  }, [searchText]);
+  }, [searchText, currentPage, sortField]);
 
   useEffect(() => {
     if (isMobile) {
