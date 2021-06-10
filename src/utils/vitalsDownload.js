@@ -36,8 +36,8 @@ export const exportToCSV = (csvData) => {
       ws[cell].s = Headerstyle;
     });
     const wb = {
-      Sheets: { vitals: ws },
-      SheetNames: ['vitals'],
+      Sheets: { Vitals: ws },
+      SheetNames: ['Vitals'],
     };
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     const vitals = new Blob([excelBuffer], { type: fileType });
@@ -66,8 +66,8 @@ export const exportIndividualVitalsToCSV = (csvVitalsData, csvLabData) => {
       });
     }
     const wb = {
-      Sheets: { vitals: ws, LabResults: wsLab },
-      SheetNames: ['vitals', 'LabResults'],
+      Sheets: { Vitals: ws, LabResults: wsLab },
+      SheetNames: ['Vitals', 'LabResults'],
     };
     const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     const vitals = new Blob([excelBuffer], { type: fileType });
