@@ -61,12 +61,6 @@ export const SearchInput = ({
     requestSearch(value);
   };
 
-  const onPatientEnter = (e) => {
-    if (e.key === ENTER && searchText !== searchValue) {
-      requestSearch(searchValue);
-    }
-  };
-
   return (
     <div className={`search-container ${customClass}`}>
       <Search className="search-icon" />
@@ -86,7 +80,6 @@ export const SearchInput = ({
             type="text"
             placeholder={placeholder}
             onChange={onPatientChange}
-            onKeyPress={onPatientEnter}
             defaultValue={searchText || searchValue}
           />
         </>
