@@ -243,7 +243,10 @@ const Patients = () => {
                   <td>
                     <Link
                       className="patient-link--small"
-                      to={`/patients/${patient.patientId}/encounter/create`}>
+                      to={routes.editPatient.path.replace(
+                        ':patientId',
+                        patient.patientId,
+                      )}>
                       {patient.fullName}
                     </Link>
                   </td>
@@ -349,7 +352,7 @@ const Patients = () => {
                             </div>
                             <Link
                               className="patient-link--small card-name mb-2"
-                              to={routes.createEncounter.path.replace(
+                              to={routes.editPatient.path.replace(
                                 ':patientId',
                                 patientId,
                               )}>
