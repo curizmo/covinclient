@@ -36,6 +36,7 @@ export const SearchInput = ({
   customClass = '',
   clearSearchInput,
   isInitLoading,
+  isPatientSearch,
 }) => {
   const [searchValue, setSearchValue] = useState('');
   const isShowSearchSpinner = useSelector(getIsShowSearchSpinner);
@@ -54,24 +55,54 @@ export const SearchInput = ({
     }
   };
 
+  const onPatientChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    requestSearch(value);
+  };
+
   return (
     <div className={`search-container ${customClass}`}>
       <Search className="search-icon" />
-      {!isInitLoading && isShowSearchSpinner && (
-        <div className="lds-spinner position-absolute">
-          {[...Array(12).keys()].map((s) => (
-            <span key={s} />
-          ))}
-        </div>
+      {isPatientSearch ? (
+        <>
+          {isInitLoading && (
+            <div className="lds-spinner position-absolute">
+              {[...Array(12).keys()].map((s) => (
+                <span key={s} />
+              ))}
+            </div>
+          )}
+
+          <Input
+            innerRef={searchRef}
+            className="search-input"
+            type="text"
+            placeholder={placeholder}
+            onChange={onPatientChange}
+            defaultValue={searchText || searchValue}
+          />
+        </>
+      ) : (
+        <>
+          {!isInitLoading && isShowSearchSpinner && (
+            <div className="lds-spinner position-absolute">
+              {[...Array(12).keys()].map((s) => (
+                <span key={s} />
+              ))}
+            </div>
+          )}
+
+          <Input
+            innerRef={searchRef}
+            className="search-input"
+            type="text"
+            placeholder={placeholder}
+            onChange={onChange}
+            onKeyPress={onEnter}
+          />
+        </>
       )}
-      <Input
-        innerRef={searchRef}
-        className="search-input"
-        type="text"
-        placeholder={placeholder}
-        onChange={onChange}
-        onKeyPress={onEnter}
-      />
       {searchRef?.current?.value?.length > 0 && (
         <XButton onClick={clearSearchInput} className="x-button">
           <XIcon src={xIcon} alt="x-icon" />

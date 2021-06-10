@@ -77,6 +77,7 @@ const Patients = () => {
   const searchRef = useRef(null);
   const user = useSelector(getUser);
 
+  const [isInitLoading, setIsInitLoading] = useState(false);
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -104,50 +105,56 @@ const Patients = () => {
     setCurrentPage((currentPage) => currentPage + 1);
   };
 
+  const makeSearchRequest = (value) => {
+    setCurrentPage(0);
+    setSearchText(value);
+  };
+
+  const clearSearchInput = () => {
+    if (searchRef?.current?.value) {
+      searchRef.current.value = '';
+    }
+    makeSearchRequest('');
+  };
+
   const pagerPageNum = currentPage;
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
   };
 
-  const handleSearchText = (e) => {
-    setCurrentPage(0);
-    setSearchText(e.target.value);
+  const fetchPatients = async () => {
+    setIsFetching(true);
+    setIsInitLoading(searchText);
+    try {
+      const response = await patientService.fetchPatients({
+        offset: isMobile ? 0 : currentPage * PER_PAGE,
+        rowsCount: isMobile ? (currentPage + 1) * PER_PAGE : PER_PAGE,
+        searchText: searchText,
+        sortField,
+      });
+
+      let patients = response.data;
+
+      patients = patients.map((patient) => ({
+        ...patient,
+        gender: GENDER_SHORTHAND[patient.gender],
+        isSelected: false,
+      }));
+
+      setPatients(patients);
+      setFilteredPatients(patients);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsFetching(false);
+      setIsInitLoading(false);
+    }
   };
-
-  const fetchPatients = useCallback(
-    async (searchText = '') => {
-      setIsFetching(true);
-      try {
-        const response = await patientService.fetchPatients({
-          offset: isMobile ? 0 : currentPage * PER_PAGE,
-          rowsCount: isMobile ? (currentPage + 1) * PER_PAGE : PER_PAGE,
-          searchText,
-          sortField,
-        });
-
-        let patients = response.data;
-
-        patients = patients.map((patient) => ({
-          ...patient,
-          gender: GENDER_SHORTHAND[patient.gender],
-          isSelected: false,
-        }));
-
-        setPatients(patients);
-        setFilteredPatients(patients);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsFetching(false);
-      }
-    },
-    [currentPage, sortField],
-  );
 
   useEffect(() => {
     fetchPatients();
-  }, [fetchPatients]);
+  }, []);
 
   useEffect(() => {
     searchRef.current.focus();
@@ -157,7 +164,7 @@ const Patients = () => {
     return () => {
       debounced.cancel();
     };
-  }, [searchText]);
+  }, [searchText, currentPage, sortField]);
 
   useEffect(() => {
     if (isMobile) {
@@ -186,11 +193,14 @@ const Patients = () => {
         <InfoColumn>
           <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
           <SearchInput
-            placeholder="Search your patient"
-            onChange={handleSearchText}
-            searchText={searchText}
-            searchRef={searchRef}
             customClass="my-2"
+            searchText={searchText}
+            requestSearch={makeSearchRequest}
+            placeholder="Search your patient"
+            searchRef={searchRef}
+            clearSearchInput={clearSearchInput}
+            isInitLoading={isInitLoading}
+            isPatientSearch={true}
           />
         </InfoColumn>
         <InfoColumn>
@@ -311,10 +321,13 @@ const Patients = () => {
         <div className="filter-container">
           <SearchInput
             placeholder="Search your patient"
-            onChange={handleSearchText}
             searchText={searchText}
+            requestSearch={makeSearchRequest}
             searchRef={searchRef}
+            clearSearchInput={clearSearchInput}
+            isInitLoading={isInitLoading}
             customClass="right"
+            isPatientSearch={true}
           />
         </div>
       </InfoColumn>
