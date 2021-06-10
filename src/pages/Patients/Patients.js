@@ -327,6 +327,7 @@ const Patients = () => {
             clearSearchInput={clearSearchInput}
             isInitLoading={isInitLoading}
             customClass="right"
+            isPatientSearch={true}
           />
         </div>
       </InfoColumn>
