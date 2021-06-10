@@ -75,7 +75,7 @@ const Patients = () => {
   const searchRef = useRef(null);
   const riskNames = Object.values(RISK);
 
-  const [isInitLoading, setIsInitLoading] = useState(true);
+  const [isInitLoading, setIsInitLoading] = useState(false);
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -123,6 +123,7 @@ const Patients = () => {
   const fetchPatients = useCallback(
     async (searchText = '') => {
       setIsFetching(true);
+      setIsInitLoading(searchText);
       try {
         const response = await patientService.fetchPatients({
           offset: isMobile ? 0 : currentPage * PER_PAGE,
@@ -145,6 +146,7 @@ const Patients = () => {
         console.error(err);
       } finally {
         setIsFetching(false);
+        setIsInitLoading(false);
       }
     },
     [currentPage, sortField],
@@ -161,7 +163,6 @@ const Patients = () => {
 
     return () => {
       debounced.cancel();
-      setIsInitLoading(true);
     };
   }, [searchText]);
 
