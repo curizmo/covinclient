@@ -160,8 +160,6 @@ const Patients = () => {
     };
   }, [searchText]);
 
-  console.log(patientRiskData);
-
   useEffect(() => {
     if (isMobile) {
       const totalRecords = patients?.[0]?.totalRecords;
