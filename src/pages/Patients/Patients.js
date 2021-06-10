@@ -75,6 +75,7 @@ const Patients = () => {
   const searchRef = useRef(null);
   const riskNames = Object.values(RISK);
 
+  const [isInitLoading, setIsInitLoading] = useState(true);
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -101,15 +102,22 @@ const Patients = () => {
     setCurrentPage((currentPage) => currentPage + 1);
   };
 
+  const makeSearchRequest = (value) => {
+    setCurrentPage(0);
+    setSearchText(value);
+  };
+
+  const clearSearchInput = () => {
+    if (searchRef?.current?.value) {
+      searchRef.current.value = '';
+    }
+    makeSearchRequest('');
+  };
+
   const pagerPageNum = currentPage;
 
   const handlePageClick = ({ selected }) => {
     setCurrentPage(selected);
-  };
-
-  const handleSearchText = (e) => {
-    setCurrentPage(0);
-    setSearchText(e.target.value);
   };
 
   const fetchPatients = useCallback(
@@ -153,6 +161,7 @@ const Patients = () => {
 
     return () => {
       debounced.cancel();
+      setIsInitLoading(true);
     };
   }, [searchText]);
 
@@ -183,11 +192,14 @@ const Patients = () => {
         <InfoColumn>
           <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
           <SearchInput
-            placeholder="Search your patient"
-            onChange={handleSearchText}
-            searchText={searchText}
-            searchRef={searchRef}
             customClass="my-2"
+            searchText={searchText}
+            requestSearch={makeSearchRequest}
+            placeholder="Search your patient"
+            searchRef={searchRef}
+            clearSearchInput={clearSearchInput}
+            isInitLoading={isInitLoading}
+            isPatientSearch={true}
           />
         </InfoColumn>
         <InfoColumn>
@@ -306,9 +318,11 @@ const Patients = () => {
         <div className="filter-container">
           <SearchInput
             placeholder="Search your patient"
-            onChange={handleSearchText}
             searchText={searchText}
+            requestSearch={makeSearchRequest}
             searchRef={searchRef}
+            clearSearchInput={clearSearchInput}
+            isInitLoading={isInitLoading}
             customClass="right"
           />
         </div>

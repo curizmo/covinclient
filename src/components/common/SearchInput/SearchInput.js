@@ -36,6 +36,7 @@ export const SearchInput = ({
   customClass = '',
   clearSearchInput,
   isInitLoading,
+  isPatientSearch,
 }) => {
   const [searchValue, setSearchValue] = useState('');
   const isShowSearchSpinner = useSelector(getIsShowSearchSpinner);
@@ -54,6 +55,20 @@ export const SearchInput = ({
     }
   };
 
+  const onPatientChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    if (value.length < 1 || value.length > 2) {
+      requestSearch(value);
+    }
+  };
+
+  const onPatientEnter = (e) => {
+    if (e.key === ENTER && searchText !== searchValue) {
+      requestSearch(searchValue);
+    }
+  };
+
   return (
     <div className={`search-container ${customClass}`}>
       <Search className="search-icon" />
@@ -64,14 +79,26 @@ export const SearchInput = ({
           ))}
         </div>
       )}
-      <Input
-        innerRef={searchRef}
-        className="search-input"
-        type="text"
-        placeholder={placeholder}
-        onChange={onChange}
-        onKeyPress={onEnter}
-      />
+      {isPatientSearch ? (
+        <Input
+          innerRef={searchRef}
+          className="search-input"
+          type="text"
+          placeholder={placeholder}
+          onChange={onPatientChange}
+          onKeyPress={onPatientEnter}
+          defaultValue={searchText || searchValue}
+        />
+      ) : (
+        <Input
+          innerRef={searchRef}
+          className="search-input"
+          type="text"
+          placeholder={placeholder}
+          onChange={onChange}
+          onKeyPress={onEnter}
+        />
+      )}
       {searchRef?.current?.value?.length > 0 && (
         <XButton onClick={clearSearchInput} className="x-button">
           <XIcon src={xIcon} alt="x-icon" />
