@@ -7,7 +7,7 @@ import React, {
   Fragment,
 } from 'react';
 import { Table, Button, Card, CardBody } from 'reactstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import styled from 'styled-components';
@@ -27,14 +27,16 @@ import {
   ViewName,
   WebViewWrap,
 } from 'global/styles';
+import { getUser } from 'selectors';
 
 import * as patientService from 'services/patient';
+import { usePatientsRiskData } from 'services/practitioner';
 import { routes } from 'routers';
 import { getISODate } from 'utils/dateTime';
 import { getRandomKey, handleCallAppointment } from 'utils';
 import useCheckIsMobile from 'hooks/useCheckIsMobile';
 import { getDate } from 'global';
-import { GENDER_SHORTHAND, PER_PAGE, RISK, SORT_ORDER } from '../../constants';
+import { GENDER_SHORTHAND, PER_PAGE, SORT_ORDER } from '../../constants';
 import phoneSvg from 'assets/images/svg-icons/icon-phone.svg';
 import time from 'assets/images/svg-icons/clock.svg';
 
@@ -73,13 +75,14 @@ const InfoColumn = styled.div`
 const Patients = () => {
   const dispatch = useDispatch();
   const searchRef = useRef(null);
-  const riskNames = Object.values(RISK);
+  const user = useSelector(getUser);
 
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchText, setSearchText] = useState('');
   const [isFetching, setIsFetching] = useState(true);
+  const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
 
   const [sortField, setSortField] = useState({
     colName: tableHeader[0]?.colName,
@@ -192,13 +195,12 @@ const Patients = () => {
         </InfoColumn>
         <InfoColumn>
           <RiskLevelWrap>
-            {riskNames.map((risk) => {
+            {patientRiskData?.map((risk) => {
               return (
                 <Fragment key={getRandomKey()}>
-                  <StatusIndicator status={risk} />
+                  <StatusIndicator status={risk.riskType} />
                   <InfoValue className="ml-2">
-                    {risk} ({patients?.filter((p) => p.status === risk)?.length}
-                    )
+                    {risk.riskType} ({risk.numberOfCases})
                   </InfoValue>
                 </Fragment>
               );
@@ -243,7 +245,10 @@ const Patients = () => {
                   <td>
                     <Link
                       className="patient-link--small"
-                      to={`/patients/${patient.patientId}/encounter/create`}>
+                      to={routes.editPatient.path.replace(
+                        ':patientId',
+                        patient.patientId,
+                      )}>
                       {patient.fullName}
                     </Link>
                   </td>
@@ -262,8 +267,8 @@ const Patients = () => {
                       </Button>
                     )}
                   </td>
-                  <td>{GENDER_SHORTHAND[patient.gender]}</td>
-                  <td>{patient.age}</td>
+                  <td>{patient.gender || '-'}</td>
+                  <td>{patient.age || '-'}</td>
                   <td>{patient.address}</td>
                   <td>{getISODate(patient.lastModifiedDate)}</td>
                 </tr>
@@ -315,14 +320,14 @@ const Patients = () => {
       </InfoColumn>
       <InfoColumn className="bg-white">
         <RiskLevelWrap className="m-0 py-4 px-3 justify-content-between w-100">
-          {riskNames.map((risk) => {
+          {patientRiskData?.map((risk) => {
             return (
-              <div className="d-flex" key={getRandomKey()}>
-                <StatusIndicator status={risk} />
+              <Fragment key={getRandomKey()}>
+                <StatusIndicator status={risk.riskType} />
                 <InfoValue className="ml-2">
-                  {risk} ({patients?.filter((p) => p.status === risk)?.length})
+                  {risk.riskType} ({risk.numberOfCases})
                 </InfoValue>
-              </div>
+              </Fragment>
             );
           })}
         </RiskLevelWrap>
@@ -349,7 +354,7 @@ const Patients = () => {
                             </div>
                             <Link
                               className="patient-link--small card-name mb-2"
-                              to={routes.createEncounter.path.replace(
+                              to={routes.editPatient.path.replace(
                                 ':patientId',
                                 patientId,
                               )}>
