@@ -78,7 +78,6 @@ const DesktopView = ({
             placeholder="Search by Name, Email or cellphone number"
             searchRef={searchRef}
             clearSearchInput={clearSearchInput}
-            isShow={isShowSearchSpinner}
           />
         </InputContainer>
         <div className="headsearch-btn-div">

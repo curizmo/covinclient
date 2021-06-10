@@ -87,7 +87,6 @@ const DashBoardComponent = () => {
   const [selectedCases, setSelectedCases] = useState(RISK.HIGH);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isInitLoading, setIsInitLoading] = useState(true);
-  const [isFirstFetchStarted, setIsFirstFetchStarted] = useState(false);
   const [page, setPage] = useState(0);
   const [patients, setPatients] = useState([]);
 
@@ -109,7 +108,15 @@ const DashBoardComponent = () => {
     }
   }, [fetchedPatients]);
 
+  useEffect(() => {
+    if (!isShowSearchSpinner) {
+      setIsInitLoading(false);
+    }
+  }, [isShowSearchSpinner]);
+
   const makeSearchRequest = (value) => {
+    const page = 0;
+    setPage(page);
     dispatch(requestSearch({ searchText: value, selectedCases, page }));
   };
 
@@ -126,8 +133,8 @@ const DashBoardComponent = () => {
   const changesCases = (sel) => {
     setIsInitLoading(true);
     const page = 0;
-    setSelectedCases(sel);
     setPage(page);
+    setSelectedCases(sel);
     dispatch(requestSearch({ searchText, selectedCases: sel, page }));
   };
 
@@ -137,17 +144,11 @@ const DashBoardComponent = () => {
     }
 
     dispatch(requestSearch({ searchText: '', selectedCases, page }));
-    setIsFirstFetchStarted(true);
+    setIsInitLoading(true);
     return () => {
       dispatch(clearSearch());
     };
   }, [user]);
-
-  useEffect(() => {
-    if (isFirstFetchStarted && !isShowSearchSpinner) {
-      setIsInitLoading(false);
-    }
-  }, [isShowSearchSpinner]);
 
   const incrementPage = () => {
     setIsInitLoading(true);
@@ -224,7 +225,6 @@ const DashBoardComponent = () => {
                 placeholder="Search by Name, Email or cellphone number"
                 searchRef={searchRefMobile}
                 clearSearchInput={clearSearchInput}
-                isInitLoading={isInitLoading}
               />
               <div className="headsearch-btn-div">
                 <Button
@@ -269,7 +269,7 @@ const DashBoardComponent = () => {
           clearSearchInput={clearSearchInput}
           hasNext={hasNext}
           incrementPage={incrementPage}
-          isShowSearchSpinner={isShowSearchSpinner}
+          isShowSearchSpinner={isShowSearchSpinner && !isInitLoading}
         />
       ) : (
         <DesktopView
@@ -278,11 +278,10 @@ const DashBoardComponent = () => {
           selectedCases={selectedCases}
           searchRef={searchRef}
           clearSearchInput={clearSearchInput}
-          isInitLoading={isInitLoading}
+          isShowSearchSpinner={isShowSearchSpinner && searchText?.length > 0}
           isDownloading={isDownloading}
           exportVitals={exportVitals}
           patients={patients}
-          isShowSearchSpinner={isShowSearchSpinner}
           incrementPage={incrementPage}
           hasNext={hasNext}
           page={page}

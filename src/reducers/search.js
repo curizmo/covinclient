@@ -26,8 +26,8 @@ const search = (state = initialState, { type, payload }) => {
     case SET_SEARCH_RESULT:
       return {
         ...state,
-        result: payload.patients,
-        hasNext: payload.hasNext,
+        result: payload?.patients,
+        hasNext: payload?.hasNext,
       };
     case SET_SEARCH_TEXT:
       return {
