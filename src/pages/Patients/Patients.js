@@ -73,19 +73,6 @@ export const InfoValue = styled.p`
   white-space: nowrap;
 `;
 
-const RiskLevelWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 8.5rem;
-  // box-shadow: 0 0 0 0.1rem #9fa7ba;
-  background: #f2f7fd;
-  display: none;
-  margin: 0;
-  @media (max-width: 768px) {
-    margin-bottom: 1.875rem;
-  }
-`;
-
 const Select = styled.select`
   border: none;
   outline: none;
@@ -110,6 +97,10 @@ const Select = styled.select`
 
   font-size: 16px;
   line-height: 20px;
+  @media (max-width: 768px) {
+    background: white;
+    margin-left: 1rem;
+  }
 `;
 
 const InfoColumn = styled.div`
@@ -332,23 +323,21 @@ const Patients = () => {
           <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
           <div className="d-flex justify-content-between">
             <StatusIndicator status={riskLevel} size={12} />
-            <div className="d-flex justify-content-between">
-              <Select
-                value={riskLevel}
-                onChange={handleRiskLevelChange}
-                onBlur={handleRiskLevelChange}>
-                {patientRiskData?.map((risk) => {
-                  return (
-                    <option
-                      key={risk.riskType}
-                      value={risk.riskType}
-                      className="select-options">
-                      {risk.riskType} ({risk.numberOfCases})
-                    </option>
-                  );
-                })}
-              </Select>
-            </div>
+            <Select
+              value={riskLevel}
+              onChange={handleRiskLevelChange}
+              onBlur={handleRiskLevelChange}>
+              {patientRiskData?.map((risk) => {
+                return (
+                  <option
+                    key={risk.riskType}
+                    value={risk.riskType}
+                    className="select-options">
+                    {risk.riskType} ({risk.numberOfCases})
+                  </option>
+                );
+              })}
+            </Select>
           </div>
         </PatientInfoColumn>
         <InfoColumn>
@@ -541,11 +530,39 @@ const Patients = () => {
     <div className="mobileview">
       <div className="header d-flex justify-content-between px-3 pt-2 align-items-center">
         <ViewName>Patients</ViewName>
-        <LinkButton className="mr-2 btn btn-covin" to={routes.addPatient.path}>
-          + New
-        </LinkButton>
+        <div className="headsearch-btn-div">
+          <Button
+            className="btn btn-download-mobile"
+            disabled={isDownloading}
+            onClick={exportVitals}>
+            {isDownloading ? (
+              <div className="lds-spinner position-absolute">
+                {[...Array(12).keys()].map((i) => (
+                  <span key={i} />
+                ))}
+              </div>
+            ) : (
+              <>
+                <span className="excel-image-wrap">
+                  <img
+                    src={excel}
+                    alt="Covin"
+                    className="logo download-excel-icon"
+                  />
+                  <img src={xicon} alt="Covin" className="logo x-icon" />
+                </span>
+                (Xls)
+              </>
+            )}
+          </Button>
+          <LinkButton
+            className="mr-2 btn btn-covin"
+            to={routes.addPatient.path}>
+            + New
+          </LinkButton>
+        </div>
       </div>
-      <InfoColumn className="bg-white">
+      <PatientInfoColumn className="bg-white">
         <InfoValue className="m-0 px-3">
           {patients?.length ?? 0} active patients
         </InfoValue>
@@ -561,20 +578,23 @@ const Patients = () => {
             isPatientSearch={true}
           />
         </div>
-      </InfoColumn>
+      </PatientInfoColumn>
       <InfoColumn className="bg-white">
-        <RiskLevelWrap className="m-0 py-4 px-3 justify-content-between w-100">
+        <Select
+          value={riskLevel}
+          onChange={handleRiskLevelChange}
+          onBlur={handleRiskLevelChange}>
           {patientRiskData?.map((risk) => {
             return (
-              <Fragment key={getRandomKey()}>
-                <StatusIndicator status={risk.riskType} />
-                <InfoValue className="ml-2">
-                  {risk.riskType} ({risk.numberOfCases})
-                </InfoValue>
-              </Fragment>
+              <option
+                key={risk.riskType}
+                value={risk.riskType}
+                className="select-options">
+                {risk.riskType} ({risk.numberOfCases})
+              </option>
             );
           })}
-        </RiskLevelWrap>
+        </Select>
       </InfoColumn>
       <div className="appointment-body-wrapper mb-1">
         {isFetching ? (
@@ -604,6 +624,43 @@ const Patients = () => {
                               )}>
                               {fullName}
                             </Link>
+                          </div>
+                          <div
+                            className="download-btn"
+                            role="button"
+                            disabled={
+                              downloadingPatientId === patient.patientId
+                            }
+                            onClick={() => {
+                              exportIndividualVitals(patient.patientId);
+                            }}
+                            onKeyDown={(e) => {
+                              e.key === 'Enter' &&
+                                exportVitals(patient.patientId);
+                            }}
+                            tabIndex={getTabIndex()}>
+                            {downloadingPatientId === patient.patientId ? (
+                              <div className="lds-spinner position-absolute">
+                                {[...Array(12).keys()].map((i) => (
+                                  <span key={i} />
+                                ))}
+                              </div>
+                            ) : (
+                              <>
+                                <span className="table-excel-wrap">
+                                  <img
+                                    src={excel}
+                                    alt="Covin"
+                                    className="table-excel-icon"
+                                  />
+                                  <img
+                                    src={xicon}
+                                    alt="Covin"
+                                    className="table-x-icon"
+                                  />
+                                </span>
+                              </>
+                            )}
                           </div>
                           <Button
                             className="transparent-button"
