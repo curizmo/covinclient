@@ -75,6 +75,19 @@ main {
   }
 }
 
+.select-arrow {
+  width: 0.8rem;
+  height: 0.8rem;
+  position: absolute;
+  left: 19.6rem;
+  top: 10.1rem;
+}
+
+.select-options {
+  background-color: #ffffff;
+  color: #22335e;
+}
+
 .patients-wrapper {
   display: none;
   @media (max-width: 768px) {
@@ -88,7 +101,7 @@ main {
   justify-content: space-evenly;
 }
 
-.excel-image-wrap{
+.excel-image-wrap {
   margin-right: 0.9rem;
 }
 
@@ -102,7 +115,7 @@ main {
   margin-right: 0.625rem;
 }
 .x-icon {
-  color: #FFFFFF;
+  color: #ffffff;
   width: 0.437rem;
   height: 0.437rem;
   position: absolute;
@@ -110,7 +123,7 @@ main {
   left: 0.937rem;
 }
 
-.excel-image-wrap-small{
+.excel-image-wrap-small {
   margin-right: 0.9rem;
 }
 
@@ -124,15 +137,15 @@ main {
   margin-right: 0.625rem;
 }
 .x-icon-small {
-  color: #FFFFFF;
-  width: 0.350rem;
-  height: 0.360rem;
+  color: #ffffff;
+  width: 0.35rem;
+  height: 0.36rem;
   position: absolute;
   top: 0.9rem;
   left: 0.957rem;
 }
 
-.excel-image-wrap-mobile{
+.excel-image-wrap-mobile {
   margin-right: 0.9rem;
 }
 
@@ -144,7 +157,7 @@ main {
   margin-right: 0.625rem;
 }
 .x-icon-mobile {
-  color: #FFFFFF;
+  color: #ffffff;
   width: 0.5rem;
   height: 0.5rem;
   position: absolute;
@@ -152,7 +165,36 @@ main {
   left: 0.3rem;
 }
 
-.mobile-download-button{
+.download-btn {
+  position: relative;
+  width: 0.945rem;
+  height: 1.25rem;
+  .lds-spinner {
+    position: absolute;
+    left: 0 !important;
+    top: 0 !important;
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.table-excel-icon {
+  width: 0.945rem;
+  height: 1.25rem;
+  position: relative;
+  z-index: 0;
+}
+.table-x-icon {
+  position: absolute;
+  left: 3px;
+  top: 8px;
+}
+
+.address-tooltip {
+  max-width: 18rem;
+}
+
+.mobile-download-button {
   outline: none;
 }
 

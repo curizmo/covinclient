@@ -6,6 +6,7 @@ import React, {
   useRef,
   Fragment,
 } from 'react';
+import ReactTooltip from 'react-tooltip';
 import { Table, Button, Card, CardBody } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -26,19 +27,32 @@ import {
   TimeImage,
   ViewName,
   WebViewWrap,
+  ScrollContainer,
 } from 'global/styles';
 import { getUser } from 'selectors';
 
 import * as patientService from 'services/patient';
+import * as patientVitalsService from 'services/patientVitals';
 import { usePatientsRiskData } from 'services/practitioner';
 import { routes } from 'routers';
 import { getISODate } from 'utils/dateTime';
-import { getRandomKey, handleCallAppointment } from 'utils';
+import { getRandomKey, handleCallAppointment, getTabIndex } from 'utils';
+import { exportToCSV, exportIndividualVitalsToCSV } from 'utils/vitalsDownload';
 import useCheckIsMobile from 'hooks/useCheckIsMobile';
-import { getDate } from 'global';
-import { GENDER_SHORTHAND, PER_PAGE, SORT_ORDER } from '../../constants';
+import { getDate, setDate, setDateTime } from 'global';
+import {
+  GENDER_SHORTHAND,
+  PER_PAGE,
+  SORT_ORDER,
+  VitalsDateFields,
+  LabDateFields,
+} from '../../constants';
+import { CAMEL_CASE_REGEX } from '../../constants/regex';
 import phoneSvg from 'assets/images/svg-icons/icon-phone.svg';
+
 import time from 'assets/images/svg-icons/clock.svg';
+import excel from 'assets/images/svg-icons/excel.svg';
+import xicon from 'assets/images/x-icon.png';
 
 const tableHeader = [
   { desc: 'Status', colName: 'Status' },
@@ -48,6 +62,7 @@ const tableHeader = [
   { desc: 'Age', colName: 'DateOfBirth' },
   { desc: 'Address', colName: 'Zip' },
   { desc: 'Last Encounter', colName: 'LastEncounter' },
+  { desc: 'Download', colName: 'Download' },
 ];
 
 export const InfoValue = styled.p`
@@ -59,17 +74,50 @@ export const InfoValue = styled.p`
   white-space: nowrap;
 `;
 
-const RiskLevelWrap = styled.div`
-  display: flex;
+const Select = styled.select`
+  border: none;
+  outline: none;
+  background: #f2f7fd;
+  height: 2rem;
+  position: relative;
+  margin-left: 6px;
+  margin-top: 0.9rem;
+  width: 7.5rem !important;
+  color: #22335e;
+  font-weight: 700;
+
+  :focus {
+    border: none;
+    outline: none;
+  }
+
+  :focus-visible {
+    border: none;
+    outline: none;
+  }
+
+  font-size: 16px;
+  line-height: 20px;
   @media (max-width: 768px) {
-    margin-bottom: 1.875rem;
+    background: white;
+    margin-right: 1rem;
+    margin-bottom: 1.5rem;
   }
 `;
 
 const InfoColumn = styled.div`
   display: flex;
   justify-content: space-between;
-  min-width: 49%;
+  min-width: 52%;
+  @media (max-width: 768px) {
+    padding: 0 6.5rem;
+  }
+`;
+
+const PatientInfoColumn = styled.div`
+  display: flex;
+  justify-content: space-between;
+  min-width: 17rem;
 `;
 
 const Patients = () => {
@@ -77,6 +125,10 @@ const Patients = () => {
   const searchRef = useRef(null);
   const user = useSelector(getUser);
 
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadingPatientId, setDownloadingPatientId] = useState(null);
+
+  const [riskLevel, setRiskLevel] = useState('High');
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -130,6 +182,7 @@ const Patients = () => {
         rowsCount: isMobile ? (currentPage + 1) * PER_PAGE : PER_PAGE,
         searchText: searchText,
         sortField,
+        riskLevel,
       });
 
       let patients = response.data;
@@ -161,7 +214,7 @@ const Patients = () => {
     return () => {
       debounced.cancel();
     };
-  }, [searchText, currentPage, sortField]);
+  }, [searchText, currentPage, sortField, riskLevel]);
 
   useEffect(() => {
     if (isMobile) {
@@ -177,6 +230,87 @@ const Patients = () => {
     [dispatch],
   );
 
+  const getVitals = (vitals) => {
+    let vitalDetails = vitals.data.map((vital) => {
+      for (var key in vital) {
+        var result = key.replace(CAMEL_CASE_REGEX, ' $1');
+        var title = result.charAt(0).toUpperCase() + result.slice(1);
+        if (title !== key) {
+          vital[title] = vital[key];
+          delete vital[key];
+        }
+      }
+      return {
+        ...vital,
+        [VitalsDateFields.updated]: setDateTime(
+          vital[VitalsDateFields.updated],
+        ),
+        [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
+        [VitalsDateFields.patientSince]: setDate(
+          vital[VitalsDateFields.patientSince],
+        ),
+        [VitalsDateFields.doseOne]: setDate(vital[VitalsDateFields.doseOne]),
+        [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
+      };
+    });
+
+    return vitalDetails;
+  };
+
+  const exportVitals = async () => {
+    try {
+      setIsDownloading(true);
+      const vitals = await patientVitalsService.getPatientVitals(
+        user.PractitionerID,
+      );
+      const vitalDetails = getVitals(vitals);
+      exportToCSV(vitalDetails);
+    } catch (err) {
+      // TODO: Handle error.
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const exportIndividualVitals = async (patientId) => {
+    try {
+      setDownloadingPatientId(patientId);
+
+      const [vitals, lab] = await Promise.all([
+        patientVitalsService.getIndividualPatientVitals(
+          user.PractitionerID,
+          patientId,
+        ),
+        patientVitalsService.getLabResults(user.PractitionerID, patientId),
+      ]);
+      const vitalDetails = getVitals(vitals);
+
+      let labResults = lab.data.map((lab) => {
+        return {
+          ...lab,
+          [LabDateFields.updated]: setDateTime(lab[LabDateFields.updated]),
+          [LabDateFields.specimenDrawnDate]: setDate(
+            lab[LabDateFields.specimenDrawnDate],
+          ),
+        };
+      });
+
+      exportIndividualVitalsToCSV(vitalDetails, labResults);
+    } catch (err) {
+      // TODO: Handle error
+    } finally {
+      setDownloadingPatientId(null);
+    }
+  };
+
+  const truncateText = (str) => {
+    return str.length > 40 ? str.substring(0, 40) + '...' : str;
+  };
+
+  const handleRiskLevelChange = (e) => {
+    setRiskLevel(e.target.value);
+  };
+
   const WebView = () => (
     <WebViewWrap>
       <InfoWrapper className="w-100">
@@ -187,36 +321,68 @@ const Patients = () => {
         </DateAndTimeWrap>
       </InfoWrapper>
       <div className="dashboard-header mb-2 d-flex justify-content-between flex-wrap w-100">
-        <InfoColumn>
+        <PatientInfoColumn>
           <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
+          <div className="d-flex justify-content-between">
+            <StatusIndicator status={riskLevel} size={12} />
+            <Select
+              value={riskLevel}
+              onChange={handleRiskLevelChange}
+              onBlur={handleRiskLevelChange}>
+              {patientRiskData?.map((risk) => {
+                return (
+                  <option
+                    key={risk.riskType}
+                    value={risk.riskType}
+                    className="select-options">
+                    {risk.riskType} ({risk.numberOfCases})
+                  </option>
+                );
+              })}
+            </Select>
+          </div>
+        </PatientInfoColumn>
+        <InfoColumn>
           <SearchInput
             customClass="my-2"
             searchText={searchText}
             requestSearch={makeSearchRequest}
-            placeholder="Search your patient"
+            placeholder="Search by Name, Email or cellphone number"
             searchRef={searchRef}
             clearSearchInput={clearSearchInput}
             isPatientSearch={true}
           />
-        </InfoColumn>
-        <InfoColumn>
-          <RiskLevelWrap>
-            {patientRiskData?.map((risk) => {
-              return (
-                <Fragment key={getRandomKey()}>
-                  <StatusIndicator status={risk.riskType} />
-                  <InfoValue className="ml-2">
-                    {risk.riskType} ({risk.numberOfCases})
-                  </InfoValue>
-                </Fragment>
-              );
-            })}
-          </RiskLevelWrap>
-          <LinkButton
-            className="btn btn-covin my-2"
-            to={routes.addPatient.path}>
-            + New Patient
-          </LinkButton>
+          <div className="headsearch-btn-div">
+            <Button
+              className="btn btn-download m-2"
+              disabled={isDownloading}
+              onClick={exportVitals}>
+              {isDownloading ? (
+                <div className="lds-spinner position-absolute">
+                  {[...Array(12).keys()].map((i) => (
+                    <span key={i} />
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <span className="excel-image-wrap">
+                    <img
+                      src={excel}
+                      alt="Covin"
+                      className="logo download-excel-icon"
+                    />
+                    <img src={xicon} alt="Covin" className="logo x-icon" />
+                  </span>
+                  DOWNLOAD (Xls)
+                </>
+              )}
+            </Button>
+            <LinkButton
+              className="btn btn-covin my-2"
+              to={routes.addPatient.path}>
+              + New Patient
+            </LinkButton>
+          </div>
         </InfoColumn>
       </div>
       <div className="dashboard-container">
@@ -243,14 +409,16 @@ const Patients = () => {
               {filteredPatients.map((patient, index) => (
                 <tr
                   key={getRandomKey()}
-                  className={patient.isSelected ? 'bg-light' : ''}>
+                  className={
+                    patient.isSelected ? 'bg-light' : 'patient-table-row'
+                  }>
                   <td>{index + 1}</td>
-                  <td className="pt-3">
+                  <td className="pt-3 table-content-status">
                     <StatusIndicator status={patient.status} size={12} />
                   </td>
                   <td>
                     <Link
-                      className="patient-link--small"
+                      className="patient-link--small table-patient-name"
                       to={routes.editPatient.path.replace(
                         ':patientId',
                         patient.patientId,
@@ -258,25 +426,77 @@ const Patients = () => {
                       {patient.fullName}
                     </Link>
                   </td>
-                  <td>
+                  <td className="table-content-phone">
                     {patient.phone && (
                       <Button
-                        className="d-flex"
+                        className="d-flex button-patient-call"
                         onClick={onCall(patient.patientId)}>
-                        <img
-                          src={phoneSvg}
-                          alt="phone"
-                          className="mr-2"
-                          size="0.8em"
-                        />
+                        <span></span>
                         {patient.phone}
                       </Button>
                     )}
                   </td>
-                  <td>{patient.gender || '-'}</td>
-                  <td>{patient.age || '-'}</td>
-                  <td>{patient.address}</td>
-                  <td>{getISODate(patient.lastModifiedDate)}</td>
+                  <td className="table-content-gender">
+                    {patient.gender || '-'}
+                  </td>
+                  <td className="table-content-age">{patient.age || '-'}</td>
+                  <td className="table-content-address">
+                    <span data-tip data-for={`${patient.address}`}>
+                      {truncateText(patient.address)}
+                    </span>
+                    <ReactTooltip
+                      className="address-tooltip"
+                      id={patient.address}
+                      place="bottom"
+                      effect="float"
+                      multiline={true}>
+                      {patient.address}
+                    </ReactTooltip>
+                  </td>
+                  <td className="table-content-date">
+                    {getISODate(patient.lastModifiedDate)}
+                  </td>
+                  <td className="table-content-download">
+                    <div
+                      data-tip={'download'}
+                      data-for={'download'}
+                      className="download-btn"
+                      role="button"
+                      disabled={downloadingPatientId === patient.patientId}
+                      onClick={() => {
+                        exportIndividualVitals(patient.patientId);
+                      }}
+                      onKeyDown={(e) => {
+                        e.key === 'Enter' && exportVitals(patient.patientId);
+                      }}
+                      tabIndex={getTabIndex()}>
+                      {downloadingPatientId === patient.patientId ? (
+                        <div className="lds-spinner position-absolute">
+                          {[...Array(12).keys()].map((i) => (
+                            <span key={i} />
+                          ))}
+                        </div>
+                      ) : (
+                        <>
+                          <span className="table-excel-wrap">
+                            <img
+                              src={excel}
+                              alt="Covin"
+                              className="table-excel-icon"
+                            />
+                            <img
+                              src={xicon}
+                              alt="Covin"
+                              className="table-x-icon"
+                            />
+                          </span>
+                        </>
+                      )}
+                    </div>
+                    <ReactTooltip id={'download'} place="bottom" effect="float">
+                      Download Xls
+                    </ReactTooltip>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -303,17 +523,62 @@ const Patients = () => {
   );
 
   const MobileView = () => (
-    <div className="mobileview">
-      <div className="header d-flex justify-content-between px-3 pt-2 align-items-center">
+    <ScrollContainer className="mobileview">
+      <div className="header d-flex justify-content-between px-3 pt-2 align-items-center mb-3">
         <ViewName>Patients</ViewName>
-        <LinkButton className="mr-2 btn btn-covin" to={routes.addPatient.path}>
-          + New
-        </LinkButton>
+        <div className="headsearch-btn-div">
+          <Button
+            className="btn btn-download-mobile"
+            disabled={isDownloading}
+            onClick={exportVitals}>
+            {isDownloading ? (
+              <div className="lds-spinner position-absolute">
+                {[...Array(12).keys()].map((i) => (
+                  <span key={i} />
+                ))}
+              </div>
+            ) : (
+              <>
+                <span className="excel-image-wrap">
+                  <img
+                    src={excel}
+                    alt="Covin"
+                    className="logo download-excel-icon"
+                  />
+                  <img src={xicon} alt="Covin" className="logo x-icon" />
+                </span>
+                (Xls)
+              </>
+            )}
+          </Button>
+          <LinkButton
+            className="mr-2 btn btn-covin"
+            to={routes.addPatient.path}>
+            + New
+          </LinkButton>
+        </div>
       </div>
-      <InfoColumn className="bg-white">
+      <PatientInfoColumn className="bg-white">
         <InfoValue className="m-0 px-3">
           {patients?.length ?? 0} active patients
         </InfoValue>
+        <Select
+          value={riskLevel}
+          onChange={handleRiskLevelChange}
+          onBlur={handleRiskLevelChange}>
+          {patientRiskData?.map((risk) => {
+            return (
+              <option
+                key={risk.riskType}
+                value={risk.riskType}
+                className="select-options">
+                {risk.riskType} ({risk.numberOfCases})
+              </option>
+            );
+          })}
+        </Select>
+      </PatientInfoColumn>
+      <InfoColumn className="bg-white">
         <div className="filter-container">
           <SearchInput
             placeholder="Search your patient"
@@ -325,20 +590,6 @@ const Patients = () => {
             isPatientSearch={true}
           />
         </div>
-      </InfoColumn>
-      <InfoColumn className="bg-white">
-        <RiskLevelWrap className="m-0 py-4 px-3 justify-content-between w-100">
-          {patientRiskData?.map((risk) => {
-            return (
-              <Fragment key={getRandomKey()}>
-                <StatusIndicator status={risk.riskType} />
-                <InfoValue className="ml-2">
-                  {risk.riskType} ({risk.numberOfCases})
-                </InfoValue>
-              </Fragment>
-            );
-          })}
-        </RiskLevelWrap>
       </InfoColumn>
       <div className="appointment-body-wrapper mb-1">
         {isFetching ? (
@@ -369,20 +620,58 @@ const Patients = () => {
                               {fullName}
                             </Link>
                           </div>
-                          <Button
-                            className="transparent-button"
-                            onClick={onCall(patient.patientId)}>
-                            <img
-                              src={phoneSvg}
-                              alt="phone"
-                              className="phone-icon-24"
-                            />
-                          </Button>
+                          <div
+                            className="download-btn"
+                            role="button"
+                            disabled={
+                              downloadingPatientId === patient.patientId
+                            }
+                            onClick={() => {
+                              exportIndividualVitals(patient.patientId);
+                            }}
+                            onKeyDown={(e) => {
+                              e.key === 'Enter' &&
+                                exportVitals(patient.patientId);
+                            }}
+                            tabIndex={getTabIndex()}>
+                            {downloadingPatientId === patient.patientId ? (
+                              <div className="lds-spinner position-absolute">
+                                {[...Array(12).keys()].map((i) => (
+                                  <span key={i} />
+                                ))}
+                              </div>
+                            ) : (
+                              <>
+                                <span className="table-excel-wrap">
+                                  <img
+                                    src={excel}
+                                    alt="Covin"
+                                    className="table-excel-icon"
+                                  />
+                                  <img
+                                    src={xicon}
+                                    alt="Covin"
+                                    className="table-x-icon"
+                                  />
+                                </span>
+                              </>
+                            )}
+                          </div>
                         </div>
                         <div className="card-div">
                           <div>
-                            <span className="mr-2">Mob:</span>
-                            <span className="card-value">{phone}</span>
+                            <span className="card-value">
+                              <Button
+                                className="d-flex button-patient-call"
+                                onClick={onCall(patient.patientId)}>
+                                <img
+                                  src={phoneSvg}
+                                  alt="phone"
+                                  className="phone-icon-24 mr-1"
+                                />
+                                {phone}
+                              </Button>
+                            </span>
                           </div>
                           <div>
                             <span className="mr-2">Gender:</span>
@@ -420,7 +709,7 @@ const Patients = () => {
           )}
         </Button>
       </div>
-    </div>
+    </ScrollContainer>
   );
 
   return (

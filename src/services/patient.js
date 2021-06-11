@@ -59,13 +59,15 @@ export async function fetchPatients({
   rowsCount,
   searchText,
   sortField,
+  riskLevel,
 }) {
   const pageQuery = rowsCount ? `offset=${offset}&rowsCount=${rowsCount}` : '';
   const searchQuery = searchText ? `&searchText=${searchText}` : '';
   const sortQuery = sortField?.colName
     ? `&colName=${sortField?.colName}&sortOrder=${sortField?.sortOrder}`
     : '';
-  const query = `?${pageQuery}${searchQuery}${sortQuery}`;
+  const risk = riskLevel ? `&riskStatus=${riskLevel}` : '';
+  const query = `?${pageQuery}${searchQuery}${sortQuery}${risk}`;
 
   return BEApi.get(`/patients/${query}`);
 }
