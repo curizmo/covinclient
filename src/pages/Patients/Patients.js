@@ -6,6 +6,7 @@ import React, {
   useRef,
   Fragment,
 } from 'react';
+import ReactTooltip from 'react-tooltip';
 import { Table, Button, Card, CardBody } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -396,12 +397,24 @@ const Patients = () => {
                     {patient.gender || '-'}
                   </td>
                   <td className="table-content-age">{patient.age || '-'}</td>
-                  <td>{patient.address}</td>
+                  <td className="table-content-address">
+                    <span data-tip data-for={`${patient.address}`}>
+                      {patient.address}
+                    </span>
+                    <ReactTooltip
+                      id={patient.address}
+                      place="bottom"
+                      effect="float">
+                      {patient.address}
+                    </ReactTooltip>
+                  </td>
                   <td className="table-content-date">
                     {getISODate(patient.lastModifiedDate)}
                   </td>
                   <td className="table-content-download">
                     <div
+                      data-tip={'download'}
+                      data-for={'download'}
                       className="download-btn"
                       role="button"
                       disabled={downloadingPatientId === patient.patientId}
@@ -435,6 +448,9 @@ const Patients = () => {
                         </>
                       )}
                     </div>
+                    <ReactTooltip id={'download'} place="bottom" effect="float">
+                      Download Xls
+                    </ReactTooltip>
                   </td>
                 </tr>
               ))}
