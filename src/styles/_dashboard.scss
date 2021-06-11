@@ -75,6 +75,19 @@ main {
   }
 }
 
+.select-arrow {
+  width: 0.8rem;
+  height: 0.8rem;
+  position: absolute;
+  left: 19.6rem;
+  top: 10.1rem;
+}
+
+.select-options {
+  background-color: #ffffff;
+  color: #22335e;
+}
+
 .patients-wrapper {
   display: none;
   @media (max-width: 768px) {
@@ -177,14 +190,13 @@ main {
   top: 8px;
 }
 
-.address-tooltip{
+.address-tooltip {
   max-width: 18rem;
 }
 
 .mobile-download-button {
   outline: none;
 }
-
 
 mobile-download-button {
   &:active,

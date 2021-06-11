@@ -52,6 +52,7 @@ import phoneSvg from 'assets/images/svg-icons/icon-phone.svg';
 
 import time from 'assets/images/svg-icons/clock.svg';
 import excel from 'assets/images/svg-icons/excel.svg';
+// import selectArrow from 'assets/images/svg-icons/select-arraow.svg';
 import xicon from 'assets/images/x-icon.png';
 
 const tableHeader = [
@@ -91,18 +92,26 @@ const Select = styled.select`
   border: none;
   outline: none;
   background: #f2f7fd;
-  margin-left: 4px;
-  width: 7.2rem;
+  height: 2rem;
+  position: relative;
+  margin-left: 6px;
+  margin-top: 0.9rem;
+  width: 7.5rem !important;
   color: #22335e;
   font-weight: 700;
+  // -webkit-appearance: none;
+  // -moz-appearance: none;
+
   :focus {
     border: none;
     outline: none;
   }
+
   :focus-visible {
     border: none;
     outline: none;
   }
+
   font-size: 16px;
   line-height: 20px;
 `;
@@ -183,6 +192,7 @@ const Patients = () => {
         rowsCount: isMobile ? (currentPage + 1) * PER_PAGE : PER_PAGE,
         searchText: searchText,
         sortField,
+        riskLevel,
       });
 
       let patients = response.data;
@@ -215,7 +225,7 @@ const Patients = () => {
     return () => {
       debounced.cancel();
     };
-  }, [searchText, currentPage, sortField]);
+  }, [searchText, currentPage, sortField, riskLevel]);
 
   useEffect(() => {
     if (isMobile) {
@@ -326,18 +336,24 @@ const Patients = () => {
           <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
           <div className="d-flex justify-content-between">
             <StatusIndicator status={riskLevel} size={12} />
-            <Select
-              value={riskLevel}
-              onChange={handleRiskLevelChange}
-              onBlur={handleRiskLevelChange}>
-              {patientRiskData?.map((risk) => {
-                return (
-                  <option key={risk.riskType} value={risk.riskType}>
-                    {risk.riskType} ({risk.numberOfCases})
-                  </option>
-                );
-              })}
-            </Select>
+            <div className="d-flex justify-content-between">
+              <Select
+                value={riskLevel}
+                onChange={handleRiskLevelChange}
+                onBlur={handleRiskLevelChange}>
+                {patientRiskData?.map((risk) => {
+                  return (
+                    <option
+                      key={risk.riskType}
+                      value={risk.riskType}
+                      className="select-options">
+                      {risk.riskType} ({risk.numberOfCases})
+                    </option>
+                  );
+                })}
+              </Select>
+              {/* <img src={selectArrow} alt="covin" className="select-arrow" /> */}
+            </div>
           </div>
         </PatientInfoColumn>
         <InfoColumn>
