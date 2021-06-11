@@ -82,7 +82,7 @@ const RiskLevelWrap = styled.div`
 const InfoColumn = styled.div`
   display: flex;
   justify-content: space-between;
-  min-width: 49%;
+  min-width: 52%;
 `;
 
 const PatientInfoColumn = styled.div`
@@ -310,7 +310,7 @@ const Patients = () => {
             customClass="my-2"
             searchText={searchText}
             requestSearch={makeSearchRequest}
-            placeholder="Search your patient"
+            placeholder="Search by Name, Email or cellphone number"
             searchRef={searchRef}
             clearSearchInput={clearSearchInput}
             isInitLoading={isInitLoading}
