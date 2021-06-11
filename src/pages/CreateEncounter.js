@@ -331,10 +331,12 @@ function CreateEncounter() {
     history.push(routes.patients.path);
   };
 
-  const handleRiskLevelChange = async (value) => {
-    await updatePatientRiskStatus(patientId, { status: value });
+  const handleRiskLevelChange = async (e) => {
+    const value = e?.target?.value;
 
     setRiskLevel(value);
+
+    await updatePatientRiskStatus(patientId, { status: value });
   };
 
   const handleFileSelect = async (e) => {

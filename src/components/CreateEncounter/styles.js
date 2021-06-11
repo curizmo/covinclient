@@ -24,7 +24,7 @@ export const NoteContainer = styled.div`
   box-shadow: 0px 2px 0px #e0e3ea;
   border-radius: 3px;
   @media (max-width: 768px) {
-    margin-top: 4.5rem;
+    margin-top: 2.5rem;
   }
 `;
 
