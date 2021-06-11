@@ -48,6 +48,8 @@ import {
 } from '../../constants';
 import { CAMEL_CASE_REGEX } from '../../constants/regex';
 import phoneSvg from 'assets/images/svg-icons/icon-phone.svg';
+// import phoneSvgWhite from 'assets/images/svg-icons/icon-phone-white.svg';
+
 import time from 'assets/images/svg-icons/clock.svg';
 import excel from 'assets/images/svg-icons/excel.svg';
 import xicon from 'assets/images/x-icon.png';
@@ -267,7 +269,6 @@ const Patients = () => {
         };
       });
 
-      console.log(vitalDetails, labResults);
       exportIndividualVitalsToCSV(vitalDetails, labResults);
     } catch (err) {
       // TODO: Handle error
@@ -398,7 +399,7 @@ const Patients = () => {
                         <img
                           src={phoneSvg}
                           alt="phone"
-                          className="mr-2"
+                          className="mr-2 phone-icon"
                           size="0.8em"
                         />
                         {patient.phone}
