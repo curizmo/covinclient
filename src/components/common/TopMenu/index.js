@@ -17,26 +17,13 @@ const TopMenu = () => {
 
   const menuItems = [
     {
-      name: '', //'Dashboard',
-      goTo: '/', //routes.dashboard.path,
+      name: 'Dashboard',
+      goTo: routes.dashboard.path,
     },
-    // {
-    //   name: 'Patients',
-    //   goTo: routes.patients.path,
-    // },
-    // @toDo add functionality for commented pages
-    // {
-    //   name: 'Prescriptions',
-    //   goTo: routes.prescriptions.path,
-    // },
-    // {
-    //   name: 'Labs',
-    //   goTo: routes.labs.path,
-    // },
-    // {
-    //   name: 'Directory',
-    //   goTo: routes.directory.path,
-    // },
+    {
+      name: 'Patients',
+      goTo: routes.patients.path,
+    },
   ];
 
   const getIsActive = useCallback(
@@ -85,7 +72,7 @@ const TopMenu = () => {
                   }`}
                   key={item.name}
                   to={item.goTo}>
-                  {/* {item.name} */}
+                  {item.name}
                 </Link>
               ))}
             </Nav>
