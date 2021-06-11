@@ -27,6 +27,7 @@ import {
   TimeImage,
   ViewName,
   WebViewWrap,
+  ScrollContainer,
 } from 'global/styles';
 import { getUser } from 'selectors';
 
@@ -99,7 +100,8 @@ const Select = styled.select`
   line-height: 20px;
   @media (max-width: 768px) {
     background: white;
-    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1.5rem;
   }
 `;
 
@@ -107,6 +109,9 @@ const InfoColumn = styled.div`
   display: flex;
   justify-content: space-between;
   min-width: 52%;
+  @media (max-width: 768px) {
+    padding: 0 6.2rem;
+  }
 `;
 
 const PatientInfoColumn = styled.div`
@@ -527,8 +532,8 @@ const Patients = () => {
   );
 
   const MobileView = () => (
-    <div className="mobileview">
-      <div className="header d-flex justify-content-between px-3 pt-2 align-items-center">
+    <ScrollContainer className="mobileview">
+      <div className="header d-flex justify-content-between px-3 pt-2 align-items-center mb-3">
         <ViewName>Patients</ViewName>
         <div className="headsearch-btn-div">
           <Button
@@ -566,20 +571,6 @@ const Patients = () => {
         <InfoValue className="m-0 px-3">
           {patients?.length ?? 0} active patients
         </InfoValue>
-        <div className="filter-container">
-          <SearchInput
-            placeholder="Search your patient"
-            searchText={searchText}
-            requestSearch={makeSearchRequest}
-            searchRef={searchRef}
-            clearSearchInput={clearSearchInput}
-            isInitLoading={isInitLoading}
-            customClass="right"
-            isPatientSearch={true}
-          />
-        </div>
-      </PatientInfoColumn>
-      <InfoColumn className="bg-white">
         <Select
           value={riskLevel}
           onChange={handleRiskLevelChange}
@@ -595,6 +586,20 @@ const Patients = () => {
             );
           })}
         </Select>
+      </PatientInfoColumn>
+      <InfoColumn className="bg-white">
+        <div className="filter-container">
+          <SearchInput
+            placeholder="Search your patient"
+            searchText={searchText}
+            requestSearch={makeSearchRequest}
+            searchRef={searchRef}
+            clearSearchInput={clearSearchInput}
+            isInitLoading={isInitLoading}
+            customClass="right"
+            isPatientSearch={true}
+          />
+        </div>
       </InfoColumn>
       <div className="appointment-body-wrapper mb-1">
         {isFetching ? (
@@ -662,20 +667,21 @@ const Patients = () => {
                               </>
                             )}
                           </div>
-                          <Button
-                            className="transparent-button"
-                            onClick={onCall(patient.patientId)}>
-                            <img
-                              src={phoneSvg}
-                              alt="phone"
-                              className="phone-icon-24"
-                            />
-                          </Button>
                         </div>
                         <div className="card-div">
                           <div>
-                            <span className="mr-2">Mob:</span>
-                            <span className="card-value">{phone}</span>
+                            <span className="card-value">
+                              <Button
+                                className="d-flex button-patient-call"
+                                onClick={onCall(patient.patientId)}>
+                                <img
+                                  src={phoneSvg}
+                                  alt="phone"
+                                  className="phone-icon-24 mr-1"
+                                />
+                                {phone}
+                              </Button>
+                            </span>
                           </div>
                           <div>
                             <span className="mr-2">Gender:</span>
@@ -713,7 +719,7 @@ const Patients = () => {
           )}
         </Button>
       </div>
-    </div>
+    </ScrollContainer>
   );
 
   return (
