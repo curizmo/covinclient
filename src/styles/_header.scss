@@ -60,12 +60,16 @@ header {
   .dropdown-menu {
     .nav-link {
       padding: 0 4px;
+      color: #22335e;
+      &:hover {
+        color: #000;
+      }
       &.active {
         color: white;
         background-color: rgba(#22335e, .9);
         border-bottom: none;
       }
-    }
+   }
   }
   @media (max-width: 768px) {
     padding: 0 1em 0 0;

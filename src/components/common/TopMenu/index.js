@@ -29,7 +29,7 @@ const TopMenu = () => {
   const getIsActive = useCallback(
     (itemPath) => {
       if (itemPath === routes.dashboard.path) {
-        return itemPath === currentTab;
+        return itemPath === currentTab || currentTab.includes('dashboard');
       }
       return currentTab.includes(itemPath);
     },

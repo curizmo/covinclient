@@ -240,7 +240,7 @@ const DesktopPatientTable = (props) => {
                     <Status selectedCases={patient.status} />
                     <Link
                       className="card-name patient-link--small min-width-20 mr-2"
-                      to={routes.editPatient.path.replace(
+                      to={routes.createEncounter.path.replace(
                         ':patientId',
                         patient.patientId,
                       )}>
@@ -355,8 +355,8 @@ DesktopPatientTable.propTypes = {
   isShowSpinner: PropTypes.bool,
   incrementPage: PropTypes.array,
   hasNext: PropTypes.bool,
-  selectedCases: PropTypes.object,
-  page: PropTypes.string,
+  selectedCases: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+  page: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   searchText: PropTypes.string,
 };
 

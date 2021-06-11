@@ -24,7 +24,7 @@ import {
   NoteText,
 } from './styles';
 
-import { getTabIndex } from 'utils';
+import { getRandomKey, getTabIndex } from 'utils';
 import { downloadFileFromBlob } from 'utils/file';
 
 import { ENTER } from '../../constants';
@@ -59,11 +59,7 @@ export const PatientNotes = ({
 
   return (
     <>
-      <HeadersComponent
-        image={notesIcon}
-        alt={'notes-icon'}
-        text={'Add Notes'}
-      />
+      <HeadersComponent image={notesIcon} alt={'notes-icon'} text={'Notes'} />
       <ColumnContainer>
         <ContentWrap>
           <TopContainer className="position-relative">
@@ -136,9 +132,8 @@ export const PatientNotes = ({
                 if (!note.notes && !note?.labResults?.length) {
                   return null;
                 }
-
                 return (
-                  <PastNote key={note.encounterId}>
+                  <PastNote key={getRandomKey()}>
                     <DateText className="mb-2">{note.eventStartTime}</DateText>
                     {note.notes ? <NoteText>{note.notes}</NoteText> : null}
                     {note?.labResults?.map((labResult) => {

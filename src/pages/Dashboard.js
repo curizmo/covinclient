@@ -82,6 +82,9 @@ const CasesHeader = styled.p`
   }
 `;
 
+// @toDo remove condition
+const isShowNewButton = false;
+
 const DashBoardComponent = () => {
   const dispatch = useDispatch();
   const [selectedCases, setSelectedCases] = useState(RISK.HIGH);
@@ -253,11 +256,13 @@ const DashBoardComponent = () => {
                     </>
                   )}
                 </Button>
-                <LinkButton
-                  className="btn btn-covin"
-                  to={routes.addPatient.path}>
-                  + New Patient
-                </LinkButton>
+                {isShowNewButton && (
+                  <LinkButton
+                    className="btn btn-covin"
+                    to={routes.addPatient.path}>
+                    + New Patient
+                  </LinkButton>
+                )}
               </div>
             </SearchWrapper>
           </div>

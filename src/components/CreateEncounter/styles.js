@@ -138,7 +138,7 @@ export const Note = styled.textarea`
   background: #ffffff;
   border: none;
   width: 100%;
-  height: 28rem;
+  height: 12rem;
   padding: 0.75rem;
   ::placeholder {
     color: #22335e;
@@ -318,9 +318,8 @@ export const ColumnContainer = styled.div`
 `;
 
 export const PastNotesContainer = styled.div`
-  margin-top: 1rem;
   border-top: 1px solid #dfe2e9;
-  padding-top: 2rem;
+  padding-top: 0.5rem;
 `;
 
 export const FileText = styled.span`

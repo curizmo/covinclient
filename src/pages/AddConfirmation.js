@@ -81,8 +81,10 @@ const AddConfirmation = ({ newPatient, message, confirmationType }) => {
           </div>
         )}
         <div>
-          <LinkButton to={routes.dashboard.path} className="back-button">
-            BACK TO DASHBOARD
+          <LinkButton
+            to={routes.patients.path}
+            className="btn-covin back-button">
+            OK
           </LinkButton>
         </div>
       </ConfirmationWrapper>
