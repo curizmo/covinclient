@@ -76,9 +76,36 @@ export const InfoValue = styled.p`
 
 const RiskLevelWrap = styled.div`
   display: flex;
+  flex-direction: column;
+  width: 8.5rem;
+  // box-shadow: 0 0 0 0.1rem #9fa7ba;
+  background: #f2f7fd;
+  display: none;
+  margin: 0;
   @media (max-width: 768px) {
     margin-bottom: 1.875rem;
   }
+`;
+
+const Select = styled.select`
+  border: none;
+  outline: none;
+  background: #f2f7fd;
+  margin-left: 5px;
+  // background: white;
+  width: 7.2rem;
+  color: #22335e;
+  font-weight: 700;
+  :focus {
+    border: none;
+    outline: none;
+  }
+  :focus-visible {
+    border: none;
+    outline: none;
+  }
+  font-size: 16px;
+  line-height: 20px;
 `;
 
 const InfoColumn = styled.div`
@@ -90,7 +117,7 @@ const InfoColumn = styled.div`
 const PatientInfoColumn = styled.div`
   display: flex;
   justify-content: space-between;
-  min-width: 25%;
+  min-width: 16%;
 `;
 
 const Patients = () => {
@@ -102,6 +129,7 @@ const Patients = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadingPatientId, setDownloadingPatientId] = useState(null);
 
+  const [riskLevel, setRiskLevel] = useState('High');
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -281,6 +309,10 @@ const Patients = () => {
     return str.length > 40 ? str.substring(0, 40) + '...' : str;
   };
 
+  const handleRiskLevelChange = (e) => {
+    setRiskLevel(e.target.value);
+  };
+
   const WebView = () => (
     <WebViewWrap>
       <InfoWrapper className="w-100">
@@ -293,18 +325,21 @@ const Patients = () => {
       <div className="dashboard-header mb-2 d-flex justify-content-between flex-wrap w-100">
         <PatientInfoColumn>
           <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
-          <RiskLevelWrap>
-            {patientRiskData?.map((risk) => {
-              return (
-                <Fragment key={getRandomKey()}>
-                  <StatusIndicator status={risk.riskType} />
-                  <InfoValue className="ml-2">
+          <div className="d-flex justify-content-between">
+            <StatusIndicator status={riskLevel} size={12} />
+            <Select
+              value={riskLevel}
+              onChange={handleRiskLevelChange}
+              onBlur={handleRiskLevelChange}>
+              {patientRiskData?.map((risk) => {
+                return (
+                  <option key={risk.riskType} value={risk.riskType}>
                     {risk.riskType} ({risk.numberOfCases})
-                  </InfoValue>
-                </Fragment>
-              );
-            })}
-          </RiskLevelWrap>
+                  </option>
+                );
+              })}
+            </Select>
+          </div>
         </PatientInfoColumn>
         <InfoColumn>
           <SearchInput
