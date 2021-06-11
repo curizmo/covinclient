@@ -385,7 +385,7 @@ const Patients = () => {
                   <td className="table-content-phone">
                     {patient.phone && (
                       <Button
-                        className="d-flex"
+                        className="d-flex button-patient-call"
                         onClick={onCall(patient.patientId)}>
                         <img
                           src={phoneSvg}

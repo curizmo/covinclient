@@ -134,6 +134,21 @@
     color: #657396;
     position: relative;
   }
+  &.button-patient-call {
+    background: transparent;
+    border: none !important;
+    border-radius: 40px;
+    color: #22345f;
+    font-family: Helvetica;
+    font-size: 0.9rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    padding-left:0.3rem;
+    letter-spacing: 0em;
+    text-align: left;
+    outline: none !important;
+  }
 }
 
 button {
@@ -155,6 +170,23 @@ button {
     color: #657396 !important;
     box-shadow: 0 0 0 0.2rem #9fa7ba !important;
     border-color: #9fa7ba !important;
+  }
+}
+
+.button-patient-call {
+  &.active,
+  &:hover {
+    background-color: #33c759 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    border-color: none !important;
+    &.phone-image{
+      background-color: #ffffff !important;
+    }
+  }
+  &:focus {
+    box-shadow: none !important;
+    border-color: none !important;
   }
 }
 
