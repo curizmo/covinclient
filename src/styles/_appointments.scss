@@ -1,7 +1,7 @@
 .patient-link {
   font-family: Helvetica;
   font-style: normal;
-  font-weight: 600;
+  font-weight: bold;
   line-height: 1.2;
   color: #3182fb;
   &:hover {
@@ -10,7 +10,6 @@
   &--small {
     @extend .patient-link;
     font-size: 0.9rem;
-    font-weight: 400;
     color: #01518d;
     &:hover {
       color: #01518d;
@@ -34,6 +33,8 @@
   width: 100%;
   outline: none !important;
   overflow: auto;
+  position: relative;
+  padding-bottom: 2rem;
 
   .header {
     padding: 1rem;

@@ -1,3 +1,10 @@
+:root {
+  --spinner-dark-color: #000;
+  --spinner-light-color: #ccc;
+  --dot-dark-color: #657396;
+  --dot-light-color: #d5dae1;
+}
+
 .spin {
   animation-name: spin;
   animation-duration: 3000ms;
@@ -82,16 +89,78 @@
   }
   @keyframes lds-spinner {
     0% {
-      background: #000;
+      background: var(--spinner-dark-color);
     }
     20% {
-      background: #000;
+      background: var(--spinner-dark-color);
     }
     21% {
-      background: #ccc;
+      background: var(--spinner-light-color);
     }
     100% {
-      background: #ccc;
+      background: var(--spinner-light-color);
     }
   }
-  
+
+/**
+ * ==============================================
+ * Dot Flashing Spinner
+ * ==============================================
+ */
+.dot-flashing-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translate3d(0, -50%, 0);
+  bottom: .5rem;
+  height: 10px;
+}
+
+.dot-flashing {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--dot-dark-color);
+  color: var(--dot-dark-color);
+  animation: dotFlashing 1s infinite linear alternate;
+  animation-delay: .5s;
+}
+
+.dot-flashing::before, .dot-flashing::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+}
+
+.dot-flashing::before {
+  left: -15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--dot-dark-color);
+  color: var(--dot-dark-color);
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 0s;
+}
+
+.dot-flashing::after {
+  left: 15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--dot-dark-color);
+  color: var(--dot-dark-color);
+  animation: dotFlashing 1s infinite alternate;
+  animation-delay: 1s;
+}
+
+@keyframes dotFlashing {
+  0% {
+    background-color: var(--dot-dark-color);
+  }
+  50%,
+  100% {
+    background-color:  var(--dot-light-color);
+  }
+}

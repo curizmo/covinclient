@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'reactstrap';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import PatientCard from 'components/Dashboard/PatientCard';
 import { SpinnerComponent } from 'components/common/SpinnerPortal/Spinner';
@@ -33,7 +34,7 @@ const MobileView = ({
   clearSearchInput,
   hasNext,
   incrementPage,
-  isShowSearchSpinner,
+  isShowSpinner,
 }) => {
   return (
     <PatientsWrapper isInitLoading={isInitLoading}>
@@ -56,9 +57,9 @@ const MobileView = ({
         <div className="load-more-container m-3">
           <Button
             onClick={incrementPage}
-            disabled={isInitLoading || isShowSearchSpinner}
+            disabled={isShowSpinner}
             className="btn-load-more btn btn-covin">
-            {isInitLoading || isShowSearchSpinner ? (
+            {isInitLoading ? (
               <div className="lds-spinner">
                 {[...Array(12).keys()].map((i) => (
                   <span key={i} />
@@ -72,6 +73,17 @@ const MobileView = ({
       ) : null}
     </PatientsWrapper>
   );
+};
+
+MobileView.propTypes = {
+  requestSearch: PropTypes.func,
+  searchText: PropTypes.string,
+  patients: PropTypes.array,
+  hasNext: PropTypes.bool,
+  incrementPage: PropTypes.func,
+  clearSearchInput: PropTypes.func,
+  isInitLoading: PropTypes.bool,
+  isShowSpinner: PropTypes.bool,
 };
 
 export { MobileView };

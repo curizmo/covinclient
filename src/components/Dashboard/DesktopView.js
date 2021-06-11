@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
-
-import { routes } from 'routers';
+import PropTypes from 'prop-types';
 
 import DesktopPatientTable from 'components/DesktopPatientTable';
-import { isLightVersion } from 'config';
 import { SearchInput } from 'components/common/SearchInput';
 import { LinkButton } from 'components/common/Button';
 
+import { routes } from 'routers';
+import { isLightVersion } from 'config';
 import excel from 'assets/images/svg-icons/excel.svg';
 import xicon from 'assets/images/x-icon.png';
 
@@ -25,7 +25,7 @@ const DeskTopViewPatient = styled.section`
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 253px);
   }
   display: none;
 `;
@@ -58,11 +58,10 @@ const DesktopView = ({
   selectedCases,
   searchRef,
   clearSearchInput,
-  isInitLoading,
   isDownloading,
   exportVitals,
   patients,
-  isShowSearchSpinner,
+  isShowSpinner,
   incrementPage,
   hasNext,
   page,
@@ -79,7 +78,6 @@ const DesktopView = ({
             placeholder="Search by Name, Email or cellphone number"
             searchRef={searchRef}
             clearSearchInput={clearSearchInput}
-            isInitLoading={isInitLoading}
           />
         </InputContainer>
         <div className="headsearch-btn-div">
@@ -114,7 +112,7 @@ const DesktopView = ({
       </HeaderSearchWrap>
       <DesktopPatientTable
         selectedCaseData={patients}
-        isShowSpinner={isInitLoading || isShowSearchSpinner}
+        isShowSpinner={isShowSpinner}
         incrementPage={incrementPage}
         hasNext={hasNext}
         page={page}
@@ -133,6 +131,21 @@ const DesktopView = ({
       )}
     </DeskTopViewPatient>
   );
+};
+
+DesktopView.propTypes = {
+  searchText: PropTypes.string,
+  makeSearchRequest: PropTypes.func,
+  selectedCases: PropTypes.array,
+  searchRef: PropTypes.object,
+  clearSearchInput: PropTypes.func,
+  isDownloading: PropTypes.bool,
+  exportVitals: PropTypes.func,
+  patients: PropTypes.array,
+  isShowSpinner: PropTypes.bool,
+  incrementPage: PropTypes.array,
+  hasNext: PropTypes.bool,
+  page: PropTypes.string,
 };
 
 export { DesktopView };

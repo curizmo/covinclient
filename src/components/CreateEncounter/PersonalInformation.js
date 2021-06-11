@@ -9,7 +9,6 @@ import {
   RISK,
   INTAKE_FORM_GROUPS,
 } from '../../constants';
-import { RadioLabel, RadioInput, OptionName } from 'global/styles';
 import arrowIcon from 'assets/images/svg-icons/arrow-left.svg';
 import collapseIcon from 'assets/images/svg-icons/showMore.svg';
 import expandIcon from 'assets/images/svg-icons/showLess.svg';
@@ -157,6 +156,25 @@ const MobAgeAndGender = styled.div`
   }
 `;
 
+const Select = styled.select`
+  border: none;
+  outline: none;
+  background: white;
+
+  :focus {
+    border: none;
+    outline: none;
+  }
+  :focus-visible {
+    border: none;
+    outline: none;
+  }
+
+  font-size: 16px;
+  line-height: 20px;
+  color: #657396;
+`;
+
 export const PersonalInformation = ({
   data,
   handleRiskLevelChange,
@@ -166,7 +184,7 @@ export const PersonalInformation = ({
   dispatch,
 }) => {
   const [isShowMore, setIsShowMore] = useState(false);
-  const radioMenu = Object.values(RISK);
+  const riskOptions = Object.values(RISK);
   const toggleShowMore = () => setIsShowMore((state) => !state);
   const onCall = useCallback(
     () => handleCallAppointment(dispatch, data?.patientId),
@@ -203,21 +221,18 @@ export const PersonalInformation = ({
           </Info>
         </MobAgeAndGender>
         <RiskLevelWrap>
-          {radioMenu.map((radio, index) => {
-            return (
-              <RadioLabel htmlFor={radio} key={index}>
-                <RadioInput
-                  type="radio"
-                  name="option"
-                  value={radio}
-                  id={radio}
-                  checked={riskLevel === radio}
-                  onChange={() => handleRiskLevelChange(radio)}
-                />
-                <OptionName checked={riskLevel === radio}>{radio}</OptionName>
-              </RadioLabel>
-            );
-          })}
+          <Select
+            value={riskLevel}
+            onChange={handleRiskLevelChange}
+            onBlur={handleRiskLevelChange}>
+            {riskOptions.map((radio) => {
+              return (
+                <option key={radio} value={radio}>
+                  {radio}
+                </option>
+              );
+            })}
+          </Select>
         </RiskLevelWrap>
         <CommunicationButtons onCall={onCall} />
         <Button onClick={onSave}>SAVE AND CLOSE</Button>

@@ -110,7 +110,7 @@ const InfoColumn = styled.div`
   justify-content: space-between;
   min-width: 52%;
   @media (max-width: 768px) {
-    padding: 0 6.2rem;
+    padding: 0 6.5rem;
   }
 `;
 
@@ -125,7 +125,6 @@ const Patients = () => {
   const searchRef = useRef(null);
   const user = useSelector(getUser);
 
-  const [isInitLoading, setIsInitLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadingPatientId, setDownloadingPatientId] = useState(null);
 
@@ -177,7 +176,6 @@ const Patients = () => {
 
   const fetchPatients = async () => {
     setIsFetching(true);
-    setIsInitLoading(searchText);
     try {
       const response = await patientService.fetchPatients({
         offset: isMobile ? 0 : currentPage * PER_PAGE,
@@ -201,7 +199,6 @@ const Patients = () => {
       console.error(err);
     } finally {
       setIsFetching(false);
-      setIsInitLoading(false);
     }
   };
 
@@ -353,7 +350,6 @@ const Patients = () => {
             placeholder="Search by Name, Email or cellphone number"
             searchRef={searchRef}
             clearSearchInput={clearSearchInput}
-            isInitLoading={isInitLoading}
             isPatientSearch={true}
           />
           <div className="headsearch-btn-div">
@@ -595,7 +591,6 @@ const Patients = () => {
             requestSearch={makeSearchRequest}
             searchRef={searchRef}
             clearSearchInput={clearSearchInput}
-            isInitLoading={isInitLoading}
             customClass="right"
             isPatientSearch={true}
           />

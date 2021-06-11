@@ -28,12 +28,14 @@
 }
 
 .vital-current-value {
-  font-size: 1.375rem;
+  font-size: 0.8125rem;
+  font-weight: bold;
 }
 
 .vital-current-unit {
-  font-size: 1.18rem;
-  margin-top: 4px;
+  font-size: .75rem;
+  font-weight: bold;
+  margin-top: 2px;
   text-transform: none;
 }
 

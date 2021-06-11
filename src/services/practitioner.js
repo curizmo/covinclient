@@ -175,8 +175,9 @@ export const usePatientsVitals = (searchText) => {
  * @returns {Promise<object>}
  */
 export async function fetchPatientsWithRiskData(practitionerId) {
-  const { data } = await api.get(`practitioner/${practitionerId}/riskdata`);
-  return data;
+  const response = await api.get(`practitioner/${practitionerId}/riskdata`);
+
+  return response?.data;
 }
 
 export const usePatientsRiskData = (practitionerId) => {
