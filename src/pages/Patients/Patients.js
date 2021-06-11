@@ -48,11 +48,9 @@ import {
 } from '../../constants';
 import { CAMEL_CASE_REGEX } from '../../constants/regex';
 import phoneSvg from 'assets/images/svg-icons/icon-phone.svg';
-// import phoneSvgWhite from 'assets/images/svg-icons/icon-phone-white.svg';
 
 import time from 'assets/images/svg-icons/clock.svg';
 import excel from 'assets/images/svg-icons/excel.svg';
-// import selectArrow from 'assets/images/svg-icons/select-arraow.svg';
 import xicon from 'assets/images/x-icon.png';
 
 const tableHeader = [
@@ -99,8 +97,6 @@ const Select = styled.select`
   width: 7.5rem !important;
   color: #22335e;
   font-weight: 700;
-  // -webkit-appearance: none;
-  // -moz-appearance: none;
 
   :focus {
     border: none;
@@ -352,7 +348,6 @@ const Patients = () => {
                   );
                 })}
               </Select>
-              {/* <img src={selectArrow} alt="covin" className="select-arrow" /> */}
             </div>
           </div>
         </PatientInfoColumn>
