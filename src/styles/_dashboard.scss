@@ -177,9 +177,14 @@ main {
   top: 8px;
 }
 
+.address-tooltip{
+  max-width: 18rem;
+}
+
 .mobile-download-button {
   outline: none;
 }
+
 
 mobile-download-button {
   &:active,

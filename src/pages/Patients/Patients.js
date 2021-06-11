@@ -406,9 +406,11 @@ const Patients = () => {
                       {truncateText(patient.address)}
                     </span>
                     <ReactTooltip
+                      className="address-tooltip"
                       id={patient.address}
-                      place="bottom"
-                      effect="float">
+                      place="right"
+                      effect="float"
+                      multiline={true}>
                       {patient.address}
                     </ReactTooltip>
                   </td>
