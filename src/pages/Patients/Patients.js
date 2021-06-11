@@ -408,7 +408,7 @@ const Patients = () => {
                     <ReactTooltip
                       className="address-tooltip"
                       id={patient.address}
-                      place="right"
+                      place="bottom"
                       effect="float"
                       multiline={true}>
                       {patient.address}
