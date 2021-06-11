@@ -49,7 +49,6 @@ import {
   ResendWrap,
 } from 'global/styles';
 import { getDate } from 'global';
-import { isLightVersion } from 'config';
 import GeneralInformation from 'components/CreateEncounter/GeneralInformation';
 import { ColumnContainer } from 'components/CreateEncounter/styles';
 
@@ -197,6 +196,8 @@ const VITALS_TABS = {
   symptoms: 'symptoms',
   labResults: 'labResults',
 };
+
+const HIDE_PRESCRIPTION = true;
 
 function CreateEncounter() {
   const dispatch = useDispatch();
@@ -438,7 +439,11 @@ function CreateEncounter() {
           />
           <MedInfoWrap>
             <Column>
-              <GeneralInformation data={patientData} dispatch={dispatch} />
+              <GeneralInformation
+                data={patientData}
+                dispatch={dispatch}
+                hidePrescription={HIDE_PRESCRIPTION}
+              />
             </Column>
             <Column>
               <TabContainer>
@@ -504,7 +509,7 @@ function CreateEncounter() {
                 handleRemoveFile={handleRemoveFile}
               />
             </Column>
-            {!isLightVersion && (
+            {!HIDE_PRESCRIPTION && (
               <Column>
                 <PatientPrescription
                   patientData={patientData}
