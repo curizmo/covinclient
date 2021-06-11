@@ -36,7 +36,7 @@ import * as patientVitalsService from 'services/patientVitals';
 import { usePatientsRiskData } from 'services/practitioner';
 import { routes } from 'routers';
 import { getISODate } from 'utils/dateTime';
-import { getRandomKey, handleCallAppointment, getTabIndex } from 'utils';
+import { handleCallAppointment, getTabIndex } from 'utils';
 import { exportToCSV, exportIndividualVitalsToCSV } from 'utils/vitalsDownload';
 import useCheckIsMobile from 'hooks/useCheckIsMobile';
 import { getDate, setDate, setDateTime } from 'global';
@@ -100,7 +100,7 @@ const Select = styled.select`
   @media (max-width: 768px) {
     background: white;
     margin-right: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
 `;
 
@@ -109,7 +109,7 @@ const InfoColumn = styled.div`
   justify-content: space-between;
   min-width: 52%;
   @media (max-width: 768px) {
-    padding: 0 6.5rem;
+    padding: 0;
   }
 `;
 
@@ -302,10 +302,6 @@ const Patients = () => {
     }
   };
 
-  const truncateText = (str) => {
-    return str.length > 40 ? str.substring(0, 40) + '...' : str;
-  };
-
   const handleRiskLevelChange = (e) => {
     setRiskLevel(e.target.value);
   };
@@ -407,7 +403,7 @@ const Patients = () => {
             <tbody>
               {filteredPatients.map((patient, index) => (
                 <tr
-                  key={getRandomKey()}
+                  key={patient.patientId}
                   className={
                     patient.isSelected ? 'bg-light' : 'patient-table-row'
                   }>
@@ -440,16 +436,16 @@ const Patients = () => {
                   </td>
                   <td className="table-content-age">{patient.age || '-'}</td>
                   <td className="table-content-address">
-                    <span data-tip data-for={`${patient.address}`}>
-                      {truncateText(patient.address)}
-                    </span>
+                    <div data-tip data-for={`${patient.address}`}>
+                      {patient.address}
+                    </div>
                     <ReactTooltip
                       className="address-tooltip"
                       id={patient.address}
                       place="bottom"
                       effect="float"
                       multiline={true}>
-                      {patient.address}
+                      <span>{patient.address}</span>
                     </ReactTooltip>
                   </td>
                   <td className="table-content-date">
@@ -597,7 +593,7 @@ const Patients = () => {
           filteredPatients.map((patient) => {
             const { patientId, fullName, age, gender, phone } = patient;
             return (
-              <Fragment key={getRandomKey()}>
+              <Fragment key={patient.patientId}>
                 <Card className="mb-1 appointment-info-card">
                   <CardBody>
                     <div className="card-info-body">

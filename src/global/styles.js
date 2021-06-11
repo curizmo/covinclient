@@ -60,6 +60,8 @@ export const TimeImage = styled.img`
 export const DateAndTime = styled.span`
   color: #657396;
   font-family: Helvetica;
+  font-size: 13px;
+  font-weight: 700;
   @media (max-width: 768px) {
     font-size: 0.8125rem;
     line-height: 1.125rem;

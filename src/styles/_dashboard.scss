@@ -191,7 +191,10 @@ main {
 }
 
 .address-tooltip {
-  max-width: 18rem;
+  span {
+    white-space: initial;
+    text-overflow: clip;
+  }
 }
 
 .mobile-download-button {
