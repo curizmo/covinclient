@@ -48,7 +48,6 @@ import {
   LabDateFields,
 } from '../../constants';
 import { CAMEL_CASE_REGEX } from '../../constants/regex';
-import phoneSvg from 'assets/images/svg-icons/icon-phone.svg';
 
 import time from 'assets/images/svg-icons/clock.svg';
 import excel from 'assets/images/svg-icons/excel.svg';
@@ -664,11 +663,7 @@ const Patients = () => {
                               <Button
                                 className="d-flex button-patient-call"
                                 onClick={onCall(patient.patientId)}>
-                                <img
-                                  src={phoneSvg}
-                                  alt="phone"
-                                  className="phone-icon-24 mr-1"
-                                />
+                                <span></span>
                                 {phone}
                               </Button>
                             </span>
