@@ -85,6 +85,12 @@ const InfoColumn = styled.div`
   min-width: 49%;
 `;
 
+const PatientInfoColumn = styled.div`
+  display: flex;
+  justify-content: space-between;
+  min-width: 25%;
+`;
+
 const Patients = () => {
   const dispatch = useDispatch();
   const searchRef = useRef(null);
@@ -284,20 +290,8 @@ const Patients = () => {
         </DateAndTimeWrap>
       </InfoWrapper>
       <div className="dashboard-header mb-2 d-flex justify-content-between flex-wrap w-100">
-        <InfoColumn>
+        <PatientInfoColumn>
           <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
-          <SearchInput
-            customClass="my-2"
-            searchText={searchText}
-            requestSearch={makeSearchRequest}
-            placeholder="Search your patient"
-            searchRef={searchRef}
-            clearSearchInput={clearSearchInput}
-            isInitLoading={isInitLoading}
-            isPatientSearch={true}
-          />
-        </InfoColumn>
-        <InfoColumn>
           <RiskLevelWrap>
             {patientRiskData?.map((risk) => {
               return (
@@ -310,6 +304,18 @@ const Patients = () => {
               );
             })}
           </RiskLevelWrap>
+        </PatientInfoColumn>
+        <InfoColumn>
+          <SearchInput
+            customClass="my-2"
+            searchText={searchText}
+            requestSearch={makeSearchRequest}
+            placeholder="Search your patient"
+            searchRef={searchRef}
+            clearSearchInput={clearSearchInput}
+            isInitLoading={isInitLoading}
+            isPatientSearch={true}
+          />
           <div className="headsearch-btn-div">
             <Button
               className="btn btn-download m-2"
