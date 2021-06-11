@@ -30,15 +30,25 @@ import {
 import { getUser } from 'selectors';
 
 import * as patientService from 'services/patient';
+import * as patientVitalsService from 'services/patientVitals';
 import { usePatientsRiskData } from 'services/practitioner';
 import { routes } from 'routers';
 import { getISODate } from 'utils/dateTime';
 import { getRandomKey, handleCallAppointment } from 'utils';
+import { exportToCSV } from 'utils/vitalsDownload';
 import useCheckIsMobile from 'hooks/useCheckIsMobile';
-import { getDate } from 'global';
-import { GENDER_SHORTHAND, PER_PAGE, SORT_ORDER } from '../../constants';
+import { getDate, setDate, setDateTime } from 'global';
+import {
+  GENDER_SHORTHAND,
+  PER_PAGE,
+  SORT_ORDER,
+  VitalsDateFields,
+} from '../../constants';
+import { CAMEL_CASE_REGEX } from '../../constants/regex';
 import phoneSvg from 'assets/images/svg-icons/icon-phone.svg';
 import time from 'assets/images/svg-icons/clock.svg';
+import excel from 'assets/images/svg-icons/excel.svg';
+import xicon from 'assets/images/x-icon.png';
 
 const tableHeader = [
   { desc: 'Status', colName: 'Status' },
@@ -78,6 +88,7 @@ const Patients = () => {
   const user = useSelector(getUser);
 
   const [isInitLoading, setIsInitLoading] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -180,6 +191,44 @@ const Patients = () => {
     [dispatch],
   );
 
+  const exportVitals = async () => {
+    try {
+      setIsDownloading(true);
+
+      const vitals = await patientVitalsService.getPatientVitals(
+        user.PractitionerID,
+      );
+
+      let vitalDetails = vitals.data.map((vital) => {
+        for (var key in vital) {
+          var result = key.replace(CAMEL_CASE_REGEX, ' $1');
+          var title = result.charAt(0).toUpperCase() + result.slice(1);
+          if (title !== key) {
+            vital[title] = vital[key];
+            delete vital[key];
+          }
+        }
+        return {
+          ...vital,
+          [VitalsDateFields.updated]: setDateTime(
+            vital[VitalsDateFields.updated],
+          ),
+          [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
+          [VitalsDateFields.patientSince]: setDate(
+            vital[VitalsDateFields.patientSince],
+          ),
+          [VitalsDateFields.doseOne]: setDate(vital[VitalsDateFields.doseOne]),
+          [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
+        };
+      });
+      exportToCSV(vitalDetails);
+    } catch (err) {
+      // TODO: Handle error.
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   const WebView = () => (
     <WebViewWrap>
       <InfoWrapper className="w-100">
@@ -216,11 +265,37 @@ const Patients = () => {
               );
             })}
           </RiskLevelWrap>
-          <LinkButton
-            className="btn btn-covin my-2"
-            to={routes.addPatient.path}>
-            + New Patient
-          </LinkButton>
+          <div className="headsearch-btn-div">
+            <Button
+              className="btn btn-download m-2"
+              disabled={isDownloading}
+              onClick={exportVitals}>
+              {isDownloading ? (
+                <div className="lds-spinner position-absolute">
+                  {[...Array(12).keys()].map((i) => (
+                    <span key={i} />
+                  ))}
+                </div>
+              ) : (
+                <>
+                  <span className="excel-image-wrap">
+                    <img
+                      src={excel}
+                      alt="Covin"
+                      className="logo download-excel-icon"
+                    />
+                    <img src={xicon} alt="Covin" className="logo x-icon" />
+                  </span>
+                  DOWNLOAD (Xls)
+                </>
+              )}
+            </Button>
+            <LinkButton
+              className="btn btn-covin my-2"
+              to={routes.addPatient.path}>
+              + New Patient
+            </LinkButton>
+          </div>
         </InfoColumn>
       </div>
       <div className="dashboard-container">
