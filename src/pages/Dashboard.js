@@ -252,7 +252,7 @@ const DashBoardComponent = () => {
                         />
                         <img src={xicon} alt="Covin" className="logo x-icon" />
                       </span>
-                      DOWNLOAD (Xls)
+                      DOWNLOAD ALL (Xls)
                     </>
                   )}
                 </Button>
