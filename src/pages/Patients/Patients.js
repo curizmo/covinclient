@@ -270,6 +270,10 @@ const Patients = () => {
     }
   };
 
+  const truncateText = (str) => {
+    return str.length > 40 ? str.substring(0, 40) + '...' : str;
+  };
+
   const WebView = () => (
     <WebViewWrap>
       <InfoWrapper className="w-100">
@@ -399,7 +403,7 @@ const Patients = () => {
                   <td className="table-content-age">{patient.age || '-'}</td>
                   <td className="table-content-address">
                     <span data-tip data-for={`${patient.address}`}>
-                      {patient.address}
+                      {truncateText(patient.address)}
                     </span>
                     <ReactTooltip
                       id={patient.address}
