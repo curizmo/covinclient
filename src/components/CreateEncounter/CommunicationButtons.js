@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
 import callIcon from 'assets/images/svg-icons/phone.svg';
-import videoIcon from 'assets/images/svg-icons/video.svg';
 
 const CommunicationWrap = styled.div`
   display: flex;
@@ -61,11 +60,6 @@ const CallIcon = styled.img`
 export const CommunicationButtons = ({ onCall }) => {
   return (
     <CommunicationWrap>
-      {/* @toDo add video call functionality */}
-      <CallButton disabled type="button">
-        <CallIcon src={videoIcon} alt="call" className="m-1" />
-        <span>Video Call</span>
-      </CallButton>
       <CallButton onClick={onCall} type="button">
         <a style={{ textDecoration: 'None', color: 'inherit' }} href={'tel:'}>
           <CallIcon src={callIcon} alt="call" className="m-1" />
