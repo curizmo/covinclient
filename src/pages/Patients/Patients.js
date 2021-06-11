@@ -91,7 +91,7 @@ const Select = styled.select`
   border: none;
   outline: none;
   background: #f2f7fd;
-  margin-left: 5px;
+  margin-left: 4px;
   // background: white;
   width: 7.2rem;
   color: #22335e;
