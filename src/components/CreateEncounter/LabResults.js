@@ -45,7 +45,7 @@ const LabResults = ({ labs }) => {
               }
 
               return (
-                <ResultText key={key}>
+                <ResultText className="mb-1" key={key}>
                   {LAB_RESULTS[key]}: {result.result[key]}
                 </ResultText>
               );
