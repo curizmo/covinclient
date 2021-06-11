@@ -367,7 +367,9 @@ const Patients = () => {
               {filteredPatients.map((patient, index) => (
                 <tr
                   key={getRandomKey()}
-                  className={patient.isSelected ? 'bg-light' : ''}>
+                  className={
+                    patient.isSelected ? 'bg-light' : 'patient-table-row'
+                  }>
                   <td>{index + 1}</td>
                   <td className="pt-3 table-content-status">
                     <StatusIndicator status={patient.status} size={12} />
