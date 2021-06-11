@@ -92,7 +92,6 @@ const Select = styled.select`
   outline: none;
   background: #f2f7fd;
   margin-left: 4px;
-  // background: white;
   width: 7.2rem;
   color: #22335e;
   font-weight: 700;
@@ -117,7 +116,7 @@ const InfoColumn = styled.div`
 const PatientInfoColumn = styled.div`
   display: flex;
   justify-content: space-between;
-  min-width: 16%;
+  min-width: 17rem;
 `;
 
 const Patients = () => {
