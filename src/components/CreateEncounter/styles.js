@@ -334,3 +334,10 @@ export const NoteText = styled.div`
   font-size: 14px;
   line-height: 18px;
 `;
+
+export const ResultText = styled.div`
+  color: #22335e;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+`;

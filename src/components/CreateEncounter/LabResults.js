@@ -8,7 +8,7 @@ import { getFile } from 'services/file';
 import { getTabIndex } from 'utils';
 import { downloadFileFromBlob } from 'utils/file';
 
-import { DateText, SymptomContainer, FileText } from './styles';
+import { DateText, SymptomContainer, FileText, ResultText } from './styles';
 
 const LAB_RESULTS = {
   crp: 'CRP',
@@ -40,17 +40,19 @@ const LabResults = ({ labs }) => {
           <SymptomContainer key={result.specimenDrawnDate}>
             <DateText className="mb-1">{result.specimenDrawnDate}:</DateText>
             {Object.keys(LAB_RESULTS).map((key) => {
-              if (!result[key]) {
+              if (!result?.result[key]) {
                 return null;
               }
 
               return (
-                <div key={key}>
-                  {LAB_RESULTS[key]}:{result[key]}
-                </div>
+                <ResultText key={key}>
+                  {LAB_RESULTS[key]}: {result.result[key]}
+                </ResultText>
               );
             })}
-            <div>Note: {result.otherLabResultsInfo || '-'}</div>
+            {result.otherLabResultsInfo ? (
+              <ResultText>Note: {result.otherLabResultsInfo}</ResultText>
+            ) : null}
             {result?.files?.map((file) => {
               return (
                 <div
