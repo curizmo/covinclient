@@ -25,7 +25,7 @@ const Value = styled.div`
   font-weight: 700;
 `;
 
-const GeneralInformation = ({ data, dispatch }) => {
+const GeneralInformation = ({ data, dispatch, hidePrescription }) => {
   const onCall = useCallback(
     () => handleCallAppointment(dispatch, data?.patientId),
     [dispatch, data],
@@ -72,16 +72,18 @@ const GeneralInformation = ({ data, dispatch }) => {
           <Label>Allergies (medications):</Label>
           <Value>{data.Allergy?.join(',')}</Value>
         </Info>
-        <Info>
-          <Label>Current medications:</Label>
-          {data.pastPrescriptions?.length > 0 ? (
-            <>
-              <Value>{data.pastPrescriptions.join(', ')}</Value>
-            </>
-          ) : (
-            <Value>-</Value>
-          )}
-        </Info>
+        {!hidePrescription && (
+          <Info>
+            <Label>Current medications:</Label>
+            {data.pastPrescriptions?.length > 0 ? (
+              <>
+                <Value>{data.pastPrescriptions.join(', ')}</Value>
+              </>
+            ) : (
+              <Value>-</Value>
+            )}
+          </Info>
+        )}
       </ColumnContainer>
     </div>
   );

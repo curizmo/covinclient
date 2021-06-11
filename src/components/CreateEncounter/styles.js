@@ -24,7 +24,7 @@ export const NoteContainer = styled.div`
   box-shadow: 0px 2px 0px #e0e3ea;
   border-radius: 3px;
   @media (max-width: 768px) {
-    margin-top: 4.5rem;
+    margin-top: 2.5rem;
   }
 `;
 
@@ -331,6 +331,13 @@ export const FileText = styled.span`
 
 export const NoteText = styled.div`
   color: #22335e;
+  font-size: 14px;
+  line-height: 18px;
+`;
+
+export const ResultText = styled.div`
+  color: #22335e;
+  font-weight: bold;
   font-size: 14px;
   line-height: 18px;
 `;

@@ -49,7 +49,6 @@ import {
   ResendWrap,
 } from 'global/styles';
 import { getDate } from 'global';
-import { isLightVersion } from 'config';
 import GeneralInformation from 'components/CreateEncounter/GeneralInformation';
 import { ColumnContainer } from 'components/CreateEncounter/styles';
 
@@ -198,6 +197,8 @@ const VITALS_TABS = {
   labResults: 'labResults',
 };
 
+const HIDE_PRESCRIPTION = true;
+
 function CreateEncounter() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -330,10 +331,12 @@ function CreateEncounter() {
     history.push(routes.patients.path);
   };
 
-  const handleRiskLevelChange = async (value) => {
-    await updatePatientRiskStatus(patientId, { status: value });
+  const handleRiskLevelChange = async (e) => {
+    const value = e?.target?.value;
 
     setRiskLevel(value);
+
+    await updatePatientRiskStatus(patientId, { status: value });
   };
 
   const handleFileSelect = async (e) => {
@@ -438,7 +441,11 @@ function CreateEncounter() {
           />
           <MedInfoWrap>
             <Column>
-              <GeneralInformation data={patientData} dispatch={dispatch} />
+              <GeneralInformation
+                data={patientData}
+                dispatch={dispatch}
+                hidePrescription={HIDE_PRESCRIPTION}
+              />
             </Column>
             <Column>
               <TabContainer>
@@ -504,7 +511,7 @@ function CreateEncounter() {
                 handleRemoveFile={handleRemoveFile}
               />
             </Column>
-            {!isLightVersion && (
+            {!HIDE_PRESCRIPTION && (
               <Column>
                 <PatientPrescription
                   patientData={patientData}
