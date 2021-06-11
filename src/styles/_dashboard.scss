@@ -171,8 +171,8 @@ main {
   height: 1.25rem;
   .lds-spinner {
     position: absolute;
-    left: 0px !important;
-    top: 0px !important;
+    left: 0 !important;
+    top: 0 !important;
     width: 1rem;
     height: 1rem;
   }
