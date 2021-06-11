@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Input } from 'reactstrap';
 import { Search } from 'react-feather';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import { getIsShowSearchSpinner } from 'selectors';
 import xIcon from 'assets/images/svg-icons/x-icon.svg';
@@ -35,16 +36,20 @@ export const SearchInput = ({
   searchRef,
   customClass = '',
   clearSearchInput,
-  isInitLoading,
   isPatientSearch,
 }) => {
   const [searchValue, setSearchValue] = useState('');
-  const isShowSearchSpinner = useSelector(getIsShowSearchSpinner);
+  const [isShowSearchSpinner, setIsShowSearchSpinner] = useState(false);
+  const isShowSpinner = useSelector(getIsShowSearchSpinner);
 
   const onChange = (e) => {
     const value = e.target.value;
     setSearchValue(value);
-    if (searchText !== value && (value.length < 1 || value.length > 2)) {
+    if (
+      isPatientSearch ||
+      (searchText !== value && (value.length < 1 || value.length > 2))
+    ) {
+      setIsShowSearchSpinner(true);
       requestSearch(value);
     }
   };
@@ -55,54 +60,31 @@ export const SearchInput = ({
     }
   };
 
-  const onPatientChange = (e) => {
-    const value = e.target.value;
-    setSearchValue(value);
-    requestSearch(value);
-  };
+  useEffect(() => {
+    if (!isShowSpinner) {
+      setIsShowSearchSpinner(false);
+    }
+  }, [isShowSpinner]);
 
   return (
     <div className={`search-container ${customClass}`}>
       <Search className="search-icon" />
-      {isPatientSearch ? (
-        <>
-          {isInitLoading && (
-            <div className="lds-spinner position-absolute">
-              {[...Array(12).keys()].map((s) => (
-                <span key={s} />
-              ))}
-            </div>
-          )}
-
-          <Input
-            innerRef={searchRef}
-            className="search-input"
-            type="text"
-            placeholder={placeholder}
-            onChange={onPatientChange}
-            defaultValue={searchText || searchValue}
-          />
-        </>
-      ) : (
-        <>
-          {!isInitLoading && isShowSearchSpinner && (
-            <div className="lds-spinner position-absolute">
-              {[...Array(12).keys()].map((s) => (
-                <span key={s} />
-              ))}
-            </div>
-          )}
-
-          <Input
-            innerRef={searchRef}
-            className="search-input"
-            type="text"
-            placeholder={placeholder}
-            onChange={onChange}
-            onKeyPress={onEnter}
-          />
-        </>
+      {isShowSearchSpinner && searchValue?.length > 0 && (
+        <div className="lds-spinner position-absolute">
+          {[...Array(12).keys()].map((s) => (
+            <span key={s} />
+          ))}
+        </div>
       )}
+      <Input
+        innerRef={searchRef}
+        className="search-input"
+        type="text"
+        placeholder={placeholder}
+        onChange={onChange}
+        defaultValue={isPatientSearch ? searchText || searchValue : undefined}
+        onKeyPress={onEnter}
+      />
       {searchRef?.current?.value?.length > 0 && (
         <XButton onClick={clearSearchInput} className="x-button">
           <XIcon src={xIcon} alt="x-icon" />
@@ -110,4 +92,14 @@ export const SearchInput = ({
       )}
     </div>
   );
+};
+
+SearchInput.propTypes = {
+  requestSearch: PropTypes.func,
+  searchText: PropTypes.string,
+  placeholder: PropTypes.string,
+  searchRef: PropTypes.object,
+  customClass: PropTypes.string,
+  clearSearchInput: PropTypes.func,
+  isPatientSearch: PropTypes.bool,
 };

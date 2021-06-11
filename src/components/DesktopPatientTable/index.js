@@ -3,9 +3,11 @@ import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
 import { SpinnerComponent } from 'components/common/SpinnerPortal/Spinner';
+import { DashboardLoader } from 'components/common/Loader';
 
 import * as patientVitalsService from 'services/patientVitals';
 import { getUser } from 'selectors';
@@ -27,7 +29,7 @@ import './index.css';
 
 const Wrapper = styled.section`
   position: relative;
-  padding: 0 4rem 2rem;
+  padding: 0 4rem;
   width: 100%;
   height: 600px;
   overflow: scroll;
@@ -70,7 +72,7 @@ const Info = styled.div`
 
 const ButtonWrap = styled.div`
   position: absolute;
-  right: 92px;
+  right: 20px;
   margin-left: 5px;
   margin-bottom: 5px;
 `;
@@ -94,18 +96,23 @@ const Value = styled.span`
 `;
 
 const spacingAroundComponent = css`
-  height: 7rem;
+  height: 9rem;
   background: #f2f5f8;
   padding: 0.5rem;
   margin: 1rem 0.2rem 0.3125rem;
   display: flex;
+  flex-direction: column;
+`;
+const linesWrapperStyle = css`
+  height: 6rem;
 `;
 
 const desktopViewLabelsForPatientsWithCurrentStats = css`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
-  width: 11rem;
+  width: 100%;
+  margin-bottom: 0.5rem;
 `;
 
 const DesktopPatientTable = (props) => {
@@ -123,6 +130,7 @@ const DesktopPatientTable = (props) => {
   const user = useSelector(getUser);
   const wrapperRef = useRef(null);
   const [downloadingPatientId, setDownloadingPatientId] = useState(null);
+  const [isShowLoadMoreSpinner, setIsShowLoadMoreSpinner] = useState(true);
 
   const onCall = useCallback(
     (patientId) => () => handleCallAppointment(dispatch, patientId),
@@ -131,25 +139,36 @@ const DesktopPatientTable = (props) => {
 
   const loadMore = useCallback(() => {
     if (hasNext && isScrolledToEnd()) {
+      setIsShowLoadMoreSpinner(true);
       incrementPage();
     }
   }, [hasNext, selectedCases, page, searchText]);
 
   const isScrolledToEnd = () => {
     return (
-      wrapperRef.current.scrollTop >
-      wrapperRef.current.scrollHeight - wrapperRef.current.offsetHeight
+      wrapperRef?.current?.scrollTop >
+      wrapperRef?.current?.scrollHeight - wrapperRef?.current?.offsetHeight - 20
     );
   };
 
   useEffect(() => {
     if (wrapperRef?.current) {
       wrapperRef.current.addEventListener('scroll', loadMore);
+      wrapperRef.current.addEventListener('wheel', loadMore);
       return () => {
-        wrapperRef.current.removeEventListener('scroll', loadMore);
+        wrapperRef.current &&
+          wrapperRef.current.removeEventListener('scroll', loadMore);
+        wrapperRef.current &&
+          wrapperRef.current.removeEventListener('wheel', loadMore);
       };
     }
   }, [wrapperRef?.current, loadMore]);
+
+  useEffect(() => {
+    if (!isShowSpinner || !hasNext) {
+      setIsShowLoadMoreSpinner(false);
+    }
+  }, [isShowSpinner, hasNext]);
 
   const exportVitals = async (patientId) => {
     try {
@@ -205,7 +224,7 @@ const DesktopPatientTable = (props) => {
     }
   };
 
-  if (selectedCaseData?.length < 1) {
+  if (selectedCaseData?.length < 1 && !isShowSpinner) {
     return null;
   }
 
@@ -302,6 +321,7 @@ const DesktopPatientTable = (props) => {
                 <GraphicalRepresentation
                   data={patient}
                   spacingAroundComponent={spacingAroundComponent}
+                  linesWrapperStyle={linesWrapperStyle}
                   desktopViewLabelsForPatientsWithCurrentStats={
                     desktopViewLabelsForPatientsWithCurrentStats
                   }
@@ -321,15 +341,23 @@ const DesktopPatientTable = (props) => {
             </InfoAndGraphWrapper>
           );
         })}
+        {isShowLoadMoreSpinner && <DashboardLoader />}
       </TableWrapper>
-      {isShowSpinner && (
-        <SpinnerComponent
-          customClasses="position-absolute"
-          isFullScreen={true}
-        />
+      {isShowSpinner && !isShowLoadMoreSpinner && (
+        <SpinnerComponent customClasses="position-absolute" />
       )}
     </Wrapper>
   );
+};
+
+DesktopPatientTable.propTypes = {
+  selectedCaseData: PropTypes.array,
+  isShowSpinner: PropTypes.bool,
+  incrementPage: PropTypes.array,
+  hasNext: PropTypes.bool,
+  selectedCases: PropTypes.object,
+  page: PropTypes.string,
+  searchText: PropTypes.string,
 };
 
 export default DesktopPatientTable;

@@ -77,7 +77,6 @@ const Patients = () => {
   const searchRef = useRef(null);
   const user = useSelector(getUser);
 
-  const [isInitLoading, setIsInitLoading] = useState(false);
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -125,7 +124,6 @@ const Patients = () => {
 
   const fetchPatients = async () => {
     setIsFetching(true);
-    setIsInitLoading(searchText);
     try {
       const response = await patientService.fetchPatients({
         offset: isMobile ? 0 : currentPage * PER_PAGE,
@@ -148,7 +146,6 @@ const Patients = () => {
       console.error(err);
     } finally {
       setIsFetching(false);
-      setIsInitLoading(false);
     }
   };
 
@@ -199,7 +196,6 @@ const Patients = () => {
             placeholder="Search your patient"
             searchRef={searchRef}
             clearSearchInput={clearSearchInput}
-            isInitLoading={isInitLoading}
             isPatientSearch={true}
           />
         </InfoColumn>
@@ -325,7 +321,6 @@ const Patients = () => {
             requestSearch={makeSearchRequest}
             searchRef={searchRef}
             clearSearchInput={clearSearchInput}
-            isInitLoading={isInitLoading}
             customClass="right"
             isPatientSearch={true}
           />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { CMLine } from 'third-party/senze-graphs/dist';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import { rangeCheck } from 'utils/rangeCheck';
 import { scales } from '../../constants';
@@ -24,14 +25,17 @@ const CurrentStatus = styled.div`
       : ''}
 `;
 
-const GraphicalRepresentation = (props) => {
-  const {
-    data,
-    preferenceList,
-    spacingAroundComponent,
-    desktopViewLabelsForPatientsWithCurrentStats,
-  } = props;
+const LinesWrapper = styled.div`
+  ${(props) => (props.linesWrapperStyle ? props.linesWrapperStyle : '')}
+`;
 
+const GraphicalRepresentation = ({
+  data,
+  preferenceList,
+  spacingAroundComponent,
+  desktopViewLabelsForPatientsWithCurrentStats,
+  linesWrapperStyle,
+}) => {
   return data?.vitals ? (
     <>
       {Object.entries(data.vitals).map((bodyParams, i) => {
@@ -83,7 +87,7 @@ const GraphicalRepresentation = (props) => {
                 </div>
               </div>
             </CurrentStatus>
-            <div className="desktop-view-graph-wrp-for-vitals">
+            <LinesWrapper linesWrapperStyle={linesWrapperStyle}>
               <CMLine
                 className="custom-class"
                 data={bodyParams[1]}
@@ -95,12 +99,20 @@ const GraphicalRepresentation = (props) => {
                   ...preferenceList,
                 }}
               />
-            </div>
+            </LinesWrapper>
           </SpacingAroundComponents>
         );
       })}
     </>
   ) : null;
+};
+
+GraphicalRepresentation.propTypes = {
+  data: PropTypes.array,
+  preferenceList: PropTypes.array,
+  spacingAroundComponent: PropTypes.object,
+  desktopViewLabelsForPatientsWithCurrentStats: PropTypes.object,
+  linesWrapperStyle: PropTypes.object,
 };
 
 export { GraphicalRepresentation };
