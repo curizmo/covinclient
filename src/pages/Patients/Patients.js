@@ -34,8 +34,8 @@ import * as patientVitalsService from 'services/patientVitals';
 import { usePatientsRiskData } from 'services/practitioner';
 import { routes } from 'routers';
 import { getISODate } from 'utils/dateTime';
-import { getRandomKey, handleCallAppointment } from 'utils';
-import { exportToCSV } from 'utils/vitalsDownload';
+import { getRandomKey, handleCallAppointment, getTabIndex } from 'utils';
+import { exportToCSV, exportIndividualVitalsToCSV } from 'utils/vitalsDownload';
 import useCheckIsMobile from 'hooks/useCheckIsMobile';
 import { getDate, setDate, setDateTime } from 'global';
 import {
@@ -43,6 +43,7 @@ import {
   PER_PAGE,
   SORT_ORDER,
   VitalsDateFields,
+  LabDateFields,
 } from '../../constants';
 import { CAMEL_CASE_REGEX } from '../../constants/regex';
 import phoneSvg from 'assets/images/svg-icons/icon-phone.svg';
@@ -58,6 +59,7 @@ const tableHeader = [
   { desc: 'Age', colName: 'DateOfBirth' },
   { desc: 'Address', colName: 'Zip' },
   { desc: 'Last Encounter', colName: 'LastEncounter' },
+  { desc: 'Download', colName: 'Download' },
 ];
 
 export const InfoValue = styled.p`
@@ -89,6 +91,8 @@ const Patients = () => {
 
   const [isInitLoading, setIsInitLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [downloadingPatientId, setDownloadingPatientId] = useState(null);
+
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
@@ -191,41 +195,77 @@ const Patients = () => {
     [dispatch],
   );
 
+  const getVitals = (vitals) => {
+    let vitalDetails = vitals.data.map((vital) => {
+      for (var key in vital) {
+        var result = key.replace(CAMEL_CASE_REGEX, ' $1');
+        var title = result.charAt(0).toUpperCase() + result.slice(1);
+        if (title !== key) {
+          vital[title] = vital[key];
+          delete vital[key];
+        }
+      }
+      return {
+        ...vital,
+        [VitalsDateFields.updated]: setDateTime(
+          vital[VitalsDateFields.updated],
+        ),
+        [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
+        [VitalsDateFields.patientSince]: setDate(
+          vital[VitalsDateFields.patientSince],
+        ),
+        [VitalsDateFields.doseOne]: setDate(vital[VitalsDateFields.doseOne]),
+        [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
+      };
+    });
+
+    return vitalDetails;
+  };
+
   const exportVitals = async () => {
     try {
       setIsDownloading(true);
-
       const vitals = await patientVitalsService.getPatientVitals(
         user.PractitionerID,
       );
-
-      let vitalDetails = vitals.data.map((vital) => {
-        for (var key in vital) {
-          var result = key.replace(CAMEL_CASE_REGEX, ' $1');
-          var title = result.charAt(0).toUpperCase() + result.slice(1);
-          if (title !== key) {
-            vital[title] = vital[key];
-            delete vital[key];
-          }
-        }
-        return {
-          ...vital,
-          [VitalsDateFields.updated]: setDateTime(
-            vital[VitalsDateFields.updated],
-          ),
-          [VitalsDateFields.dob]: setDate(vital[VitalsDateFields.dob]),
-          [VitalsDateFields.patientSince]: setDate(
-            vital[VitalsDateFields.patientSince],
-          ),
-          [VitalsDateFields.doseOne]: setDate(vital[VitalsDateFields.doseOne]),
-          [VitalsDateFields.doseTwo]: setDate(vital[VitalsDateFields.doseTwo]),
-        };
-      });
+      const vitalDetails = getVitals(vitals);
       exportToCSV(vitalDetails);
     } catch (err) {
       // TODO: Handle error.
     } finally {
       setIsDownloading(false);
+    }
+  };
+
+  const exportIndividualVitals = async (patientId) => {
+    try {
+      setDownloadingPatientId(patientId);
+
+      const [vitals, lab] = await Promise.all([
+        patientVitalsService.getIndividualPatientVitals(
+          user.PractitionerID,
+          patientId,
+        ),
+        patientVitalsService.getLabResults(user.PractitionerID, patientId),
+      ]);
+      const vitalDetails = getVitals(vitals);
+
+      let labResults = lab.data.map((lab) => {
+        return {
+          ...lab,
+          [LabDateFields.updated]: setDateTime(lab[LabDateFields.updated]),
+          [LabDateFields.specimenDrawnDate]: setDate(
+            lab[LabDateFields.specimenDrawnDate],
+          ),
+        };
+      });
+
+      console.log(vitalDetails, labResults);
+      exportIndividualVitalsToCSV(vitalDetails, labResults);
+    } catch (err) {
+      // TODO: Handle error
+    } finally {
+      setDownloadingPatientId(null);
     }
   };
 
@@ -356,6 +396,42 @@ const Patients = () => {
                   <td>{patient.age || '-'}</td>
                   <td>{patient.address}</td>
                   <td>{getISODate(patient.lastModifiedDate)}</td>
+                  <td>
+                    <div
+                      className="download-btn"
+                      role="button"
+                      disabled={downloadingPatientId === patient.patientId}
+                      onClick={() => {
+                        exportIndividualVitals(patient.patientId);
+                      }}
+                      onKeyDown={(e) => {
+                        e.key === 'Enter' && exportVitals(patient.patientId);
+                      }}
+                      tabIndex={getTabIndex()}>
+                      {downloadingPatientId === patient.patientId ? (
+                        <div className="lds-spinner position-absolute">
+                          {[...Array(12).keys()].map((i) => (
+                            <span key={i} />
+                          ))}
+                        </div>
+                      ) : (
+                        <>
+                          <span className="table-excel-wrap">
+                            <img
+                              src={excel}
+                              alt="Covin"
+                              className="table-excel-icon"
+                            />
+                            <img
+                              src={xicon}
+                              alt="Covin"
+                              className="table-x-icon"
+                            />
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

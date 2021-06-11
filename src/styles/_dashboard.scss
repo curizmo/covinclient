@@ -152,6 +152,24 @@ main {
   left: 0.3rem;
 }
 
+.download-btn{
+  position: relative;
+  width: 0.945rem;
+  height: 1.25rem;
+}
+
+.table-excel-icon {
+  width: 0.945rem;
+  height: 1.25rem;
+  position: relative;
+  z-index: 0;
+}
+.table-x-icon {
+  position: absolute;
+  left: 3px;
+  top: 8px;
+}
+
 .mobile-download-button{
   outline: none;
 }
