@@ -94,7 +94,7 @@ const DashBoardComponent = () => {
   const fetchedPatients = useSelector(getSearchResult);
   const hasNext = useSelector(getPatientsHasNext);
   const searchText = useSelector(getSearchText);
-  const isShowSearchSpinner = useSelector(getIsShowSearchSpinner);
+  const isShowSpinner = useSelector(getIsShowSearchSpinner);
   const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
   const searchRef = useRef(null);
   const searchRefMobile = useRef(null);
@@ -109,15 +109,16 @@ const DashBoardComponent = () => {
   }, [fetchedPatients]);
 
   useEffect(() => {
-    if (!isShowSearchSpinner) {
+    if (!isShowSpinner || searchText?.length > 0) {
       setIsInitLoading(false);
     }
-  }, [isShowSearchSpinner]);
+  }, [searchText, isShowSpinner]);
 
   const makeSearchRequest = (value) => {
     const page = 0;
-    setPage(page);
     dispatch(requestSearch({ searchText: value, selectedCases, page }));
+    setPage(page);
+    setPatients([]);
   };
 
   const clearSearchInput = () => {
@@ -132,6 +133,7 @@ const DashBoardComponent = () => {
 
   const changesCases = (sel) => {
     setIsInitLoading(true);
+    setPatients([]);
     const page = 0;
     setPage(page);
     setSelectedCases(sel);
@@ -269,7 +271,7 @@ const DashBoardComponent = () => {
           clearSearchInput={clearSearchInput}
           hasNext={hasNext}
           incrementPage={incrementPage}
-          isShowSearchSpinner={isShowSearchSpinner && !isInitLoading}
+          isShowSpinner={isShowSpinner}
         />
       ) : (
         <DesktopView
@@ -278,7 +280,7 @@ const DashBoardComponent = () => {
           selectedCases={selectedCases}
           searchRef={searchRef}
           clearSearchInput={clearSearchInput}
-          isShowSearchSpinner={isShowSearchSpinner && searchText?.length > 0}
+          isShowSpinner={isShowSpinner}
           isDownloading={isDownloading}
           exportVitals={exportVitals}
           patients={patients}

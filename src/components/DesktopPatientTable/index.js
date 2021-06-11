@@ -3,12 +3,11 @@ import styled, { css } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
-import {
-  SpinnerComponent,
-  DotFlashingSpinner,
-} from 'components/common/SpinnerPortal/Spinner';
+import { SpinnerComponent } from 'components/common/SpinnerPortal/Spinner';
+import { DashboardLoader } from 'components/common/Loader';
 
 import * as patientVitalsService from 'services/patientVitals';
 import { getUser } from 'selectors';
@@ -148,25 +147,28 @@ const DesktopPatientTable = (props) => {
   const isScrolledToEnd = () => {
     return (
       wrapperRef?.current?.scrollTop >
-      wrapperRef?.current?.scrollHeight - wrapperRef?.current?.offsetHeight
+      wrapperRef?.current?.scrollHeight - wrapperRef?.current?.offsetHeight - 20
     );
   };
 
   useEffect(() => {
     if (wrapperRef?.current) {
       wrapperRef.current.addEventListener('scroll', loadMore);
+      wrapperRef.current.addEventListener('wheel', loadMore);
       return () => {
         wrapperRef.current &&
           wrapperRef.current.removeEventListener('scroll', loadMore);
+        wrapperRef.current &&
+          wrapperRef.current.removeEventListener('wheel', loadMore);
       };
     }
   }, [wrapperRef?.current, loadMore]);
 
   useEffect(() => {
-    if (!isShowSpinner) {
+    if (!isShowSpinner || !hasNext) {
       setIsShowLoadMoreSpinner(false);
     }
-  }, [isShowSpinner]);
+  }, [isShowSpinner, hasNext]);
 
   const exportVitals = async (patientId) => {
     try {
@@ -222,7 +224,7 @@ const DesktopPatientTable = (props) => {
     }
   };
 
-  if (selectedCaseData?.length < 1) {
+  if (selectedCaseData?.length < 1 && !isShowSpinner) {
     return null;
   }
 
@@ -339,13 +341,23 @@ const DesktopPatientTable = (props) => {
             </InfoAndGraphWrapper>
           );
         })}
-        <DotFlashingSpinner isShow={isShowLoadMoreSpinner} />
+        {isShowLoadMoreSpinner && <DashboardLoader />}
       </TableWrapper>
       {isShowSpinner && !isShowLoadMoreSpinner && (
         <SpinnerComponent customClasses="position-absolute" />
       )}
     </Wrapper>
   );
+};
+
+DesktopPatientTable.propTypes = {
+  selectedCaseData: PropTypes.array,
+  isShowSpinner: PropTypes.bool,
+  incrementPage: PropTypes.array,
+  hasNext: PropTypes.bool,
+  selectedCases: PropTypes.object,
+  page: PropTypes.string,
+  searchText: PropTypes.string,
 };
 
 export default DesktopPatientTable;

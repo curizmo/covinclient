@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Input } from 'reactstrap';
 import { Search } from 'react-feather';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import { getIsShowSearchSpinner } from 'selectors';
 import xIcon from 'assets/images/svg-icons/x-icon.svg';
@@ -38,7 +39,8 @@ export const SearchInput = ({
   isPatientSearch,
 }) => {
   const [searchValue, setSearchValue] = useState('');
-  const isShowSearchSpinner = useSelector(getIsShowSearchSpinner);
+  const [isShowSearchSpinner, setIsShowSearchSpinner] = useState(false);
+  const isShowSpinner = useSelector(getIsShowSearchSpinner);
 
   const onChange = (e) => {
     const value = e.target.value;
@@ -47,6 +49,7 @@ export const SearchInput = ({
       isPatientSearch ||
       (searchText !== value && (value.length < 1 || value.length > 2))
     ) {
+      setIsShowSearchSpinner(true);
       requestSearch(value);
     }
   };
@@ -56,6 +59,12 @@ export const SearchInput = ({
       requestSearch(searchValue);
     }
   };
+
+  useEffect(() => {
+    if (!isShowSpinner) {
+      setIsShowSearchSpinner(false);
+    }
+  }, [isShowSpinner]);
 
   return (
     <div className={`search-container ${customClass}`}>
@@ -83,4 +92,14 @@ export const SearchInput = ({
       )}
     </div>
   );
+};
+
+SearchInput.propTypes = {
+  requestSearch: PropTypes.func,
+  searchText: PropTypes.string,
+  placeholder: PropTypes.string,
+  searchRef: PropTypes.object,
+  customClass: PropTypes.string,
+  clearSearchInput: PropTypes.func,
+  isPatientSearch: PropTypes.bool,
 };

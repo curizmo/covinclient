@@ -1,5 +1,6 @@
 import React from 'react';
 import { Spinner } from 'reactstrap';
+import PropTypes from 'prop-types';
 
 const SpinnerComponent = ({ isFullScreen = true, customClasses = '' }) => {
   return (
@@ -22,6 +23,16 @@ const DotFlashingSpinner = ({ customClasses = '', isShow }) => {
       </div>
     </div>
   );
+};
+
+SpinnerComponent.propTypes = {
+  isFullScreen: PropTypes.bool,
+  customClasses: PropTypes.string,
+};
+
+DotFlashingSpinner.propTypes = {
+  isShow: PropTypes.bool,
+  customClasses: PropTypes.string,
 };
 
 export { SpinnerComponent, DotFlashingSpinner };

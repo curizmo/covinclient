@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
-
-import { routes } from 'routers';
+import PropTypes from 'prop-types';
 
 import DesktopPatientTable from 'components/DesktopPatientTable';
-import { isLightVersion } from 'config';
 import { SearchInput } from 'components/common/SearchInput';
 import { LinkButton } from 'components/common/Button';
 
+import { routes } from 'routers';
+import { isLightVersion } from 'config';
 import excel from 'assets/images/svg-icons/excel.svg';
 import xicon from 'assets/images/x-icon.png';
 
@@ -61,7 +61,7 @@ const DesktopView = ({
   isDownloading,
   exportVitals,
   patients,
-  isShowSearchSpinner,
+  isShowSpinner,
   incrementPage,
   hasNext,
   page,
@@ -112,7 +112,7 @@ const DesktopView = ({
       </HeaderSearchWrap>
       <DesktopPatientTable
         selectedCaseData={patients}
-        isShowSpinner={isShowSearchSpinner}
+        isShowSpinner={isShowSpinner}
         incrementPage={incrementPage}
         hasNext={hasNext}
         page={page}
@@ -131,6 +131,21 @@ const DesktopView = ({
       )}
     </DeskTopViewPatient>
   );
+};
+
+DesktopView.propTypes = {
+  searchText: PropTypes.string,
+  makeSearchRequest: PropTypes.func,
+  selectedCases: PropTypes.array,
+  searchRef: PropTypes.object,
+  clearSearchInput: PropTypes.func,
+  isDownloading: PropTypes.bool,
+  exportVitals: PropTypes.func,
+  patients: PropTypes.array,
+  isShowSpinner: PropTypes.bool,
+  incrementPage: PropTypes.array,
+  hasNext: PropTypes.bool,
+  page: PropTypes.string,
 };
 
 export { DesktopView };

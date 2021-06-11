@@ -1,6 +1,7 @@
 import React from 'react';
 import { CMLine } from 'third-party/senze-graphs/dist';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 import { rangeCheck } from 'utils/rangeCheck';
 import { scales } from '../../constants';
@@ -28,15 +29,13 @@ const LinesWrapper = styled.div`
   ${(props) => (props.linesWrapperStyle ? props.linesWrapperStyle : '')}
 `;
 
-const GraphicalRepresentation = (props) => {
-  const {
-    data,
-    preferenceList,
-    spacingAroundComponent,
-    desktopViewLabelsForPatientsWithCurrentStats,
-    linesWrapperStyle,
-  } = props;
-
+const GraphicalRepresentation = ({
+  data,
+  preferenceList,
+  spacingAroundComponent,
+  desktopViewLabelsForPatientsWithCurrentStats,
+  linesWrapperStyle,
+}) => {
   return data?.vitals ? (
     <>
       {Object.entries(data.vitals).map((bodyParams, i) => {
@@ -106,6 +105,14 @@ const GraphicalRepresentation = (props) => {
       })}
     </>
   ) : null;
+};
+
+GraphicalRepresentation.propTypes = {
+  data: PropTypes.array,
+  preferenceList: PropTypes.array,
+  spacingAroundComponent: PropTypes.object,
+  desktopViewLabelsForPatientsWithCurrentStats: PropTypes.object,
+  linesWrapperStyle: PropTypes.object,
 };
 
 export { GraphicalRepresentation };
