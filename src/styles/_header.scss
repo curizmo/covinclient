@@ -32,7 +32,6 @@ header {
 
   .top-menu-list {
     flex-wrap: nowrap !important;
-    margin-left: -5rem;
   }
   
   .nav-link {
@@ -79,6 +78,11 @@ header {
     .nav-link {
       font-weight: bold;
       color: #000;
+    }
+  }
+  @media (min-width: 768px) {
+    .top-menu-list {
+      margin-left: -5rem;
     }
   }
 }

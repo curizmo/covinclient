@@ -233,7 +233,7 @@ const DashBoardComponent = () => {
               />
               <div className="headsearch-btn-div">
                 <Button
-                  className="btn btn-download mr-2"
+                  className="btn btn-download"
                   disabled={isDownloading}
                   onClick={exportVitals}>
                   {isDownloading ? (

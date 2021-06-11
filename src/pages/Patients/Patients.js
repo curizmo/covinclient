@@ -344,7 +344,7 @@ const Patients = () => {
         )}
         <InfoColumn>
           <SearchInput
-            customClass="my-2"
+            customClass="my-2 mw-30-rem"
             searchText={searchText}
             requestSearch={makeSearchRequest}
             placeholder="Search by Name, Email or cellphone number"

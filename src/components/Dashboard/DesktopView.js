@@ -85,7 +85,7 @@ const DesktopView = ({
         </InputContainer>
         <div className="headsearch-btn-div">
           <Button
-            className="btn btn-download mx-2"
+            className="btn btn-download"
             disabled={isDownloading}
             onClick={exportVitals}>
             {isDownloading ? (
