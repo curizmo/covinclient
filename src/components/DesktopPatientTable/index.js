@@ -73,7 +73,7 @@ const Info = styled.div`
 
 const ButtonWrap = styled.div`
   position: absolute;
-  right: 92px;
+  right: 20px;
   margin-left: 5px;
   margin-bottom: 5px;
 `;
@@ -97,12 +97,15 @@ const Value = styled.span`
 `;
 
 const spacingAroundComponent = css`
-  height: 12.5rem;
+  height: 9rem;
   background: #f2f5f8;
   padding: 0.5rem;
   margin: 1rem 0.2rem 0.3125rem;
   display: flex;
   flex-direction: column;
+`;
+const linesWrapperStyle = css`
+  height: 6rem;
 `;
 
 const desktopViewLabelsForPatientsWithCurrentStats = css`
@@ -316,6 +319,7 @@ const DesktopPatientTable = (props) => {
                 <GraphicalRepresentation
                   data={patient}
                   spacingAroundComponent={spacingAroundComponent}
+                  linesWrapperStyle={linesWrapperStyle}
                   desktopViewLabelsForPatientsWithCurrentStats={
                     desktopViewLabelsForPatientsWithCurrentStats
                   }

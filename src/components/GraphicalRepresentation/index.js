@@ -24,12 +24,17 @@ const CurrentStatus = styled.div`
       : ''}
 `;
 
+const LinesWrapper = styled.div`
+  ${(props) => (props.linesWrapperStyle ? props.linesWrapperStyle : '')}
+`;
+
 const GraphicalRepresentation = (props) => {
   const {
     data,
     preferenceList,
     spacingAroundComponent,
     desktopViewLabelsForPatientsWithCurrentStats,
+    linesWrapperStyle,
   } = props;
 
   return data?.vitals ? (
@@ -83,7 +88,7 @@ const GraphicalRepresentation = (props) => {
                 </div>
               </div>
             </CurrentStatus>
-            <div className="desktop-view-graph-wrp-for-vitals">
+            <LinesWrapper linesWrapperStyle={linesWrapperStyle}>
               <CMLine
                 className="custom-class"
                 data={bodyParams[1]}
@@ -95,7 +100,7 @@ const GraphicalRepresentation = (props) => {
                   ...preferenceList,
                 }}
               />
-            </div>
+            </LinesWrapper>
           </SpacingAroundComponents>
         );
       })}
