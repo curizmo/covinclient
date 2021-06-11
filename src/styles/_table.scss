@@ -39,15 +39,23 @@ table th {
 }
 
 .table-content-phone {
-  padding-left: 0rem !important;
+  padding-left: 0rem !important;  
 }
 
 .table-content-status {
-  padding-right: 2.7rem !important;
+  padding-right: 3rem !important;
 }
 
-.patient-table-row{
-  background-color: #FFFFFF;
+.table-patient-name {
+  font-weight: 700 !important;
+  color: #01518d;
+}
+
+.patient-table-row {
+  background-color: #ffffff;
+  color: #657396;
+  font-size: 14px;
+  line-height: 18px;
 }
 
 @media only screen and (max-width: 1024px) {

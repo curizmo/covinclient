@@ -382,7 +382,7 @@ const Patients = () => {
                   </td>
                   <td>
                     <Link
-                      className="patient-link--small"
+                      className="patient-link--small table-patient-name"
                       to={routes.editPatient.path.replace(
                         ':patientId',
                         patient.patientId,
