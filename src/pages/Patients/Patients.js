@@ -431,12 +431,7 @@ const Patients = () => {
                       <Button
                         className="d-flex button-patient-call"
                         onClick={onCall(patient.patientId)}>
-                        <img
-                          src={phoneSvg}
-                          alt="phone"
-                          className="mr-2 phone-icon"
-                          size="0.8em"
-                        />
+                        <span></span>
                         {patient.phone}
                       </Button>
                     )}
