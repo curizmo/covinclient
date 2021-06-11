@@ -364,7 +364,7 @@ const Patients = () => {
                   key={getRandomKey()}
                   className={patient.isSelected ? 'bg-light' : ''}>
                   <td>{index + 1}</td>
-                  <td className="pt-3">
+                  <td className="pt-3 table-content-status">
                     <StatusIndicator status={patient.status} size={12} />
                   </td>
                   <td>
@@ -377,7 +377,7 @@ const Patients = () => {
                       {patient.fullName}
                     </Link>
                   </td>
-                  <td>
+                  <td className="table-content-phone">
                     {patient.phone && (
                       <Button
                         className="d-flex"
@@ -392,11 +392,15 @@ const Patients = () => {
                       </Button>
                     )}
                   </td>
-                  <td>{patient.gender || '-'}</td>
-                  <td>{patient.age || '-'}</td>
+                  <td className="table-content-gender">
+                    {patient.gender || '-'}
+                  </td>
+                  <td className="table-content-age">{patient.age || '-'}</td>
                   <td>{patient.address}</td>
-                  <td>{getISODate(patient.lastModifiedDate)}</td>
-                  <td>
+                  <td className="table-content-date">
+                    {getISODate(patient.lastModifiedDate)}
+                  </td>
+                  <td className="table-content-download">
                     <div
                       className="download-btn"
                       role="button"

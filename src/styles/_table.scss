@@ -16,13 +16,34 @@ table th {
   font-weight: bold;
   line-height: 1.5;
   color: #657396;
-  background-color: #E9EFF6;
+  background-color: #e9eff6;
   text-transform: uppercase;
   box-shadow: 0 2px 0 rgba(101, 115, 150, 0.2);
 }
 
 .table-hover tbody tr:hover {
-  background-color: #F6F8FA;
+  background-color: #f6f8fa;
+}
+
+.table-content-gender,
+.table-content-date {
+  padding-left: 2.2rem !important;
+}
+
+.table-content-age {
+  padding-left: 1.1rem !important;
+}
+
+.table-content-download {
+  padding-left: 2.7rem !important;
+}
+
+.table-content-phone {
+  padding-left: 0rem !important;
+}
+
+.table-content-status {
+  padding-right: 2.7rem !important;
 }
 
 @media only screen and (max-width: 1024px) {
