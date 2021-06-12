@@ -101,8 +101,8 @@ const Column = styled.div`
     border-right: none;
     flex-direction: column;
     display: flex;
-}
   }
+}
 `;
 
 const MobileViewMedInfoWrap = styled.div`
@@ -328,7 +328,7 @@ function CreateEncounter() {
   );
 
   const handleSaveAndClose = () => {
-    history.push(routes.patients.path);
+    history.push(routes.dashboard.path);
   };
 
   const handleRiskLevelChange = async (e) => {

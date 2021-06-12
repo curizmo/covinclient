@@ -108,11 +108,11 @@ const GraphicalRepresentation = ({
 };
 
 GraphicalRepresentation.propTypes = {
-  data: PropTypes.array,
-  preferenceList: PropTypes.array,
-  spacingAroundComponent: PropTypes.object,
-  desktopViewLabelsForPatientsWithCurrentStats: PropTypes.object,
-  linesWrapperStyle: PropTypes.object,
+  data: PropTypes.object,
+  preferenceList: PropTypes.object,
+  spacingAroundComponent: PropTypes.array,
+  desktopViewLabelsForPatientsWithCurrentStats: PropTypes.array,
+  linesWrapperStyle: PropTypes.array,
 };
 
 export { GraphicalRepresentation };

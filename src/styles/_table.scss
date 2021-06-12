@@ -38,6 +38,26 @@ table th {
   padding-left: 2.7rem !important;
 }
 
+.table-content-address {
+  &, & > div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    @media only screen and (min-width: 768px) {
+      width: 6rem;
+    }
+    @media only screen and (min-width: 950px) {
+      width: 8rem;
+    }
+    @media only screen and (min-width: 1025px) {
+      width: 15rem;
+    }
+    @media only screen and (min-width: 1500px) {
+      width: 20rem;
+    }
+  }
+}
+
 .table-content-phone {
   padding-left: 0 !important;  
 }

@@ -48,8 +48,12 @@ const GeneralInformation = ({ data, dispatch, hidePrescription }) => {
         <Info>
           <Label>Cell Number:</Label>
           <button className="transparent-button d-flex p-0" onClick={onCall}>
-            {data?.phone}
-            <img style={{ marginLeft: '10px' }} src={mobileIcon} alt="mobile" />
+            <Value>{data?.phone}</Value>
+            <img
+              style={{ margin: 'auto 0 auto 10px' }}
+              src={mobileIcon}
+              alt="mobile"
+            />
           </button>
         </Info>
         <Info>

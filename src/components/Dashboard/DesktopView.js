@@ -52,6 +52,9 @@ const NoPatientsWrapper = styled.div`
   font-size: 1.1rem;
 `;
 
+// @toDo remove condition
+const isShowNewButton = false;
+
 const DesktopView = ({
   searchText,
   makeSearchRequest,
@@ -82,7 +85,7 @@ const DesktopView = ({
         </InputContainer>
         <div className="headsearch-btn-div">
           <Button
-            className="btn btn-download mx-2"
+            className="btn btn-download"
             disabled={isDownloading}
             onClick={exportVitals}>
             {isDownloading ? (
@@ -101,13 +104,15 @@ const DesktopView = ({
                   />
                   <img src={xicon} alt="Covin" className="logo x-icon" />
                 </span>
-                DOWNLOAD (Xls)
+                DOWNLOAD ALL (Xls)
               </>
             )}
           </Button>
-          <LinkButton className="btn btn-covin" to={routes.addPatient.path}>
-            + New Patient
-          </LinkButton>
+          {isShowNewButton && (
+            <LinkButton className="btn btn-covin" to={routes.addPatient.path}>
+              + New Patient
+            </LinkButton>
+          )}
         </div>
       </HeaderSearchWrap>
       <DesktopPatientTable
@@ -145,7 +150,7 @@ DesktopView.propTypes = {
   isShowSpinner: PropTypes.bool,
   incrementPage: PropTypes.array,
   hasNext: PropTypes.bool,
-  page: PropTypes.string,
+  page: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export { DesktopView };

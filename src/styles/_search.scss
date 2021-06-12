@@ -54,7 +54,9 @@
     }
   }
 }
-
+.search-container.mw-30-rem {
+  max-width: 30rem;
+}
 .search-input.form-control {
   height: 2.5rem;
   padding-left: 37px;
@@ -66,7 +68,6 @@
   line-height: 1.25rem;
   color: #1f3259;
   @media (max-width: 768px) {
-    margin-top: 0.75rem;
     border: none;
     text-align: center;
     ::placeholder {

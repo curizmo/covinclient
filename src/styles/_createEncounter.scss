@@ -19,6 +19,14 @@
   font-size: 0.8125rem;
   font-weight: bold;
 }
+.desktop-view-vital-current-info-stat {
+  .vital-current-unit {
+    font-size: .75rem;
+    font-weight: bold;
+    margin-top: 2px;
+    text-transform: none;
+  }  
+}
 
 .degree {
   margin-top: 1px;

@@ -49,7 +49,7 @@ export const routes = {
     component: Encounters,
   },
   createEncounter: {
-    path: '/patients/:patientId/encounter/create',
+    path: '/dashboard/:patientId/encounter/create',
     isPrivate: true,
     component: CreateEncounter,
   },

@@ -36,7 +36,7 @@ import * as patientVitalsService from 'services/patientVitals';
 import { usePatientsRiskData } from 'services/practitioner';
 import { routes } from 'routers';
 import { getISODate } from 'utils/dateTime';
-import { getRandomKey, handleCallAppointment, getTabIndex } from 'utils';
+import { handleCallAppointment, getTabIndex } from 'utils';
 import { exportToCSV, exportIndividualVitalsToCSV } from 'utils/vitalsDownload';
 import useCheckIsMobile from 'hooks/useCheckIsMobile';
 import { getDate, setDate, setDateTime } from 'global';
@@ -100,16 +100,16 @@ const Select = styled.select`
   @media (max-width: 768px) {
     background: white;
     margin-right: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
 `;
 
 const InfoColumn = styled.div`
   display: flex;
   justify-content: space-between;
-  min-width: 52%;
+  width: 100%;
   @media (max-width: 768px) {
-    padding: 0 6.5rem;
+    padding: 0;
   }
 `;
 
@@ -118,6 +118,9 @@ const PatientInfoColumn = styled.div`
   justify-content: space-between;
   min-width: 17rem;
 `;
+
+// @toDo remove condition
+const isShowPatientInfoColumn = false;
 
 const Patients = () => {
   const dispatch = useDispatch();
@@ -302,10 +305,6 @@ const Patients = () => {
     }
   };
 
-  const truncateText = (str) => {
-    return str.length > 40 ? str.substring(0, 40) + '...' : str;
-  };
-
   const handleRiskLevelChange = (e) => {
     setRiskLevel(e.target.value);
   };
@@ -320,30 +319,32 @@ const Patients = () => {
         </DateAndTimeWrap>
       </InfoWrapper>
       <div className="dashboard-header mb-2 d-flex justify-content-between flex-wrap w-100">
-        <PatientInfoColumn>
-          <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
-          <div className="d-flex justify-content-between">
-            <StatusIndicator status={riskLevel} size={12} />
-            <Select
-              value={riskLevel}
-              onChange={handleRiskLevelChange}
-              onBlur={handleRiskLevelChange}>
-              {patientRiskData?.map((risk) => {
-                return (
-                  <option
-                    key={risk.riskType}
-                    value={risk.riskType}
-                    className="select-options">
-                    {risk.riskType} ({risk.numberOfCases})
-                  </option>
-                );
-              })}
-            </Select>
-          </div>
-        </PatientInfoColumn>
+        {isShowPatientInfoColumn && (
+          <PatientInfoColumn>
+            <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
+            <div className="d-flex justify-content-between">
+              <StatusIndicator status={riskLevel} size={12} />
+              <Select
+                value={riskLevel}
+                onChange={handleRiskLevelChange}
+                onBlur={handleRiskLevelChange}>
+                {patientRiskData?.map((risk) => {
+                  return (
+                    <option
+                      key={risk.riskType}
+                      value={risk.riskType}
+                      className="select-options">
+                      {risk.riskType} ({risk.numberOfCases})
+                    </option>
+                  );
+                })}
+              </Select>
+            </div>
+          </PatientInfoColumn>
+        )}
         <InfoColumn>
           <SearchInput
-            customClass="my-2"
+            customClass="my-2 mw-30-rem"
             searchText={searchText}
             requestSearch={makeSearchRequest}
             placeholder="Search by Name, Email or cellphone number"
@@ -372,7 +373,7 @@ const Patients = () => {
                     />
                     <img src={xicon} alt="Covin" className="logo x-icon" />
                   </span>
-                  DOWNLOAD (Xls)
+                  DOWNLOAD ALL (Xls)
                 </>
               )}
             </Button>
@@ -407,7 +408,7 @@ const Patients = () => {
             <tbody>
               {filteredPatients.map((patient, index) => (
                 <tr
-                  key={getRandomKey()}
+                  key={patient.patientId}
                   className={
                     patient.isSelected ? 'bg-light' : 'patient-table-row'
                   }>
@@ -440,16 +441,16 @@ const Patients = () => {
                   </td>
                   <td className="table-content-age">{patient.age || '-'}</td>
                   <td className="table-content-address">
-                    <span data-tip data-for={`${patient.address}`}>
-                      {truncateText(patient.address)}
-                    </span>
+                    <div data-tip data-for={`${patient.address}`}>
+                      {patient.address}
+                    </div>
                     <ReactTooltip
                       className="address-tooltip"
                       id={patient.address}
                       place="bottom"
                       effect="float"
                       multiline={true}>
-                      {patient.address}
+                      <span>{patient.address}</span>
                     </ReactTooltip>
                   </td>
                   <td className="table-content-date">
@@ -557,26 +558,28 @@ const Patients = () => {
           </LinkButton>
         </div>
       </div>
-      <PatientInfoColumn className="bg-white">
-        <InfoValue className="m-0 px-3">
-          {patients?.length ?? 0} active patients
-        </InfoValue>
-        <Select
-          value={riskLevel}
-          onChange={handleRiskLevelChange}
-          onBlur={handleRiskLevelChange}>
-          {patientRiskData?.map((risk) => {
-            return (
-              <option
-                key={risk.riskType}
-                value={risk.riskType}
-                className="select-options">
-                {risk.riskType} ({risk.numberOfCases})
-              </option>
-            );
-          })}
-        </Select>
-      </PatientInfoColumn>
+      {isShowPatientInfoColumn && (
+        <PatientInfoColumn className="bg-white">
+          <InfoValue className="m-0 px-3">
+            {patients?.length ?? 0} active patients
+          </InfoValue>
+          <Select
+            value={riskLevel}
+            onChange={handleRiskLevelChange}
+            onBlur={handleRiskLevelChange}>
+            {patientRiskData?.map((risk) => {
+              return (
+                <option
+                  key={risk.riskType}
+                  value={risk.riskType}
+                  className="select-options">
+                  {risk.riskType} ({risk.numberOfCases})
+                </option>
+              );
+            })}
+          </Select>
+        </PatientInfoColumn>
+      )}
       <InfoColumn className="bg-white">
         <div className="filter-container">
           <SearchInput
@@ -597,7 +600,7 @@ const Patients = () => {
           filteredPatients.map((patient) => {
             const { patientId, fullName, age, gender, phone } = patient;
             return (
-              <Fragment key={getRandomKey()}>
+              <Fragment key={patient.patientId}>
                 <Card className="mb-1 appointment-info-card">
                   <CardBody>
                     <div className="card-info-body">

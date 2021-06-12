@@ -62,18 +62,15 @@ const GraphicalReadings = (props) => {
                 desktopViewLabelsForPatientsWithCurrentStats
               }
               preferenceList={{
-                showAxisX: true,
-                showXAxisFonts: false,
-                axisXLines: true,
-                showAxisY: true,
+                showAxisX: false,
+                dashedXaxisBaseLine: true,
+                dashedYAxis: true,
+                showYAxisFonts: false,
+                yAxisDomainFactor: 1.2,
                 showTooltip: true,
-
-                // dashedYAxis: true,
-                // showYAxisFonts: false,
-                // yAxisDomainFactor: 2,
-                xScalePaddingOuter: 2,
+                xScalePaddingOuter: 5,
                 // maxRangeMultiplier: 1.8,
-                yAxisFontSize: 12,
+                yAxisFontSize: 5,
               }}
             />
           </div>

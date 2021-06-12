@@ -426,7 +426,7 @@ const EditPatient = () => {
                   ) : null}
                   <div className="d-flex justify-content-end">
                     <LinkButton
-                      to={routes.dashboard.path}
+                      to={routes.patients.path}
                       className="btn-cancel mr-2 cancel-add-patient">
                       Cancel
                     </LinkButton>
