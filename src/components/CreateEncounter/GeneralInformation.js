@@ -71,11 +71,19 @@ const GeneralInformation = ({ data, dispatch, hidePrescription }) => {
         </Info>
         <Info>
           <Label>Allergies (food):</Label>
-          <Value>{data.food?.join(',')}</Value>
+          {data['food']?.length > 0 ? (
+            <Value>{data.food?.join(',')}</Value>
+          ) : (
+            <Value>-</Value>
+          )}
         </Info>
         <Info>
           <Label>Allergies (medications):</Label>
-          <Value>{data.medications?.join(',')}</Value>
+          {data['medications']?.length > 0 ? (
+            <Value>{data.medications?.join(',')}</Value>
+          ) : (
+            <Value>-</Value>
+          )}
         </Info>
         {!hidePrescription && (
           <Info>
