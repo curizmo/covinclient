@@ -52,7 +52,7 @@ export const useAuthProvider = () => {
     if (isLoginFinished) {
       if (!user) {
         history.push(routes.login.path);
-      } else if (user?.isFirstTimeSignUp || !user?.isPractitioner) {
+      } else if (user?.isFirstTimeSignUp || user?.isPractitioner === false) {
         history.push(routes.nonPhysician.path);
       } else {
         history.push(routes.dashboard.path);

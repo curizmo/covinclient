@@ -36,7 +36,10 @@ const RouterSwitch = () => {
         const redirectPath =
           isPrivate && (!isLoggedIn || !user)
             ? routes.login.path
-            : !isLoginInProgress && user && !user.isPractitioner
+            : key !== 'login' &&
+              !isLoginInProgress &&
+              user &&
+              !user.isPractitioner
             ? routes.nonPhysician.path
             : null;
 
@@ -47,8 +50,7 @@ const RouterSwitch = () => {
                 <div className={isShowSpinner ? 'blur-content' : ''}>
                   <TopMenu />
                   <Layout key={key} isPrivate={isPrivate}>
-                    {!['login', 'nonPhysician'].includes(key) &&
-                    redirectPath ? (
+                    {redirectPath ? (
                       <Redirect to={redirectPath} />
                     ) : (
                       <Component />
