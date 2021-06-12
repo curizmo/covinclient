@@ -216,7 +216,11 @@ const Patients = () => {
     return () => {
       debounced.cancel();
     };
-  }, [searchText, currentPage, sortField, riskLevel]);
+  }, [searchText, sortField, riskLevel]);
+
+  useEffect(() => {
+    fetchPatients();
+  }, [currentPage]);
 
   useEffect(() => {
     if (isMobile) {
