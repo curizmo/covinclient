@@ -62,7 +62,8 @@ const GeneralInformation = ({ data, dispatch, hidePrescription }) => {
         </Info>
         <Info>
           <Label>Medical History:</Label>
-          {data['Pre-existing condition']?.length > 0 ? (
+          {data['Pre-existing condition']?.length > 0 &&
+          data['Pre-existing condition'][0] !== 'None of the above' ? (
             <Value>{data['Pre-existing condition'].join(', ')}</Value>
           ) : (
             <Value>-</Value>
@@ -70,11 +71,19 @@ const GeneralInformation = ({ data, dispatch, hidePrescription }) => {
         </Info>
         <Info>
           <Label>Allergies (food):</Label>
-          <Value>{data.Allergy?.join(',')}</Value>
+          {data['food']?.length > 0 ? (
+            <Value>{data.food?.join(',')}</Value>
+          ) : (
+            <Value>-</Value>
+          )}
         </Info>
         <Info>
           <Label>Allergies (medications):</Label>
-          <Value>{data.Allergy?.join(',')}</Value>
+          {data['medications']?.length > 0 ? (
+            <Value>{data.medications?.join(',')}</Value>
+          ) : (
+            <Value>-</Value>
+          )}
         </Info>
         {!hidePrescription && (
           <Info>
