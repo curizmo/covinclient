@@ -50,7 +50,8 @@ const RouterSwitch = () => {
                 <div className={isShowSpinner ? 'blur-content' : ''}>
                   <TopMenu />
                   <Layout key={key} isPrivate={isPrivate}>
-                    {redirectPath ? (
+                    {!['login', 'nonPhysician'].includes(key) &&
+                    redirectPath ? (
                       <Redirect to={redirectPath} />
                     ) : (
                       <Component />
