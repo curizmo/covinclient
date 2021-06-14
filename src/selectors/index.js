@@ -14,6 +14,7 @@ export const getUser = ({ user }) => user.data;
 export const getUserId = ({ user }) => user.data.AuthID;
 export const getUserAppointment = ({ user }) => user.appointments;
 export const getIsShowSpinner = ({ spinner }) => spinner.isShow;
+export const getSpinnerType = ({ spinner }) => spinner.custom;
 export const getIsLoginInProgress = ({ login }) => login.isInProgress;
 export const getAppointment = ({ appointment }) => appointment;
 export const getTwilioDevice = ({ twilio }) => twilio.device;
@@ -41,7 +42,6 @@ export const getPatient = ({ patient }) => patient;
 export const getIsEncounterUpdated = ({ patient }) =>
   patient?.isEncounterUpdated;
 
-export const getIsShowSearchSpinner = ({ search }) => search?.isShowSpinner;
 export const getSearchText = ({ search }) => search?.text;
 export const getSearchResult = ({ search }) => search?.result;
 export const getPatientsHasNext = ({ search }) => search?.hasNext;

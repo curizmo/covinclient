@@ -4,22 +4,20 @@ import {
   SEARCH_REQUESTED,
   setSearchResult,
   setSearchText,
-  showSearchSpinner,
-  hideSearchSpinner,
-} from '../actions/search';
+  hideCustomSpinner,
+} from '../actions';
 import { fetchPatientsWithVitals } from '../services/practitioner';
 import { fetchData } from '../services/api';
 
 function* makeSearch({ payload }) {
-  yield put(showSearchSpinner());
-  yield delay(500);
+  yield delay(1000);
   yield put(setSearchText(payload.searchText));
   yield call(fetchData, fetchPatientsWithVitals, setSearchResult, {
     searchText: payload.searchText,
     selectedCases: payload.selectedCases,
     page: payload.page,
   });
-  yield put(hideSearchSpinner());
+  yield put(hideCustomSpinner());
 }
 
 function* watchSearch() {
