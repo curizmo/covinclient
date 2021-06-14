@@ -122,8 +122,8 @@ export const PersonalInformation = ({
   );
 
   useEffect(() => {
-    setRiskLevel(data?.riskLevel?.toLowerCase());
-  }, []);
+    setRiskLevel(data?.status);
+  }, [data?.status]);
 
   return (
     <PersonalInfoWrap>
