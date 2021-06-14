@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { routes } from 'routers';
 import { useSelector } from 'react-redux';
@@ -93,15 +92,7 @@ const PatientVitalFieldName = styled.div`
 // Patient information at a glace
 const PatientCard = (props) => {
   const { patient } = props;
-  const history = useHistory();
   const user = useSelector(getUser);
-  const onPatientNameClick = (name) => {
-    if (isLightVersion) {
-      return;
-    }
-    const val = name.replace(/ /g, '_').toLowerCase();
-    history.push({ pathname: `/patients/${val}`, state: {} });
-  };
 
   const exportVitals = async (patientId) => {
     const [vitals, lab] = await Promise.all([
@@ -154,9 +145,9 @@ const PatientCard = (props) => {
       {/*patient name & state */}
       <PatientStatusWrp>
         {!isLightVersion && <State selectedState={patient.status} />}
-        <PatientName onClick={() => onPatientNameClick(patient?.fullName)}>
+        <PatientName>
           <Link
-            to={routes.editPatient.path.replace(
+            to={routes.createEncounter.path.replace(
               ':patientId',
               patient.patientId,
             )}>
