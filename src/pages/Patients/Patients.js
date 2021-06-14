@@ -133,6 +133,8 @@ const Patients = () => {
   const [searchText, setSearchText] = useState('');
   const [isFetching, setIsFetching] = useState(true);
   const [patientRisk, setPatientRisk] = useState([]);
+  const [totalPatients, setTotalPatients] = useState('');
+  const [dischargedPatients, setDischargedPatients] = useState('');
 
   const [sortField, setSortField] = useState({
     colName: tableHeader[0]?.colName,
@@ -150,9 +152,15 @@ const Patients = () => {
   const getPatientRiskData = async () => {
     const patientRisk = await patientService.fetchPatientRiskData();
     setPatientRisk(patientRisk.data.riskCount);
+    const totalPatients = patientRisk.data.riskCount.filter(
+      (patient) => patient.status === 'All',
+    );
+    const dischargedPatients = patientRisk.data.riskCount.filter(
+      (patient) => patient.status === 'Discharged',
+    );
+    setTotalPatients(totalPatients[0].count);
+    setDischargedPatients(dischargedPatients[0].count);
   };
-
-  console.log(patientRisk);
 
   const handleLoadMore = () => {
     if (disableLoadMore) {
@@ -328,7 +336,14 @@ const Patients = () => {
       </InfoWrapper>
       <div className="dashboard-header mb-2 d-flex justify-content-between flex-wrap w-100">
         <PatientInfoColumn>
-          <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
+          <InfoValue>
+            {totalPatients
+              ? dischargedPatients
+                ? totalPatients - dischargedPatients
+                : totalPatients
+              : 0}{' '}
+            active patients
+          </InfoValue>
           <div className="d-flex justify-content-between">
             <StatusIndicator status={riskLevel} size={12} />
             <Select
