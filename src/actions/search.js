@@ -3,9 +3,8 @@ export const CLEAR_SEARCH = 'CLEAR_SEARCH';
 export const SET_SEARCH_RESULT = 'SET_SEARCH_RESULT';
 export const SEARCH_REQUESTED = 'SEARCH_REQUESTED';
 
-export const setSearchText = (payload) => ({
+export const setSearchText = () => ({
   type: SET_SEARCH_TEXT,
-  payload,
 });
 
 export const clearSearch = () => ({
