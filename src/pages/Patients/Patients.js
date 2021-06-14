@@ -107,7 +107,7 @@ const Select = styled.select`
 const InfoColumn = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  min-width: 52%;
   @media (max-width: 768px) {
     padding: 0;
   }
@@ -118,9 +118,6 @@ const PatientInfoColumn = styled.div`
   justify-content: space-between;
   min-width: 17rem;
 `;
-
-// @toDo remove condition
-const isShowPatientInfoColumn = false;
 
 const Patients = () => {
   const dispatch = useDispatch();
@@ -323,32 +320,30 @@ const Patients = () => {
         </DateAndTimeWrap>
       </InfoWrapper>
       <div className="dashboard-header mb-2 d-flex justify-content-between flex-wrap w-100">
-        {isShowPatientInfoColumn && (
-          <PatientInfoColumn>
-            <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
-            <div className="d-flex justify-content-between">
-              <StatusIndicator status={riskLevel} size={12} />
-              <Select
-                value={riskLevel}
-                onChange={handleRiskLevelChange}
-                onBlur={handleRiskLevelChange}>
-                {patientRiskData?.map((risk) => {
-                  return (
-                    <option
-                      key={risk.riskType}
-                      value={risk.riskType}
-                      className="select-options">
-                      {risk.riskType} ({risk.numberOfCases})
-                    </option>
-                  );
-                })}
-              </Select>
-            </div>
-          </PatientInfoColumn>
-        )}
+        <PatientInfoColumn>
+          <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
+          <div className="d-flex justify-content-between">
+            <StatusIndicator status={riskLevel} size={12} />
+            <Select
+              value={riskLevel}
+              onChange={handleRiskLevelChange}
+              onBlur={handleRiskLevelChange}>
+              {patientRiskData?.map((risk) => {
+                return (
+                  <option
+                    key={risk.riskType}
+                    value={risk.riskType}
+                    className="select-options">
+                    {risk.riskType} ({risk.numberOfCases})
+                  </option>
+                );
+              })}
+            </Select>
+          </div>
+        </PatientInfoColumn>
         <InfoColumn>
           <SearchInput
-            customClass="my-2 mw-30-rem"
+            customClass="my-2 patient-search-input"
             searchText={searchText}
             requestSearch={makeSearchRequest}
             placeholder="Search by Name, Email or cellphone number"
@@ -562,28 +557,28 @@ const Patients = () => {
           </LinkButton>
         </div>
       </div>
-      {isShowPatientInfoColumn && (
-        <PatientInfoColumn className="bg-white">
-          <InfoValue className="m-0 px-3">
-            {patients?.length ?? 0} active patients
-          </InfoValue>
-          <Select
-            value={riskLevel}
-            onChange={handleRiskLevelChange}
-            onBlur={handleRiskLevelChange}>
-            {patientRiskData?.map((risk) => {
-              return (
-                <option
-                  key={risk.riskType}
-                  value={risk.riskType}
-                  className="select-options">
-                  {risk.riskType} ({risk.numberOfCases})
-                </option>
-              );
-            })}
-          </Select>
-        </PatientInfoColumn>
-      )}
+
+      <PatientInfoColumn className="bg-white">
+        <InfoValue className="m-0 px-3">
+          {patients?.length ?? 0} active patients
+        </InfoValue>
+        <Select
+          value={riskLevel}
+          onChange={handleRiskLevelChange}
+          onBlur={handleRiskLevelChange}>
+          {patientRiskData?.map((risk) => {
+            return (
+              <option
+                key={risk.riskType}
+                value={risk.riskType}
+                className="select-options">
+                {risk.riskType} ({risk.numberOfCases})
+              </option>
+            );
+          })}
+        </Select>
+      </PatientInfoColumn>
+
       <InfoColumn className="bg-white">
         <div className="filter-container">
           <SearchInput
