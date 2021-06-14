@@ -30,7 +30,13 @@ const NoPatientsWrapper = styled.div`
   font-size: 1.1rem;
 `;
 
-const MobileView = ({ patients, clearSearchInput, hasNext, incrementPage }) => {
+const MobileView = ({
+  patients,
+  clearSearchInput,
+  hasNext,
+  incrementPage,
+  searchText,
+}) => {
   const showSpinner = useSelector(getSpinnerType);
 
   return (
@@ -39,7 +45,8 @@ const MobileView = ({ patients, clearSearchInput, hasNext, incrementPage }) => {
         ? patients?.map((patient) => (
             <PatientCard key={patient.patientId} patient={patient} />
           ))
-        : showSpinner === SPINNERS.NONE && (
+        : showSpinner === SPINNERS.NONE &&
+          searchText?.length > 0 && (
             <NoPatientsWrapper>
               <p>
                 <strong>No results found</strong>
@@ -79,6 +86,7 @@ MobileView.propTypes = {
   clearSearchInput: PropTypes.func,
   hasNext: PropTypes.bool,
   incrementPage: PropTypes.func,
+  searchText: PropTypes.string,
 };
 
 export { MobileView };

@@ -8,10 +8,9 @@ import {
  * @returns {Search}
  */
 export const initialState = {
-  isShowSpinner: false,
   text: '',
   result: [],
-  hasNext: true,
+  hasNext: false,
 };
 
 /**
