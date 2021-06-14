@@ -80,7 +80,7 @@ const Select = styled.select`
   position: relative;
   margin-left: 6px;
   margin-top: 0.8rem;
-  width: 8.3rem !important;
+  width: auto;
   color: #22335e;
   font-weight: 700;
 
@@ -158,8 +158,8 @@ const Patients = () => {
     const dischargedPatients = patientRisk.data.riskCount.filter(
       (patient) => patient.status === 'Discharged',
     );
-    setTotalPatients(totalPatients[0].count);
-    setDischargedPatients(dischargedPatients[0].count);
+    setTotalPatients(totalPatients[0]?.count);
+    setDischargedPatients(dischargedPatients[0]?.count);
   };
 
   const handleLoadMore = () => {
