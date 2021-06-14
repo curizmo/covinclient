@@ -33,7 +33,6 @@ import { getUser } from 'selectors';
 
 import * as patientService from 'services/patient';
 import * as patientVitalsService from 'services/patientVitals';
-import { usePatientsRiskData } from 'services/practitioner';
 import { routes } from 'routers';
 import { getISODate } from 'utils/dateTime';
 import { handleCallAppointment, getTabIndex } from 'utils';
@@ -127,13 +126,13 @@ const Patients = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadingPatientId, setDownloadingPatientId] = useState(null);
 
-  const [riskLevel, setRiskLevel] = useState('High');
+  const [riskLevel, setRiskLevel] = useState('');
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchText, setSearchText] = useState('');
   const [isFetching, setIsFetching] = useState(true);
-  const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
+  const [patientRisk, setPatientRisk] = useState([]);
 
   const [sortField, setSortField] = useState({
     colName: tableHeader[0]?.colName,
@@ -147,6 +146,13 @@ const Patients = () => {
     () => Math.ceil((patients?.[0]?.totalRecords ?? 1) / PER_PAGE),
     [patients],
   );
+
+  const getPatientRiskData = async () => {
+    const patientRisk = await patientService.fetchPatientRiskData();
+    setPatientRisk(patientRisk.data.riskCount);
+  };
+
+  console.log(patientRisk);
 
   const handleLoadMore = () => {
     if (disableLoadMore) {
@@ -203,6 +209,7 @@ const Patients = () => {
 
   useEffect(() => {
     fetchPatients();
+    getPatientRiskData();
   }, []);
 
   useEffect(() => {
@@ -328,13 +335,13 @@ const Patients = () => {
               value={riskLevel}
               onChange={handleRiskLevelChange}
               onBlur={handleRiskLevelChange}>
-              {patientRiskData?.map((risk) => {
+              {patientRisk?.map((risk, i) => {
                 return (
                   <option
-                    key={risk.riskType}
-                    value={risk.riskType}
+                    key={i}
+                    value={risk.status === 'All' ? '' : risk.status}
                     className="select-options">
-                    {risk.riskType} ({risk.numberOfCases})
+                    {risk.status} ({risk.count})
                   </option>
                 );
               })}
@@ -566,13 +573,13 @@ const Patients = () => {
           value={riskLevel}
           onChange={handleRiskLevelChange}
           onBlur={handleRiskLevelChange}>
-          {patientRiskData?.map((risk) => {
+          {patientRisk?.map((risk, i) => {
             return (
               <option
-                key={risk.riskType}
-                value={risk.riskType}
+                key={i}
+                value={risk.status === 'All' ? '' : risk.status}
                 className="select-options">
-                {risk.riskType} ({risk.numberOfCases})
+                {risk.status} ({risk.count})
               </option>
             );
           })}
