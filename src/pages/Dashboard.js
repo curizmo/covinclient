@@ -89,7 +89,6 @@ const DashBoardComponent = () => {
   const dispatch = useDispatch();
   const [selectedCases, setSelectedCases] = useState(RISK.HIGH);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [isInitLoading, setIsInitLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [patients, setPatients] = useState([]);
 
@@ -111,9 +110,15 @@ const DashBoardComponent = () => {
   }, [fetchedPatients]);
 
   const makeSearchRequest = (value) => {
-    dispatch(showCustomSpinner(SPINNERS.SEARCH));
     const page = 0;
-    dispatch(requestSearch({ searchText: value, selectedCases, page }));
+    dispatch(
+      requestSearch({
+        searchText: value,
+        selectedCases,
+        page,
+        spinner: SPINNERS.SEARCH,
+      }),
+    );
     setPage(page);
   };
 
@@ -129,12 +134,18 @@ const DashBoardComponent = () => {
 
   const changesCases = (sel) => {
     dispatch(showCustomSpinner(SPINNERS.MAIN));
-    setIsInitLoading(true);
     setPatients([]);
+    setSelectedCases(sel);
     const page = 0;
     setPage(page);
-    setSelectedCases(sel);
-    dispatch(requestSearch({ searchText, selectedCases: sel, page }));
+    dispatch(
+      requestSearch({
+        searchText,
+        selectedCases: sel,
+        page,
+        spinner: SPINNERS.MAIN,
+      }),
+    );
   };
 
   useEffect(() => {
@@ -143,8 +154,14 @@ const DashBoardComponent = () => {
     }
 
     dispatch(showCustomSpinner(SPINNERS.MAIN));
-    dispatch(requestSearch({ searchText: '', selectedCases, page }));
-    setIsInitLoading(true);
+    dispatch(
+      requestSearch({
+        searchText: '',
+        selectedCases,
+        page,
+        spinner: SPINNERS.MAIN,
+      }),
+    );
     return () => {
       dispatch(clearSearch());
     };
@@ -152,9 +169,15 @@ const DashBoardComponent = () => {
 
   const incrementPage = () => {
     dispatch(showCustomSpinner(SPINNERS.LOAD_MORE));
-    setIsInitLoading(true);
     setPage(page + 1);
-    dispatch(requestSearch({ searchText, selectedCases, page: page + 1 }));
+    dispatch(
+      requestSearch({
+        searchText,
+        selectedCases,
+        page: page + 1,
+        spinner: SPINNERS.LOAD_MORE,
+      }),
+    );
   };
 
   const exportVitals = async () => {
@@ -226,7 +249,6 @@ const DashBoardComponent = () => {
                 placeholder="Search by Name, Email or cellphone number"
                 searchRef={searchRefMobile}
                 clearSearchInput={clearSearchInput}
-                isInitLoader={isInitLoading}
               />
               <div className="headsearch-btn-div">
                 <Button
@@ -267,15 +289,14 @@ const DashBoardComponent = () => {
       </FirstRow>
       {isMobile ? (
         <MobileView
-          isInitLoading={isInitLoading}
           patients={patients}
           clearSearchInput={clearSearchInput}
           hasNext={hasNext}
           incrementPage={incrementPage}
+          searchText={searchText}
         />
       ) : (
         <DesktopView
-          searchText={searchText}
           makeSearchRequest={makeSearchRequest}
           selectedCases={selectedCases}
           searchRef={searchRef}

@@ -11,7 +11,7 @@ import { SPINNERS } from '../constants';
  */
 export const initialState = {
   isShow: false,
-  custom: SPINNERS.NONE,
+  custom: SPINNERS.MAIN,
 };
 
 /**
