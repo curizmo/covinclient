@@ -12,7 +12,6 @@ import {
   PatientPrescription,
   GraphicalReadings,
 } from 'components/CreateEncounter';
-import { GraphicalRepresentation } from 'components/GraphicalRepresentation';
 import { DashboardLayout } from 'components/common/Layout';
 import { Symptoms } from 'components/CreateEncounter/Symptoms';
 import { LabResults } from 'components/CreateEncounter/LabResults';
@@ -42,35 +41,31 @@ import {
   TimeImage,
   ViewName,
   Wrapper,
-  InitiateCovidScreenWrap,
-  NoRecordStyling,
-  PendingMsg,
-  InitiateCovidScreening,
-  ResendWrap,
 } from 'global/styles';
 import { getDate } from 'global';
 import GeneralInformation from 'components/CreateEncounter/GeneralInformation';
 import { ColumnContainer } from 'components/CreateEncounter/styles';
 
 const PATIENT_DETAILS_TABS = {
-  READINGS: 'Readings',
-  NOTES: 'Notes',
+  GENERAL: 'General',
+  VITALS: 'Vitals',
   SYMPTOMS: 'Symptoms',
+  NOTES: 'Notes',
   LAB_RESULTS: 'Lab Results',
 };
 
 const tabMenu = [
   {
-    name: PATIENT_DETAILS_TABS.NOTES,
+    name: PATIENT_DETAILS_TABS.GENERAL,
   },
   {
-    name: PATIENT_DETAILS_TABS.PRESCRIPTION,
-  },
-  {
-    name: PATIENT_DETAILS_TABS.READINGS,
+    name: PATIENT_DETAILS_TABS.VITALS,
   },
   {
     name: PATIENT_DETAILS_TABS.SYMPTOMS,
+  },
+  {
+    name: PATIENT_DETAILS_TABS.NOTES,
   },
   {
     name: PATIENT_DETAILS_TABS.LAB_RESULTS,
@@ -117,9 +112,6 @@ const TabWrap = styled.div`
   display: flex;
   height: 3.125rem;
   overflow-x: scroll;
-  @media (max-width: 768px) {
-    margin-top: 1.25rem;
-  }
 `;
 
 const EachTab = styled.div`
@@ -131,6 +123,9 @@ const EachTab = styled.div`
   cursor: pointer;
   padding: 0rem 0.5rem;
   white-space: nowrap;
+  @media (max-width: 768px) {
+    padding: 0rem 6vw;
+  }
 `;
 
 const TabName = styled.span`
@@ -139,20 +134,6 @@ const TabName = styled.span`
   line-height: 1.25rem;
   text-transform: capitalize;
   display: flex;
-  align-items: center;
-`;
-
-const spacingAroundComponent = css`
-  height: 12rem;
-  background: #f2f7fd;
-  padding: 0.5rem;
-  margin: 1rem 0rem 0.3125rem;
-`;
-
-const desktopViewLabelsForPatientsWithCurrentStats = css`
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
   align-items: center;
 `;
 
@@ -208,12 +189,11 @@ function CreateEncounter() {
 
   const isEncounterUpdated = useSelector(getIsEncounterUpdated);
 
-  const [selectedTab, setSelectedTab] = useState(PATIENT_DETAILS_TABS.READINGS);
+  const [selectedTab, setSelectedTab] = useState(PATIENT_DETAILS_TABS.GENERAL);
   const [riskLevel, setRiskLevel] = useState('');
   const [note, setNote] = useState('');
   const [prescriptionList, setPrescriptionList] = useState([]);
   const [labsList, setLabsList] = useState([]);
-  const [vitalsCompletionStatus, setVitalsCompletionStatus] = useState('');
   const [appointmentId, setAppointmentId] = useState('');
   const [isNoteSaved, setIsNoteSaved] = useState(false);
   const [isNoteLoading, setIsNoteLoading] = useState(false);
@@ -221,14 +201,6 @@ function CreateEncounter() {
   const [symptoms, setSymptoms] = useState([]);
   const [labResults, setLabResults] = useState([]);
   const [labs, setLabs] = useState([]);
-
-  useEffect(() => {
-    setRiskLevel(patientData?.status);
-    // @toDo receive patientParameterStatus
-    setVitalsCompletionStatus(
-      patientData?.patientParameterStatus ?? 'Completed',
-    );
-  }, [patientData]);
 
   useEffect(() => {
     dispatch(fetchPatient({ patientId, ntoUserId: user.NTOUserID }));
@@ -542,48 +514,22 @@ function CreateEncounter() {
               })}
             </TabWrap>
             <ContentWrap>
-              {selectedTab === PATIENT_DETAILS_TABS.READINGS && (
-                <>
-                  {/* Initiated-when user initiates covid screening,
-                    Pending-when patient hasnt completed his vitals fill up,
-                    Completed- All the information is availaible} */}
-                  {vitalsCompletionStatus === 'Initiated' && (
-                    <InitiateCovidScreenWrap>
-                      <NoRecordStyling>No Record Availaible</NoRecordStyling>
-                      <InitiateCovidScreening>
-                        INITIATE COVID SCREENING
-                      </InitiateCovidScreening>
-                    </InitiateCovidScreenWrap>
-                  )}
-                  {vitalsCompletionStatus === 'Pending' && (
-                    <InitiateCovidScreenWrap>
-                      <NoRecordStyling>No Record Availaible</NoRecordStyling>
-                      <PendingMsg>
-                        <span>
-                          Invite has been sent to patient, Awaiting Covid
-                          details...
-                        </span>
-                      </PendingMsg>
-                      <ResendWrap>Resend</ResendWrap>
-                    </InitiateCovidScreenWrap>
-                  )}
-                  {vitalsCompletionStatus === 'Completed' && (
-                    <GraphicalRepresentation
-                      data={patientData}
-                      spacingAroundComponent={spacingAroundComponent}
-                      desktopViewLabelsForPatientsWithCurrentStats={
-                        desktopViewLabelsForPatientsWithCurrentStats
-                      }
-                      preferenceList={{
-                        axisXLines: true,
-                        showXAxisFonts: false,
-                        showTooltip: true,
-                        xScalePaddingOuter: 5,
-                        yAxisFontSize: 12,
-                      }}
-                    />
-                  )}
-                </>
+              {selectedTab === PATIENT_DETAILS_TABS.GENERAL && (
+                <GeneralInformation
+                  data={patientData}
+                  dispatch={dispatch}
+                  hidePrescription={HIDE_PRESCRIPTION}
+                />
+              )}
+              {selectedTab === PATIENT_DETAILS_TABS.VITALS && (
+                <ColumnContainer>
+                  <GraphicalReadings data={patientData} />
+                </ColumnContainer>
+              )}
+              {selectedTab === PATIENT_DETAILS_TABS.SYMPTOMS && (
+                <ColumnContainer>
+                  <Symptoms symptoms={symptoms} />
+                </ColumnContainer>
               )}
               {selectedTab === PATIENT_DETAILS_TABS.NOTES && (
                 <PatientNotes
@@ -598,11 +544,10 @@ function CreateEncounter() {
                   handleRemoveFile={handleRemoveFile}
                 />
               )}
-              {selectedTab === PATIENT_DETAILS_TABS.SYMPTOMS && (
-                <Symptoms symptoms={symptoms} />
-              )}
               {selectedTab === PATIENT_DETAILS_TABS.LAB_RESULTS && (
-                <LabResults labs={labs} />
+                <ColumnContainer>
+                  <LabResults labs={labs} />
+                </ColumnContainer>
               )}
             </ContentWrap>
           </MobileViewMedInfoWrap>

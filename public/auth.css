@@ -430,7 +430,7 @@ input {
     width: 100%;
   }
   .login-section .logo {
-    padding: 2rem 0 2rem;
+    padding: 2rem 0;
   }
   .signup-screen .logo {
     padding: 4rem 0 0;
