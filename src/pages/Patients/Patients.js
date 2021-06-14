@@ -80,7 +80,7 @@ const Select = styled.select`
   position: relative;
   margin-left: 6px;
   margin-top: 0.9rem;
-  width: 7.5rem !important;
+  width: 8.3rem !important;
   color: #22335e;
   font-weight: 700;
 
