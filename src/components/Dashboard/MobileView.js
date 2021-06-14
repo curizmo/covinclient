@@ -5,6 +5,9 @@ import PropTypes from 'prop-types';
 
 import PatientCard from 'components/Dashboard/PatientCard';
 import { SpinnerComponent } from 'components/common/SpinnerPortal/Spinner';
+import { useSelector } from 'react-redux';
+import { getSpinnerType } from 'selectors';
+import { SPINNERS } from '../../constants';
 
 const PatientsWrapper = styled.div`
   display: none;
@@ -27,22 +30,16 @@ const NoPatientsWrapper = styled.div`
   font-size: 1.1rem;
 `;
 
-const MobileView = ({
-  isInitLoading,
-  patients,
-  searchText,
-  clearSearchInput,
-  hasNext,
-  incrementPage,
-  isShowSpinner,
-}) => {
+const MobileView = ({ patients, clearSearchInput, hasNext, incrementPage }) => {
+  const showSpinner = useSelector(getSpinnerType);
+
   return (
-    <PatientsWrapper isInitLoading={isInitLoading}>
+    <PatientsWrapper isInitLoading={showSpinner === SPINNERS.MAIN}>
       {patients?.length > 0
         ? patients?.map((patient) => (
             <PatientCard key={patient.patientId} patient={patient} />
           ))
-        : searchText?.length > 0 && (
+        : showSpinner === SPINNERS.NONE && (
             <NoPatientsWrapper>
               <p>
                 <strong>No results found</strong>
@@ -52,14 +49,16 @@ const MobileView = ({
               </Button>
             </NoPatientsWrapper>
           )}
-      {isInitLoading && <SpinnerComponent isFullScreen={false} />}
+      {showSpinner === SPINNERS.MAIN && (
+        <SpinnerComponent isFullScreen={false} />
+      )}
       {hasNext ? (
         <div className="load-more-container m-3">
           <Button
             onClick={incrementPage}
-            disabled={isShowSpinner}
+            disabled={showSpinner !== SPINNERS.NONE}
             className="btn-load-more btn btn-covin">
-            {isInitLoading ? (
+            {showSpinner === SPINNERS.MAIN ? (
               <div className="lds-spinner">
                 {[...Array(12).keys()].map((i) => (
                   <span key={i} />
@@ -76,14 +75,10 @@ const MobileView = ({
 };
 
 MobileView.propTypes = {
-  requestSearch: PropTypes.func,
-  searchText: PropTypes.string,
   patients: PropTypes.array,
+  clearSearchInput: PropTypes.func,
   hasNext: PropTypes.bool,
   incrementPage: PropTypes.func,
-  clearSearchInput: PropTypes.func,
-  isInitLoading: PropTypes.bool,
-  isShowSpinner: PropTypes.bool,
 };
 
 export { MobileView };

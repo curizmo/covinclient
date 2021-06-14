@@ -11,6 +11,9 @@ import { routes } from 'routers';
 import { isLightVersion } from 'config';
 import excel from 'assets/images/svg-icons/excel.svg';
 import xicon from 'assets/images/x-icon.png';
+import { useSelector } from 'react-redux';
+import { getSpinnerType } from 'selectors';
+import { SPINNERS } from '../../constants';
 
 const TypeHeader = styled.h3`
   margin-bottom: 0;
@@ -64,11 +67,11 @@ const DesktopView = ({
   isDownloading,
   exportVitals,
   patients,
-  isShowSpinner,
   incrementPage,
   hasNext,
-  page,
 }) => {
+  const showSpinner = useSelector(getSpinnerType);
+
   return (
     <DeskTopViewPatient>
       <HeaderSearchWrap className="w-100 mb-3">
@@ -117,14 +120,10 @@ const DesktopView = ({
       </HeaderSearchWrap>
       <DesktopPatientTable
         selectedCaseData={patients}
-        isShowSpinner={isShowSpinner}
         incrementPage={incrementPage}
         hasNext={hasNext}
-        page={page}
-        selectedCases={selectedCases}
-        searchText={searchText}
       />
-      {patients?.length < 1 && searchText?.length > 0 && (
+      {showSpinner == SPINNERS.NONE && patients?.length < 1 && (
         <NoPatientsWrapper>
           <p>
             <strong>No results found</strong>
@@ -141,14 +140,13 @@ const DesktopView = ({
 DesktopView.propTypes = {
   searchText: PropTypes.string,
   makeSearchRequest: PropTypes.func,
-  selectedCases: PropTypes.array,
+  selectedCases: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   searchRef: PropTypes.object,
   clearSearchInput: PropTypes.func,
   isDownloading: PropTypes.bool,
   exportVitals: PropTypes.func,
   patients: PropTypes.array,
-  isShowSpinner: PropTypes.bool,
-  incrementPage: PropTypes.array,
+  incrementPage: PropTypes.func,
   hasNext: PropTypes.bool,
   page: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
