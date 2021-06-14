@@ -12,7 +12,7 @@ import { isLightVersion } from 'config';
 import excel from 'assets/images/svg-icons/excel.svg';
 import xicon from 'assets/images/x-icon.png';
 import { useSelector } from 'react-redux';
-import { getSpinnerType } from 'selectors';
+import { getSearchText, getSpinnerType } from 'selectors';
 import { SPINNERS } from '../../constants';
 
 const TypeHeader = styled.h3`
@@ -59,7 +59,6 @@ const NoPatientsWrapper = styled.div`
 const isShowNewButton = false;
 
 const DesktopView = ({
-  searchText,
   makeSearchRequest,
   selectedCases,
   searchRef,
@@ -71,6 +70,7 @@ const DesktopView = ({
   hasNext,
 }) => {
   const showSpinner = useSelector(getSpinnerType);
+  const searchText = useSelector(getSearchText);
 
   return (
     <DeskTopViewPatient>
@@ -123,16 +123,18 @@ const DesktopView = ({
         incrementPage={incrementPage}
         hasNext={hasNext}
       />
-      {showSpinner == SPINNERS.NONE && patients?.length < 1 && (
-        <NoPatientsWrapper>
-          <p>
-            <strong>No results found</strong>
-          </p>
-          <Button onClick={clearSearchInput} className="link-button">
-            Back to dashboard
-          </Button>
-        </NoPatientsWrapper>
-      )}
+      {showSpinner === SPINNERS.NONE &&
+        searchText?.length > 0 &&
+        patients?.length < 1 && (
+          <NoPatientsWrapper>
+            <p>
+              <strong>No results found</strong>
+            </p>
+            <Button onClick={clearSearchInput} className="link-button">
+              Back to dashboard
+            </Button>
+          </NoPatientsWrapper>
+        )}
     </DeskTopViewPatient>
   );
 };

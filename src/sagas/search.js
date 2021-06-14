@@ -5,19 +5,27 @@ import {
   setSearchResult,
   setSearchText,
   hideCustomSpinner,
+  showCustomSpinner,
+  clearSearch,
 } from '../actions';
 import { fetchPatientsWithVitals } from '../services/practitioner';
 import { fetchData } from '../services/api';
 
 function* makeSearch({ payload }) {
-  yield delay(1000);
-  yield put(setSearchText(payload.searchText));
-  yield call(fetchData, fetchPatientsWithVitals, setSearchResult, {
-    searchText: payload.searchText,
-    selectedCases: payload.selectedCases,
-    page: payload.page,
-  });
-  yield put(hideCustomSpinner());
+  try {
+    yield delay(1000);
+    yield put(showCustomSpinner(payload.spinner));
+    yield put(setSearchText(payload.searchText));
+    yield call(fetchData, fetchPatientsWithVitals, setSearchResult, {
+      searchText: payload.searchText,
+      selectedCases: payload.selectedCases,
+      page: payload.page,
+    });
+  } catch (err) {
+    yield put(clearSearch());
+  } finally {
+    yield put(hideCustomSpinner());
+  }
 }
 
 function* watchSearch() {
