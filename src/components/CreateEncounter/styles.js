@@ -260,7 +260,7 @@ export const ImgButton = styled.button`
 `;
 
 export const LoadingIcon = styled.div`
-  bottom: 1.25rem !important;
+  bottom: 2rem !important;
   right: 2.5rem !important;
 `;
 
