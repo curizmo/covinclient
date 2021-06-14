@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Input } from 'reactstrap';
 import { Search } from 'react-feather';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-import { getIsShowSearchSpinner } from 'selectors';
+import { getSpinnerType } from 'selectors';
 import xIcon from 'assets/images/svg-icons/x-icon.svg';
-import { ENTER } from '../../../constants';
+import { ENTER, SPINNERS } from '../../../constants';
 
 const XButton = styled.button`
   background-color: #9fa7ba;
@@ -39,8 +39,7 @@ export const SearchInput = ({
   isPatientSearch,
 }) => {
   const [searchValue, setSearchValue] = useState('');
-  const [isShowSearchSpinner, setIsShowSearchSpinner] = useState(false);
-  const isShowSpinner = useSelector(getIsShowSearchSpinner);
+  const showSpinner = useSelector(getSpinnerType);
 
   const onChange = (e) => {
     const value = e.target.value;
@@ -49,7 +48,6 @@ export const SearchInput = ({
       isPatientSearch ||
       (searchText !== value && (value.length < 1 || value.length > 2))
     ) {
-      setIsShowSearchSpinner(true);
       requestSearch(value);
     }
   };
@@ -60,16 +58,15 @@ export const SearchInput = ({
     }
   };
 
-  useEffect(() => {
-    if (!isShowSpinner) {
-      setIsShowSearchSpinner(false);
-    }
-  }, [isShowSpinner]);
+  const onClickXButton = () => {
+    clearSearchInput();
+    setSearchValue('');
+  };
 
   return (
     <div className={`search-container ${customClass}`}>
       <Search className="search-icon" />
-      {isShowSearchSpinner && searchValue?.length > 0 && (
+      {showSpinner === SPINNERS.SEARCH && (
         <div className="lds-spinner position-absolute">
           {[...Array(12).keys()].map((s) => (
             <span key={s} />
@@ -86,7 +83,7 @@ export const SearchInput = ({
         onKeyPress={onEnter}
       />
       {searchRef?.current?.value?.length > 0 && (
-        <XButton onClick={clearSearchInput} className="x-button">
+        <XButton onClick={onClickXButton} className="x-button">
           <XIcon src={xIcon} alt="x-icon" />
         </XButton>
       )}
@@ -102,4 +99,5 @@ SearchInput.propTypes = {
   customClass: PropTypes.string,
   clearSearchInput: PropTypes.func,
   isPatientSearch: PropTypes.bool,
+  isInitLoader: PropTypes.bool,
 };

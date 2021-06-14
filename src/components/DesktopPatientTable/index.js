@@ -10,7 +10,7 @@ import { SpinnerComponent } from 'components/common/SpinnerPortal/Spinner';
 import { DashboardLoader } from 'components/common/Loader';
 
 import * as patientVitalsService from 'services/patientVitals';
-import { getUser } from 'selectors';
+import { getSpinnerType, getUser } from 'selectors';
 import { getFormatedTimeDate, handleCallAppointment } from 'utils';
 import { exportIndividualVitalsToCSV } from 'utils/vitalsDownload';
 import { isLightVersion } from 'config';
@@ -18,6 +18,7 @@ import {
   GENDER_SHORTHAND,
   VitalsDateFields,
   LabDateFields,
+  SPINNERS,
 } from '../../constants';
 import { CAMEL_CASE_REGEX } from '../../constants/regex';
 import { setDate, setDateTime } from 'global';
@@ -116,33 +117,18 @@ const desktopViewLabelsForPatientsWithCurrentStats = css`
 `;
 
 const DesktopPatientTable = (props) => {
-  const {
-    selectedCaseData,
-    isShowSpinner,
-    incrementPage,
-    hasNext,
-    selectedCases,
-    page,
-    searchText,
-  } = props;
+  const { selectedCaseData, incrementPage, hasNext } = props;
 
   const dispatch = useDispatch();
   const user = useSelector(getUser);
+  const showSpinner = useSelector(getSpinnerType);
   const wrapperRef = useRef(null);
   const [downloadingPatientId, setDownloadingPatientId] = useState(null);
-  const [isShowLoadMoreSpinner, setIsShowLoadMoreSpinner] = useState(true);
 
   const onCall = useCallback(
     (patientId) => () => handleCallAppointment(dispatch, patientId),
     [dispatch],
   );
-
-  const loadMore = useCallback(() => {
-    if (hasNext && isScrolledToEnd()) {
-      setIsShowLoadMoreSpinner(true);
-      incrementPage();
-    }
-  }, [hasNext, selectedCases, page, searchText]);
 
   const isScrolledToEnd = () => {
     return (
@@ -150,6 +136,12 @@ const DesktopPatientTable = (props) => {
       wrapperRef?.current?.scrollHeight - wrapperRef?.current?.offsetHeight - 20
     );
   };
+
+  const loadMore = useCallback(() => {
+    if (hasNext && isScrolledToEnd()) {
+      incrementPage();
+    }
+  }, [hasNext, selectedCaseData]);
 
   useEffect(() => {
     if (wrapperRef?.current) {
@@ -163,12 +155,6 @@ const DesktopPatientTable = (props) => {
       };
     }
   }, [wrapperRef?.current, loadMore]);
-
-  useEffect(() => {
-    if (!isShowSpinner || !hasNext) {
-      setIsShowLoadMoreSpinner(false);
-    }
-  }, [isShowSpinner, hasNext]);
 
   const exportVitals = async (patientId) => {
     try {
@@ -224,7 +210,7 @@ const DesktopPatientTable = (props) => {
     }
   };
 
-  if (selectedCaseData?.length < 1 && !isShowSpinner) {
+  if (selectedCaseData?.length < 1 && showSpinner === SPINNERS.NONE) {
     return null;
   }
 
@@ -341,9 +327,9 @@ const DesktopPatientTable = (props) => {
             </InfoAndGraphWrapper>
           );
         })}
-        {isShowLoadMoreSpinner && <DashboardLoader />}
+        {showSpinner === SPINNERS.LOAD_MORE && <DashboardLoader />}
       </TableWrapper>
-      {isShowSpinner && !isShowLoadMoreSpinner && (
+      {showSpinner === SPINNERS.MAIN && (
         <SpinnerComponent customClasses="position-absolute" />
       )}
     </Wrapper>
@@ -352,12 +338,8 @@ const DesktopPatientTable = (props) => {
 
 DesktopPatientTable.propTypes = {
   selectedCaseData: PropTypes.array,
-  isShowSpinner: PropTypes.bool,
-  incrementPage: PropTypes.array,
+  incrementPage: PropTypes.func,
   hasNext: PropTypes.bool,
-  selectedCases: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  page: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  searchText: PropTypes.string,
 };
 
 export default DesktopPatientTable;

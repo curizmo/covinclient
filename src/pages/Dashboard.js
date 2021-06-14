@@ -28,7 +28,6 @@ import {
   getSearchResult,
   getSearchText,
   getUser,
-  getIsShowSearchSpinner,
   getPatientsHasNext,
 } from 'selectors';
 
@@ -37,7 +36,7 @@ import * as patientVitalsService from 'services/patientVitals';
 
 import { isLightVersion } from '../config';
 
-import { RISK, VitalsDateFields } from '../constants';
+import { RISK, SPINNERS, VitalsDateFields } from '../constants';
 import { CAMEL_CASE_REGEX } from '../constants/regex';
 
 import { routes } from 'routers';
@@ -47,6 +46,7 @@ import { clearSearch, requestSearch } from 'actions/search';
 import useCheckIsMobile from 'hooks/useCheckIsMobile';
 import { DesktopView } from 'components/Dashboard/DesktopView';
 import { MobileView } from 'components/Dashboard/MobileView';
+import { showCustomSpinner } from 'actions';
 
 const FirstRow = styled.section`
   padding: 0em 4em;
@@ -97,7 +97,6 @@ const DashBoardComponent = () => {
   const fetchedPatients = useSelector(getSearchResult);
   const hasNext = useSelector(getPatientsHasNext);
   const searchText = useSelector(getSearchText);
-  const isShowSpinner = useSelector(getIsShowSearchSpinner);
   const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
   const searchRef = useRef(null);
   const searchRefMobile = useRef(null);
@@ -111,17 +110,11 @@ const DashBoardComponent = () => {
     }
   }, [fetchedPatients]);
 
-  useEffect(() => {
-    if (!isShowSpinner || searchText?.length > 0) {
-      setIsInitLoading(false);
-    }
-  }, [searchText, isShowSpinner]);
-
   const makeSearchRequest = (value) => {
+    dispatch(showCustomSpinner(SPINNERS.SEARCH));
     const page = 0;
     dispatch(requestSearch({ searchText: value, selectedCases, page }));
     setPage(page);
-    setPatients([]);
   };
 
   const clearSearchInput = () => {
@@ -135,6 +128,7 @@ const DashBoardComponent = () => {
   };
 
   const changesCases = (sel) => {
+    dispatch(showCustomSpinner(SPINNERS.MAIN));
     setIsInitLoading(true);
     setPatients([]);
     const page = 0;
@@ -148,6 +142,7 @@ const DashBoardComponent = () => {
       return;
     }
 
+    dispatch(showCustomSpinner(SPINNERS.MAIN));
     dispatch(requestSearch({ searchText: '', selectedCases, page }));
     setIsInitLoading(true);
     return () => {
@@ -156,6 +151,7 @@ const DashBoardComponent = () => {
   }, [user]);
 
   const incrementPage = () => {
+    dispatch(showCustomSpinner(SPINNERS.LOAD_MORE));
     setIsInitLoading(true);
     setPage(page + 1);
     dispatch(requestSearch({ searchText, selectedCases, page: page + 1 }));
@@ -230,6 +226,7 @@ const DashBoardComponent = () => {
                 placeholder="Search by Name, Email or cellphone number"
                 searchRef={searchRefMobile}
                 clearSearchInput={clearSearchInput}
+                isInitLoader={isInitLoading}
               />
               <div className="headsearch-btn-div">
                 <Button
@@ -272,11 +269,9 @@ const DashBoardComponent = () => {
         <MobileView
           isInitLoading={isInitLoading}
           patients={patients}
-          searchText={searchText}
           clearSearchInput={clearSearchInput}
           hasNext={hasNext}
           incrementPage={incrementPage}
-          isShowSpinner={isShowSpinner}
         />
       ) : (
         <DesktopView
@@ -285,7 +280,6 @@ const DashBoardComponent = () => {
           selectedCases={selectedCases}
           searchRef={searchRef}
           clearSearchInput={clearSearchInput}
-          isShowSpinner={isShowSpinner}
           isDownloading={isDownloading}
           exportVitals={exportVitals}
           patients={patients}

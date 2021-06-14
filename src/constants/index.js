@@ -478,3 +478,10 @@ export const INTAKE_FORM_GROUPS = {
 };
 
 export const INDIA_COUNTRY_CODE = 'IN';
+
+export const SPINNERS = {
+  MAIN: 'Main',
+  LOAD_MORE: 'Load more',
+  SEARCH: 'Search',
+  NONE: 'None',
+};

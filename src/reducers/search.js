@@ -1,6 +1,4 @@
 import {
-  SHOW_SEARCH_SPINNER,
-  HIDE_SEARCH_SPINNER,
   SET_SEARCH_TEXT,
   SET_SEARCH_RESULT,
   CLEAR_SEARCH,
@@ -33,16 +31,8 @@ const search = (state = initialState, { type, payload }) => {
       return {
         ...state,
         text: payload,
-      };
-    case SHOW_SEARCH_SPINNER:
-      return {
-        ...state,
-        isShowSpinner: true,
-      };
-    case HIDE_SEARCH_SPINNER:
-      return {
-        ...state,
-        isShowSpinner: false,
+        result: [],
+        hasNext: false,
       };
     case CLEAR_SEARCH:
       return { ...initialState };
