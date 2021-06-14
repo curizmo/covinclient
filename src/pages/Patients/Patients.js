@@ -20,6 +20,17 @@ import TableLoader from 'assets/loaders/TableLoader';
 import TableHeader from 'components/common/TableHeader';
 import { StatusIndicator } from 'components/common/StatusIndicator';
 import { SearchInput } from 'components/common/SearchInput';
+
+import { hideCustomSpinner, showCustomSpinner } from 'actions';
+import * as patientService from 'services/patient';
+import * as patientVitalsService from 'services/patientVitals';
+import { usePatientsRiskData } from 'services/practitioner';
+import { getUser } from 'selectors';
+import { getISODate } from 'utils/dateTime';
+import { handleCallAppointment, getTabIndex } from 'utils';
+import { exportToCSV, exportIndividualVitalsToCSV } from 'utils/vitalsDownload';
+import useCheckIsMobile from 'hooks/useCheckIsMobile';
+import { getDate, setDate, setDateTime } from 'global';
 import {
   DateAndTime,
   DateAndTimeWrap,
@@ -29,23 +40,14 @@ import {
   WebViewWrap,
   ScrollContainer,
 } from 'global/styles';
-import { getUser } from 'selectors';
-
-import * as patientService from 'services/patient';
-import * as patientVitalsService from 'services/patientVitals';
-import { usePatientsRiskData } from 'services/practitioner';
 import { routes } from 'routers';
-import { getISODate } from 'utils/dateTime';
-import { handleCallAppointment, getTabIndex } from 'utils';
-import { exportToCSV, exportIndividualVitalsToCSV } from 'utils/vitalsDownload';
-import useCheckIsMobile from 'hooks/useCheckIsMobile';
-import { getDate, setDate, setDateTime } from 'global';
 import {
   GENDER_SHORTHAND,
   PER_PAGE,
   SORT_ORDER,
   VitalsDateFields,
   LabDateFields,
+  SPINNERS,
 } from '../../constants';
 import { CAMEL_CASE_REGEX } from '../../constants/regex';
 
@@ -164,6 +166,7 @@ const Patients = () => {
   };
 
   const clearSearchInput = () => {
+    dispatch(showCustomSpinner(SPINNERS.SEARCH));
     if (searchRef?.current?.value) {
       searchRef.current.value = '';
     }
@@ -177,6 +180,9 @@ const Patients = () => {
   };
 
   const fetchPatients = async () => {
+    if (searchText?.length > 0) {
+      dispatch(showCustomSpinner(SPINNERS.SEARCH));
+    }
     setIsFetching(true);
     try {
       const response = await patientService.fetchPatients({
@@ -201,6 +207,7 @@ const Patients = () => {
       console.error(err);
     } finally {
       setIsFetching(false);
+      dispatch(hideCustomSpinner());
     }
   };
 
