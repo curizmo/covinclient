@@ -297,7 +297,6 @@ const DashBoardComponent = () => {
         />
       ) : (
         <DesktopView
-          searchText={searchText}
           makeSearchRequest={makeSearchRequest}
           selectedCases={selectedCases}
           searchRef={searchRef}
