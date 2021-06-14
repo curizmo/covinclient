@@ -61,7 +61,7 @@ const GeneralInformation = ({ data, dispatch, hidePrescription }) => {
           <Value>{data.address || '-'}</Value>
         </Info>
         <Info>
-          <Label>Medical History:</Label>
+          <Label>Pre-existing Conditions:</Label>
           {data['Pre-existing condition']?.length > 0 &&
           data['Pre-existing condition'][0] !== 'None of the above' ? (
             <Value>{data['Pre-existing condition'].join(', ')}</Value>
