@@ -591,21 +591,24 @@ const Patients = () => {
         <InfoValue className="m-0 px-3">
           {patients?.length ?? 0} active patients
         </InfoValue>
-        <Select
-          value={riskLevel}
-          onChange={handleRiskLevelChange}
-          onBlur={handleRiskLevelChange}>
-          {patientRisk?.map((risk, i) => {
-            return (
-              <option
-                key={i}
-                value={risk.status === 'All' ? '' : risk.status}
-                className="select-options">
-                {risk.status} ({risk.count})
-              </option>
-            );
-          })}
-        </Select>
+        <div className="d-flex justify-content-between">
+          <StatusIndicator status={riskLevel} size={12} />
+          <Select
+            value={riskLevel}
+            onChange={handleRiskLevelChange}
+            onBlur={handleRiskLevelChange}>
+            {patientRisk?.map((risk, i) => {
+              return (
+                <option
+                  key={i}
+                  value={risk.status === 'All' ? '' : risk.status}
+                  className="select-options">
+                  {risk.status} ({risk.count})
+                </option>
+              );
+            })}
+          </Select>
+        </div>
       </PatientInfoColumn>
 
       <InfoColumn className="bg-white">
