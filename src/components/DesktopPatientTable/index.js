@@ -42,10 +42,10 @@ const Status = styled.div`
   border-radius: 50%;
   background-color: ${(props) =>
     props.selectedCases === 'High'
-      ? '#eb2f2f'
+      ? '#FF3636'
       : props.selectedCases === 'Mild'
-      ? '#657396'
-      : '#e5881b'};
+      ? '#99BEE9'
+      : '#FFC636'};
   width: 1rem;
   height: 1rem;
   margin-right: 1.25rem;

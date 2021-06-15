@@ -27,19 +27,19 @@ const Severe = styled(Tile)`
   border-bottom: ${(props) => (props.selected ? '0.625rem' : '0.3125rem')} solid;
   border-color: ${(props) =>
     props.riskType === 'high'
-      ? '#eb2f2f'
+      ? '#FF3636'
       : props.riskType === 'moderate'
-      ? '#e5881b'
-      : '#657396'};
+      ? '#FFC636'
+      : '#99BEE9'};
   @media (max-width: 768px) {
     border: 0;
     border-bottom: 0.625rem solid;
     border-color: ${(props) =>
       props.riskType === 'high'
-        ? '#eb2f2f'
+        ? '#FF3636'
         : props.riskType === 'moderate'
-        ? '#e5881b'
-        : '#657396'};
+        ? '#FFC636'
+        : '#99BEE9'};
   }
 `;
 
@@ -105,10 +105,10 @@ const Value = styled.h6`
   margin: 0.3125rem 0;
   color: ${(props) =>
     props.type === 'high'
-      ? '#eb2f2f'
+      ? '#FF3636'
       : props.type === 'moderate'
-      ? '#e5881b'
-      : '#657396'};
+      ? '#FFC636'
+      : '#99BEE9'};
   font-weight: bold;
   text-align: center;
   @media (max-width: 768px) {

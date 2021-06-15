@@ -26,10 +26,10 @@ const Status = styled.div`
   border-radius: 50%;
   background-color: ${(props) =>
     props.risk === 'High'
-      ? '#eb2f2f'
+      ? '#FF3636'
       : props.risk === 'Moderate'
-      ? '#e5881b'
-      : '#657396'};
+      ? '#FFC636'
+      : '#99BEE9'};
   width: 1rem;
   height: 1rem;
   margin-right: 1.25rem;

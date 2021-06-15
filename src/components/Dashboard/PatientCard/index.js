@@ -28,10 +28,10 @@ const State = styled.div`
   border-radius: 50%;
   background-color: ${(props) =>
     props.selectedState === 'High'
-      ? '#eb2f2f'
+      ? '#FF3636'
       : props.selectedState === 'Mild'
-      ? '#657396'
-      : '#e5881b'};
+      ? '#99BEE9'
+      : '#FFC636'};
   width: 1rem;
   height: 1rem;
 `;
