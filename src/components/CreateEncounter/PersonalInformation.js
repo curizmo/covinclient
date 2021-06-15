@@ -49,9 +49,6 @@ const Name = styled.span`
 
 const RiskLevelWrap = styled.div`
   display: flex;
-  @media (max-width: 768px) {
-    margin-bottom: 1.875rem;
-  }
 `;
 
 const Button = styled.button`
@@ -125,8 +122,8 @@ export const PersonalInformation = ({
   );
 
   useEffect(() => {
-    setRiskLevel(data?.riskLevel?.toLowerCase());
-  }, []);
+    setRiskLevel(data?.status);
+  }, [data?.status]);
 
   return (
     <PersonalInfoWrap>

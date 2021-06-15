@@ -314,7 +314,8 @@ export const FileName = styled.span`
 
 export const ColumnContainer = styled.div`
   overflow-y: auto;
-  height: 65vh;
+  height: 67vh;
+  padding-bottom: 1rem;
 `;
 
 export const PastNotesContainer = styled.div`
