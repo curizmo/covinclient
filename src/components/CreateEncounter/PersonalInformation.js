@@ -81,21 +81,6 @@ const BackButton = styled.div`
 `;
 
 const Select = styled.select`
-  border: none;
-  outline: none;
-  background: white;
-
-  :focus {
-    border: none;
-    outline: none;
-  }
-  :focus-visible {
-    border: none;
-    outline: none;
-  }
-
-  font-size: 16px;
-  line-height: 20px;
   color: #657396;
 `;
 
@@ -138,7 +123,7 @@ export const PersonalInformation = ({
               {riskOptions.map((radio) => {
                 return (
                   <option key={radio} value={radio}>
-                    {radio}
+                    {radio} Risk
                   </option>
                 );
               })}

@@ -60,3 +60,13 @@ input::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
 }
+
+select {
+  padding-right: 1.6rem;
+  border: none;
+  outline: none;
+  line-height: 20px;
+  background-color: transparent;
+  appearance: none;
+  background: url('../assets/images/svg-icons/select-arrow.svg') no-repeat 95% 50%;
+}
