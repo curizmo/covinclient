@@ -272,6 +272,14 @@ export const PATH_PARAMS = {
   subdomain: '/:subdomain',
 };
 
+export const COLOR_CODE = {
+  highRisk: '#FF3636',
+  moderateRisk: '#FFC636',
+  mildRisk: '#99BEE9',
+  uncertainRisk: '#FF8936',
+  dischargedRisk: '#54D776',
+};
+
 export const ORGANIZATION_TYPES = {
   CARE_TEAM: 'CareTeam',
 };

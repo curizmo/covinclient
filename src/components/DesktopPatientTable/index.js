@@ -19,6 +19,7 @@ import {
   VitalsDateFields,
   LabDateFields,
   SPINNERS,
+  COLOR_CODE,
 } from '../../constants';
 import { CAMEL_CASE_REGEX } from '../../constants/regex';
 import { setDate, setDateTime } from 'global';
@@ -42,10 +43,10 @@ const Status = styled.div`
   border-radius: 50%;
   background-color: ${(props) =>
     props.selectedCases === 'High'
-      ? '#FF3636'
+      ? COLOR_CODE.highRisk
       : props.selectedCases === 'Mild'
-      ? '#99BEE9'
-      : '#FFC636'};
+      ? COLOR_CODE.mildRisk
+      : COLOR_CODE.moderateRisk};
   width: 1rem;
   height: 1rem;
   margin-right: 1.25rem;

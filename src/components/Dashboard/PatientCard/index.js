@@ -15,8 +15,10 @@ import {
   GENDER_SHORTHAND,
   VitalsDateFields,
   LabDateFields,
+  COLOR_CODE,
 } from '../../../constants';
 import { CAMEL_CASE_REGEX } from '../../../constants/regex';
+
 import { getUser } from '../../../selectors';
 
 import { setDate, setDateTime } from '../../../global';
@@ -28,10 +30,10 @@ const State = styled.div`
   border-radius: 50%;
   background-color: ${(props) =>
     props.selectedState === 'High'
-      ? '#FF3636'
+      ? COLOR_CODE.highRisk
       : props.selectedState === 'Mild'
-      ? '#99BEE9'
-      : '#FFC636'};
+      ? COLOR_CODE.mildRisk
+      : COLOR_CODE.moderateRisk};
   width: 1rem;
   height: 1rem;
 `;

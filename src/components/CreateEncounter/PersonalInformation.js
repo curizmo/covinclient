@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { CommunicationButtons } from 'components/CreateEncounter';
 import { handleCallAppointment } from 'utils';
-import { RISK } from '../../constants';
+import { RISK, COLOR_CODE } from '../../constants';
 import arrowIcon from 'assets/images/svg-icons/arrow-left.svg';
 
 const PersonalInfoWrap = styled.div`
@@ -26,14 +26,14 @@ const Status = styled.div`
   border-radius: 50%;
   background-color: ${(props) =>
     props.risk === 'High'
-      ? '#FF3636'
+      ? COLOR_CODE.highRisk
       : props.risk === 'Moderate'
-      ? '#FFC636'
+      ? COLOR_CODE.moderateRisk
       : props.risk === 'Discharged'
-      ? '#54D776'
+      ? COLOR_CODE.dischargedRisk
       : props.risk === 'Uncertain'
-      ? '#FF8936'
-      : '#99BEE9'};
+      ? COLOR_CODE.uncertainRisk
+      : COLOR_CODE.mildRisk};
   width: 1rem;
   height: 1rem;
   margin-right: 1.25rem;

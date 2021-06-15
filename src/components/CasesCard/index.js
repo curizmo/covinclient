@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { COLOR_CODE } from '../../constants';
 
 const CasesWrapper = styled.div`
   display: flex;
@@ -27,19 +28,19 @@ const Severe = styled(Tile)`
   border-bottom: ${(props) => (props.selected ? '0.625rem' : '0.3125rem')} solid;
   border-color: ${(props) =>
     props.riskType === 'high'
-      ? '#FF3636'
+      ? COLOR_CODE.highRisk
       : props.riskType === 'moderate'
-      ? '#FFC636'
-      : '#99BEE9'};
+      ? COLOR_CODE.moderateRisk
+      : COLOR_CODE.mildRisk};
   @media (max-width: 768px) {
     border: 0;
     border-bottom: 0.625rem solid;
     border-color: ${(props) =>
       props.riskType === 'high'
-        ? '#FF3636'
+        ? COLOR_CODE.highRisk
         : props.riskType === 'moderate'
-        ? '#FFC636'
-        : '#99BEE9'};
+        ? COLOR_CODE.moderateRisk
+        : COLOR_CODE.mildRisk};
   }
 `;
 
@@ -105,10 +106,10 @@ const Value = styled.h6`
   margin: 0.3125rem 0;
   color: ${(props) =>
     props.type === 'high'
-      ? '#FF3636'
+      ? COLOR_CODE.highRisk
       : props.type === 'moderate'
-      ? '#FFC636'
-      : '#99BEE9'};
+      ? COLOR_CODE.moderateRisk
+      : COLOR_CODE.mildRisk};
   font-weight: bold;
   text-align: center;
   @media (max-width: 768px) {
