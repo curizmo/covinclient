@@ -29,6 +29,10 @@ const Status = styled.div`
       ? '#FF3636'
       : props.risk === 'Moderate'
       ? '#FFC636'
+      : props.risk === 'Discharged'
+      ? '#54D776'
+      : props.risk === 'Uncertain'
+      ? '#FF8936'
       : '#99BEE9'};
   width: 1rem;
   height: 1rem;
