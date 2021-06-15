@@ -238,11 +238,11 @@ const Patients = () => {
     return () => {
       debounced.cancel();
     };
-  }, [searchText, sortField]);
+  }, [searchText]);
 
   useEffect(() => {
     fetchPatients();
-  }, [currentPage, riskLevel]);
+  }, [currentPage, riskLevel, sortField]);
 
   useEffect(() => {
     if (isMobile) {
