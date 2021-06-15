@@ -41,7 +41,10 @@ import { CAMEL_CASE_REGEX } from '../constants/regex';
 
 import { routes } from 'routers';
 
-import { clearSearch, requestSearch } from 'actions/search';
+import {
+  requestSearch,
+  clearSearch as clearSearchAction,
+} from 'actions/search';
 
 import useCheckIsMobile from 'hooks/useCheckIsMobile';
 import { DesktopView } from 'components/Dashboard/DesktopView';
@@ -132,15 +135,22 @@ const DashBoardComponent = () => {
     makeSearchRequest('');
   };
 
+  const clearSearch = () => {
+    clearSearchInput();
+    makeSearchRequest('');
+  };
+
   const changesCases = (sel) => {
+    const page = 0;
     dispatch(showCustomSpinner(SPINNERS.MAIN));
+    clearSearchInput();
+    dispatch(clearSearchAction());
     setPatients([]);
     setSelectedCases(sel);
-    const page = 0;
     setPage(page);
     dispatch(
       requestSearch({
-        searchText,
+        searchText: '',
         selectedCases: sel,
         page,
         spinner: SPINNERS.MAIN,
@@ -248,7 +258,7 @@ const DashBoardComponent = () => {
                 requestSearch={makeSearchRequest}
                 placeholder="Search by Name, Email or cellphone number"
                 searchRef={searchRefMobile}
-                clearSearchInput={clearSearchInput}
+                clearSearchInput={clearSearch}
               />
               <div className="headsearch-btn-div">
                 <Button
@@ -290,7 +300,7 @@ const DashBoardComponent = () => {
       {isMobile ? (
         <MobileView
           patients={patients}
-          clearSearchInput={clearSearchInput}
+          clearSearchInput={clearSearch}
           hasNext={hasNext}
           incrementPage={incrementPage}
           searchText={searchText}
@@ -300,7 +310,7 @@ const DashBoardComponent = () => {
           makeSearchRequest={makeSearchRequest}
           selectedCases={selectedCases}
           searchRef={searchRef}
-          clearSearchInput={clearSearchInput}
+          clearSearchInput={clearSearch}
           isDownloading={isDownloading}
           exportVitals={exportVitals}
           patients={patients}
