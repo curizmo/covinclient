@@ -341,3 +341,9 @@ export const ResultText = styled.div`
   font-size: 14px;
   line-height: 18px;
 `;
+
+export const ResultNote = styled.div`
+  color: #009898;
+  font-size: 14px;
+  line-height: 18px;
+`;

@@ -8,7 +8,13 @@ import { getFile } from 'services/file';
 import { getTabIndex } from 'utils';
 import { downloadFileFromBlob } from 'utils/file';
 
-import { DateText, SymptomContainer, FileText, ResultText } from './styles';
+import {
+  DateText,
+  SymptomContainer,
+  FileText,
+  ResultText,
+  ResultNote,
+} from './styles';
 
 const LAB_RESULTS = {
   crp: 'CRP',
@@ -50,8 +56,10 @@ const LabResults = ({ labs }) => {
                 </ResultText>
               );
             })}
-            {result.otherLabResultsInfo ? (
-              <ResultText>Note: {result.otherLabResultsInfo}</ResultText>
+            {result?.result?.otherLabResultsInfo ? (
+              <ResultNote>
+                Patient Note: {result.result.otherLabResultsInfo}
+              </ResultNote>
             ) : null}
             {result?.files?.map((file) => {
               return (
