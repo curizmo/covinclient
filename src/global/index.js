@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 export const severePreferences = {
-  lineColor: '#eb2f2f',
+  lineColor: '#FF3636',
   showCircleOnLines: false,
   showAxisX: false,
   showAxisY: false,
@@ -9,7 +9,7 @@ export const severePreferences = {
   showTooltip: false,
 };
 export const moderatePreferences = {
-  lineColor: '#e5881b',
+  lineColor: '#FFC636',
   showCircleOnLines: false,
   showAxisX: false,
   showAxisY: false,
@@ -17,7 +17,7 @@ export const moderatePreferences = {
   showTooltip: false,
 };
 export const mildPreferences = {
-  lineColor: '#5EB16A',
+  lineColor: '#99BEE9',
   showCircleOnLines: false,
   showAxisX: false,
   showAxisY: false,

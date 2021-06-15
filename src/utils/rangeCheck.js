@@ -14,16 +14,16 @@ const mapColors = (vitalCheck, list) => {
       vitalInfoStats = vitalCheck[currentValue?.label];
     }
     if (between(currentValue?.value, vitalInfoStats?.Elevated)) {
-      color.push('#e5881b');
+      color.push('#FFC636');
     } else if (between(currentValue?.value, vitalInfoStats?.Normal)) {
-      color.push('#5EB16A');
+      color.push('#99BEE9');
     } else if (
       vitalInfoStats?.High?.max >= currentValue?.value ||
       between(currentValue?.value, vitalInfoStats?.High)
     ) {
-      color.push('#eb2f2f');
+      color.push('#FF3636');
     } else if (vitalInfoStats?.Normal?.min >= currentValue?.value) {
-      color.push('#5EB16A');
+      color.push('#99BEE9');
     }
     return null;
   });
