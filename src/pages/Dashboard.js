@@ -41,10 +41,7 @@ import { CAMEL_CASE_REGEX } from '../constants/regex';
 
 import { routes } from 'routers';
 
-import {
-  requestSearch,
-  clearSearch as clearSearchAction,
-} from 'actions/search';
+import { clearSearch, requestSearch } from 'actions/search';
 
 import useCheckIsMobile from 'hooks/useCheckIsMobile';
 import { DesktopView } from 'components/Dashboard/DesktopView';
@@ -125,26 +122,25 @@ const DashBoardComponent = () => {
     setPage(page);
   };
 
-  const clearSearchInput = () => {
+  const resetSearchValue = () => {
     if (searchRef?.current?.value) {
       searchRef.current.value = '';
     }
     if (searchRefMobile?.current?.value) {
       searchRefMobile.current.value = '';
     }
-    makeSearchRequest('');
   };
 
-  const clearSearch = () => {
-    clearSearchInput();
+  const clearSearchInput = () => {
+    resetSearchValue();
     makeSearchRequest('');
   };
 
   const changesCases = (sel) => {
     const page = 0;
     dispatch(showCustomSpinner(SPINNERS.MAIN));
-    clearSearchInput();
-    dispatch(clearSearchAction());
+    resetSearchValue();
+    dispatch(clearSearch());
     setPatients([]);
     setSelectedCases(sel);
     setPage(page);
@@ -258,7 +254,7 @@ const DashBoardComponent = () => {
                 requestSearch={makeSearchRequest}
                 placeholder="Search by Name, Email or cellphone number"
                 searchRef={searchRefMobile}
-                clearSearchInput={clearSearch}
+                clearSearchInput={clearSearchInput}
               />
               <div className="headsearch-btn-div">
                 <Button
@@ -300,7 +296,7 @@ const DashBoardComponent = () => {
       {isMobile ? (
         <MobileView
           patients={patients}
-          clearSearchInput={clearSearch}
+          clearSearchInput={clearSearchInput}
           hasNext={hasNext}
           incrementPage={incrementPage}
           searchText={searchText}
@@ -310,7 +306,7 @@ const DashBoardComponent = () => {
           makeSearchRequest={makeSearchRequest}
           selectedCases={selectedCases}
           searchRef={searchRef}
-          clearSearchInput={clearSearch}
+          clearSearchInput={clearSearchInput}
           isDownloading={isDownloading}
           exportVitals={exportVitals}
           patients={patients}
