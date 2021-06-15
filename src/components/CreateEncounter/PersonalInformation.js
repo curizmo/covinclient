@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 
 import { CommunicationButtons } from 'components/CreateEncounter';
-import { handleCallAppointment } from 'utils';
+import { handleCallAppointment, getColorCode } from 'utils';
 import { RISK } from '../../constants';
 import arrowIcon from 'assets/images/svg-icons/arrow-left.svg';
 
@@ -24,12 +24,7 @@ const TopView = styled.div`
 
 const Status = styled.div`
   border-radius: 50%;
-  background-color: ${(props) =>
-    props.risk === 'High'
-      ? '#eb2f2f'
-      : props.risk === 'Moderate'
-      ? '#e5881b'
-      : '#657396'};
+  background-color: ${(props) => getColorCode(props.risk)};
   width: 1rem;
   height: 1rem;
   margin-right: 1.25rem;

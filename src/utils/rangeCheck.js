@@ -1,4 +1,4 @@
-import { RangeCheck } from '../constants';
+import { RangeCheck, COLOR_CODE } from '../constants';
 
 const mapColors = (vitalCheck, list) => {
   let vitalInfoStats = vitalCheck;
@@ -14,16 +14,16 @@ const mapColors = (vitalCheck, list) => {
       vitalInfoStats = vitalCheck[currentValue?.label];
     }
     if (between(currentValue?.value, vitalInfoStats?.Elevated)) {
-      color.push('#e5881b');
+      color.push(COLOR_CODE.moderateRisk);
     } else if (between(currentValue?.value, vitalInfoStats?.Normal)) {
-      color.push('#5EB16A');
+      color.push(COLOR_CODE.mildRisk);
     } else if (
       vitalInfoStats?.High?.max >= currentValue?.value ||
       between(currentValue?.value, vitalInfoStats?.High)
     ) {
-      color.push('#eb2f2f');
+      color.push(COLOR_CODE.highRisk);
     } else if (vitalInfoStats?.Normal?.min >= currentValue?.value) {
-      color.push('#5EB16A');
+      color.push(COLOR_CODE.mildRisk);
     }
     return null;
   });

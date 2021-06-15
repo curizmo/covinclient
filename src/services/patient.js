@@ -94,6 +94,10 @@ export async function fetchPatientVitals(patientId) {
   return BEApi.get(`/patients/${patientId}/vitals`);
 }
 
+export async function fetchPatientRiskData() {
+  return BEApi.get('/patients/risk-status/count');
+}
+
 /**
  * @returns {Promise<object>}
  */

@@ -1,7 +1,8 @@
+import { COLOR_CODE } from '../constants';
 const moment = require('moment');
 
 export const severePreferences = {
-  lineColor: '#eb2f2f',
+  lineColor: COLOR_CODE.highRisk,
   showCircleOnLines: false,
   showAxisX: false,
   showAxisY: false,
@@ -9,7 +10,7 @@ export const severePreferences = {
   showTooltip: false,
 };
 export const moderatePreferences = {
-  lineColor: '#e5881b',
+  lineColor: COLOR_CODE.moderateRisk,
   showCircleOnLines: false,
   showAxisX: false,
   showAxisY: false,
@@ -17,7 +18,7 @@ export const moderatePreferences = {
   showTooltip: false,
 };
 export const mildPreferences = {
-  lineColor: '#5EB16A',
+  lineColor: COLOR_CODE.mildRisk,
   showCircleOnLines: false,
   showAxisX: false,
   showAxisY: false,

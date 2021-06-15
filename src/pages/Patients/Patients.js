@@ -24,7 +24,6 @@ import { SearchInput } from 'components/common/SearchInput';
 import { hideCustomSpinner, showCustomSpinner } from 'actions';
 import * as patientService from 'services/patient';
 import * as patientVitalsService from 'services/patientVitals';
-import { usePatientsRiskData } from 'services/practitioner';
 import { getUser } from 'selectors';
 import { getISODate } from 'utils/dateTime';
 import { handleCallAppointment, getTabIndex } from 'utils';
@@ -82,8 +81,8 @@ const Select = styled.select`
   height: 2rem;
   position: relative;
   margin-left: 6px;
-  margin-top: 0.9rem;
-  width: 7.5rem !important;
+  margin-top: 0.8rem;
+  width: auto;
   color: #22335e;
   font-weight: 700;
 
@@ -109,7 +108,7 @@ const Select = styled.select`
 const InfoColumn = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  min-width: 52%;
   @media (max-width: 768px) {
     padding: 0;
   }
@@ -121,9 +120,6 @@ const PatientInfoColumn = styled.div`
   min-width: 17rem;
 `;
 
-// @toDo remove condition
-const isShowPatientInfoColumn = false;
-
 const Patients = () => {
   const dispatch = useDispatch();
   const searchRef = useRef(null);
@@ -132,13 +128,14 @@ const Patients = () => {
   const [isDownloading, setIsDownloading] = useState(false);
   const [downloadingPatientId, setDownloadingPatientId] = useState(null);
 
-  const [riskLevel, setRiskLevel] = useState('High');
+  const [riskLevel, setRiskLevel] = useState('');
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchText, setSearchText] = useState('');
   const [isFetching, setIsFetching] = useState(true);
-  const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
+  const [patientRisk, setPatientRisk] = useState([]);
+  const [activePatients, setActivePatients] = useState('');
 
   const [sortField, setSortField] = useState({
     colName: tableHeader[0]?.colName,
@@ -152,6 +149,23 @@ const Patients = () => {
     () => Math.ceil((patients?.[0]?.totalRecords ?? 1) / PER_PAGE),
     [patients],
   );
+
+  const getPatientRiskData = async () => {
+    const patientRisk = await patientService.fetchPatientRiskData();
+    setPatientRisk(patientRisk.data.riskCount);
+    const totalPatients = patientRisk.data.riskCount.find(
+      (patient) => patient.status === 'All',
+    );
+    const dischargedPatients = patientRisk.data.riskCount.find(
+      (patient) => patient.status === 'Discharged',
+    );
+
+    const activePatients = dischargedPatients
+      ? totalPatients?.count - dischargedPatients?.count
+      : totalPatients?.count;
+
+    setActivePatients(activePatients || 0);
+  };
 
   const handleLoadMore = () => {
     if (disableLoadMore) {
@@ -213,6 +227,7 @@ const Patients = () => {
 
   useEffect(() => {
     fetchPatients();
+    getPatientRiskData();
   }, []);
 
   useEffect(() => {
@@ -223,11 +238,11 @@ const Patients = () => {
     return () => {
       debounced.cancel();
     };
-  }, [searchText, sortField, riskLevel]);
+  }, [searchText]);
 
   useEffect(() => {
     fetchPatients();
-  }, [currentPage]);
+  }, [currentPage, riskLevel, sortField]);
 
   useEffect(() => {
     if (isMobile) {
@@ -330,32 +345,32 @@ const Patients = () => {
         </DateAndTimeWrap>
       </InfoWrapper>
       <div className="dashboard-header mb-2 d-flex justify-content-between flex-wrap w-100">
-        {isShowPatientInfoColumn && (
-          <PatientInfoColumn>
-            <InfoValue>{patients?.length ?? 0} active patients</InfoValue>
-            <div className="d-flex justify-content-between">
-              <StatusIndicator status={riskLevel} size={12} />
-              <Select
-                value={riskLevel}
-                onChange={handleRiskLevelChange}
-                onBlur={handleRiskLevelChange}>
-                {patientRiskData?.map((risk) => {
-                  return (
-                    <option
-                      key={risk.riskType}
-                      value={risk.riskType}
-                      className="select-options">
-                      {risk.riskType} ({risk.numberOfCases})
-                    </option>
-                  );
-                })}
-              </Select>
-            </div>
-          </PatientInfoColumn>
-        )}
+        <PatientInfoColumn>
+          <InfoValue>
+            {activePatients ? activePatients : 0} active patients
+          </InfoValue>
+          <div className="d-flex justify-content-between">
+            <StatusIndicator status={riskLevel} size={12} />
+            <Select
+              value={riskLevel}
+              onChange={handleRiskLevelChange}
+              onBlur={handleRiskLevelChange}>
+              {patientRisk?.map((risk) => {
+                return (
+                  <option
+                    key={risk.status}
+                    value={risk.status === 'All' ? '' : risk.status}
+                    className="select-options">
+                    {risk.status} ({risk.count})
+                  </option>
+                );
+              })}
+            </Select>
+          </div>
+        </PatientInfoColumn>
         <InfoColumn>
           <SearchInput
-            customClass="my-2 mw-30-rem"
+            customClass="my-2 patient-search-input"
             searchText={searchText}
             requestSearch={makeSearchRequest}
             placeholder="Search by Name, Email or cellphone number"
@@ -569,28 +584,31 @@ const Patients = () => {
           </LinkButton>
         </div>
       </div>
-      {isShowPatientInfoColumn && (
-        <PatientInfoColumn className="bg-white">
-          <InfoValue className="m-0 px-3">
-            {patients?.length ?? 0} active patients
-          </InfoValue>
+
+      <PatientInfoColumn className="bg-white">
+        <InfoValue className="m-0 px-3">
+          {activePatients ? activePatients : 0} active patients
+        </InfoValue>
+        <div className="d-flex justify-content-between">
+          <StatusIndicator status={riskLevel} size={12} />
           <Select
             value={riskLevel}
             onChange={handleRiskLevelChange}
             onBlur={handleRiskLevelChange}>
-            {patientRiskData?.map((risk) => {
+            {patientRisk?.map((risk) => {
               return (
                 <option
-                  key={risk.riskType}
-                  value={risk.riskType}
+                  key={risk.status}
+                  value={risk.status === 'All' ? '' : risk.status}
                   className="select-options">
-                  {risk.riskType} ({risk.numberOfCases})
+                  {risk.status} ({risk.count})
                 </option>
               );
             })}
           </Select>
-        </PatientInfoColumn>
-      )}
+        </div>
+      </PatientInfoColumn>
+
       <InfoColumn className="bg-white">
         <div className="filter-container">
           <SearchInput

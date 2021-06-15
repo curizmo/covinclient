@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { routes } from 'routers';
 import { useSelector } from 'react-redux';
 
-import { getRandomKey, rangeCheck, getTabIndex } from 'utils';
+import { getRandomKey, rangeCheck, getTabIndex, getColorCode } from 'utils';
 import { CMLine } from 'third-party/senze-graphs/dist';
 import * as patientVitalsService from '../../../services/patientVitals';
 import mobileIcon from 'assets/images/svg-icons/icon-phone.svg';
@@ -17,6 +17,7 @@ import {
   LabDateFields,
 } from '../../../constants';
 import { CAMEL_CASE_REGEX } from '../../../constants/regex';
+
 import { getUser } from '../../../selectors';
 
 import { setDate, setDateTime } from '../../../global';
@@ -26,12 +27,7 @@ import './index.css';
 
 const State = styled.div`
   border-radius: 50%;
-  background-color: ${(props) =>
-    props.selectedState === 'High'
-      ? '#eb2f2f'
-      : props.selectedState === 'Mild'
-      ? '#657396'
-      : '#e5881b'};
+  background-color: ${(props) => getColorCode(props.selectedState)};
   width: 1rem;
   height: 1rem;
 `;

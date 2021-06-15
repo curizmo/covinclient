@@ -69,6 +69,12 @@
 .bg-mild-risk {
   background-color: $mild-risk;
 }
+.bg-uncertain-risk {
+  background-color: $uncertain-risk;
+}
+.bg-discharged-risk {
+  background-color: $discharged-risk;
+}
 .phone-icon {
   &-24 {
     width: 24px;
