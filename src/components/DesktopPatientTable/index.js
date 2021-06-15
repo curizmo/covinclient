@@ -11,7 +11,11 @@ import { DashboardLoader } from 'components/common/Loader';
 
 import * as patientVitalsService from 'services/patientVitals';
 import { getSpinnerType, getUser } from 'selectors';
-import { getFormatedTimeDate, handleCallAppointment } from 'utils';
+import {
+  getFormatedTimeDate,
+  handleCallAppointment,
+  getColorCode,
+} from 'utils';
 import { exportIndividualVitalsToCSV } from 'utils/vitalsDownload';
 import { isLightVersion } from 'config';
 import {
@@ -19,7 +23,6 @@ import {
   VitalsDateFields,
   LabDateFields,
   SPINNERS,
-  COLOR_CODE,
 } from '../../constants';
 import { CAMEL_CASE_REGEX } from '../../constants/regex';
 import { setDate, setDateTime } from 'global';
@@ -41,12 +44,7 @@ const TableWrapper = styled.div``;
 
 const Status = styled.div`
   border-radius: 50%;
-  background-color: ${(props) =>
-    props.selectedCases === 'High'
-      ? COLOR_CODE.highRisk
-      : props.selectedCases === 'Mild'
-      ? COLOR_CODE.mildRisk
-      : COLOR_CODE.moderateRisk};
+  background-color: ${(props) => getColorCode(props.selectedCases)};
   width: 1rem;
   height: 1rem;
   margin-right: 1.25rem;

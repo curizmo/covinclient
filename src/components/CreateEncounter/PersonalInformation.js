@@ -2,8 +2,8 @@ import React, { useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 
 import { CommunicationButtons } from 'components/CreateEncounter';
-import { handleCallAppointment } from 'utils';
-import { RISK, COLOR_CODE } from '../../constants';
+import { handleCallAppointment, getColorCode } from 'utils';
+import { RISK } from '../../constants';
 import arrowIcon from 'assets/images/svg-icons/arrow-left.svg';
 
 const PersonalInfoWrap = styled.div`
@@ -24,16 +24,7 @@ const TopView = styled.div`
 
 const Status = styled.div`
   border-radius: 50%;
-  background-color: ${(props) =>
-    props.risk === 'High'
-      ? COLOR_CODE.highRisk
-      : props.risk === 'Moderate'
-      ? COLOR_CODE.moderateRisk
-      : props.risk === 'Discharged'
-      ? COLOR_CODE.dischargedRisk
-      : props.risk === 'Uncertain'
-      ? COLOR_CODE.uncertainRisk
-      : COLOR_CODE.mildRisk};
+  background-color: ${(props) => getColorCode(props.risk)};
   width: 1rem;
   height: 1rem;
   margin-right: 1.25rem;

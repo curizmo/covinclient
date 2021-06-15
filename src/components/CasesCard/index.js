@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { COLOR_CODE } from '../../constants';
+import { getColorCode, capitalizeFirstLetter } from 'utils';
 
 const CasesWrapper = styled.div`
   display: flex;
@@ -25,23 +25,15 @@ const Tile = styled.div`
 `;
 const Severe = styled(Tile)`
   border: 1px solid;
-  border-bottom: ${(props) => (props.selected ? '0.625rem' : '0.3125rem')} solid;
+  border-bottom: ${(props) =>
+    props.selected ? '0.625rem' : '0.3125rem'} solid;
   border-color: ${(props) =>
-    props.riskType === 'high'
-      ? COLOR_CODE.highRisk
-      : props.riskType === 'moderate'
-      ? COLOR_CODE.moderateRisk
-      : COLOR_CODE.mildRisk};
+    getColorCode(capitalizeFirstLetter(props.riskType))};
   @media (max-width: 768px) {
     border: 0;
     border-bottom: 0.625rem solid;
     border-color: ${(props) =>
-      props.riskType === 'high'
-        ? COLOR_CODE.highRisk
-        : props.riskType === 'moderate'
-        ? COLOR_CODE.moderateRisk
-        : COLOR_CODE.mildRisk};
-  }
+      getColorCode(capitalizeFirstLetter(props.riskType))}
 `;
 
 const Arrow = styled.div`
@@ -104,12 +96,7 @@ const NumberAndGraphWrap = styled.div`
 const Value = styled.h6`
   font-size: 2.25rem;
   margin: 0.3125rem 0;
-  color: ${(props) =>
-    props.type === 'high'
-      ? COLOR_CODE.highRisk
-      : props.type === 'moderate'
-      ? COLOR_CODE.moderateRisk
-      : COLOR_CODE.mildRisk};
+  color: ${(props) => getColorCode(capitalizeFirstLetter(props.type))};
   font-weight: bold;
   text-align: center;
   @media (max-width: 768px) {

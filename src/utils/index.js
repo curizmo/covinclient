@@ -1,5 +1,5 @@
 import { routes } from '../routers';
-import { PATH_PARAMS } from '../constants';
+import { PATH_PARAMS, COLOR_CODE } from '../constants';
 
 export * from './dateTime';
 export * from './patient';
@@ -37,6 +37,21 @@ export const getOrganizationPath = (subdomain, path) => {
 
 export const getLobbyPath = (subdomain) => {
   return getOrganizationPath(subdomain, routes.lobby.path);
+};
+
+export const getColorCode = (riskType) => {
+  switch (riskType) {
+    case 'High':
+      return COLOR_CODE.highRisk;
+    case 'Moderate':
+      return COLOR_CODE.moderateRisk;
+    case 'Discharged':
+      return COLOR_CODE.dischargedRisk;
+    case 'Uncertain':
+      return COLOR_CODE.uncertainRisk;
+    case 'Mild':
+      return COLOR_CODE.mildRisk;
+  }
 };
 
 /**
