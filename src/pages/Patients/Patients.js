@@ -238,7 +238,7 @@ const Patients = () => {
     return () => {
       debounced.cancel();
     };
-  }, [searchText, sortField, riskLevel]);
+  }, [searchText, sortField]);
 
   useEffect(() => {
     fetchPatients();
