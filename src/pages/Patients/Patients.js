@@ -135,8 +135,7 @@ const Patients = () => {
   const [searchText, setSearchText] = useState('');
   const [isFetching, setIsFetching] = useState(true);
   const [patientRisk, setPatientRisk] = useState([]);
-  const [totalPatients, setTotalPatients] = useState('');
-  const [dischargedPatients, setDischargedPatients] = useState('');
+  const [activePatients, setActivePatients] = useState('');
 
   const [sortField, setSortField] = useState({
     colName: tableHeader[0]?.colName,
@@ -154,14 +153,18 @@ const Patients = () => {
   const getPatientRiskData = async () => {
     const patientRisk = await patientService.fetchPatientRiskData();
     setPatientRisk(patientRisk.data.riskCount);
-    const totalPatients = patientRisk.data.riskCount.filter(
+    const totalPatients = patientRisk.data.riskCount.find(
       (patient) => patient.status === 'All',
     );
-    const dischargedPatients = patientRisk.data.riskCount.filter(
+    const dischargedPatients = patientRisk.data.riskCount.find(
       (patient) => patient.status === 'Discharged',
     );
-    setTotalPatients(totalPatients[0]?.count);
-    setDischargedPatients(dischargedPatients[0]?.count);
+
+    const activePatients = dischargedPatients
+      ? totalPatients?.count - dischargedPatients?.count
+      : totalPatients?.count;
+
+    setActivePatients(activePatients || 0);
   };
 
   const handleLoadMore = () => {
@@ -239,7 +242,7 @@ const Patients = () => {
 
   useEffect(() => {
     fetchPatients();
-  }, [currentPage]);
+  }, [currentPage, riskLevel]);
 
   useEffect(() => {
     if (isMobile) {
@@ -344,12 +347,7 @@ const Patients = () => {
       <div className="dashboard-header mb-2 d-flex justify-content-between flex-wrap w-100">
         <PatientInfoColumn>
           <InfoValue>
-            {totalPatients
-              ? dischargedPatients
-                ? totalPatients - dischargedPatients
-                : totalPatients
-              : 0}{' '}
-            active patients
+            {activePatients ? activePatients : 0} active patients
           </InfoValue>
           <div className="d-flex justify-content-between">
             <StatusIndicator status={riskLevel} size={12} />
@@ -589,7 +587,7 @@ const Patients = () => {
 
       <PatientInfoColumn className="bg-white">
         <InfoValue className="m-0 px-3">
-          {patients?.length ?? 0} active patients
+          {activePatients ? activePatients : 0} active patients
         </InfoValue>
         <div className="d-flex justify-content-between">
           <StatusIndicator status={riskLevel} size={12} />
