@@ -355,10 +355,10 @@ const Patients = () => {
               value={riskLevel}
               onChange={handleRiskLevelChange}
               onBlur={handleRiskLevelChange}>
-              {patientRisk?.map((risk, i) => {
+              {patientRisk?.map((risk) => {
                 return (
                   <option
-                    key={i}
+                    key={risk.status}
                     value={risk.status === 'All' ? '' : risk.status}
                     className="select-options">
                     {risk.status} ({risk.count})
@@ -595,10 +595,10 @@ const Patients = () => {
             value={riskLevel}
             onChange={handleRiskLevelChange}
             onBlur={handleRiskLevelChange}>
-            {patientRisk?.map((risk, i) => {
+            {patientRisk?.map((risk) => {
               return (
                 <option
-                  key={i}
+                  key={risk.status}
                   value={risk.status === 'All' ? '' : risk.status}
                   className="select-options">
                   {risk.status} ({risk.count})
