@@ -77,7 +77,6 @@ export const InfoValue = styled.p`
 const Select = styled.select`
   border: none;
   outline: none;
-  background: #f2f7fd;
   height: 2rem;
   position: relative;
   margin-left: 6px;
@@ -99,9 +98,8 @@ const Select = styled.select`
   font-size: 16px;
   line-height: 20px;
   @media (max-width: 768px) {
-    background: white;
     margin-right: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
   }
 `;
 
