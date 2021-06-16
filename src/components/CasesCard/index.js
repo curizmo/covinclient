@@ -7,20 +7,29 @@ const CasesWrapper = styled.div`
   justify-content: space-between;
 `;
 const Tile = styled.div`
-  background-color: #fff;
-  cursor: pointer;
-  width: 32.5%;
-  height: 7.25rem;
-  padding: 0 1.25rem;
-  display: flex;
   justify-content: space-between;
+  display: flex;
   flex-direction: column;
   position: relative;
+  padding: 0 1.25rem;
+  width: 32.5%;
+  height: 7.25rem;
+  cursor: pointer;
+  background-color: #fff;
   @media (max-width: 768px) {
     border: 0;
     width: 33%;
     height: 10.25rem;
     padding: 0;
+    &:not(:last-of-type) {
+      margin-right: 2px;
+    }
+  }
+  @media (min-width: 768px) {
+    box-shadow: 0px 4px 10px rgb(101 115 150 / 40%);
+    &:not(:last-of-type) {
+      margin-right: 7px;
+    }
   }
 `;
 const Severe = styled(Tile)`
