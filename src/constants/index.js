@@ -422,6 +422,7 @@ export const RISK = {
   MODERATE: 'Moderate',
   MILD: 'Mild',
   DISCHARGED: 'Discharged',
+  UNCERTAIN: 'Uncertain',
 };
 
 export const PATIENT_CURRENT_STATUS = {
