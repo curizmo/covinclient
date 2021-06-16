@@ -19,7 +19,7 @@ export const MobileDropdownMenu = ({ menuItems, getIsActive }) => {
   return (
     <Dropdown isOpen={isOpen} toggle={toggle}>
       <DropdownToggle
-        className="p-2"
+        className="pl-2 pr-0 py-2"
         tag="div"
         data-toggle="dropdown"
         aria-expanded={isOpen}>

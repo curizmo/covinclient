@@ -51,8 +51,10 @@ import { showCustomSpinner } from 'actions';
 const FirstRow = styled.section`
   padding: 0em 4em;
   width: 100%;
+  margin-bottom: 1.5rem;
   @media (max-width: 768px) {
     padding: 0em;
+    margin-bottom: 0;
   }
 `;
 const Headings = styled.div`
@@ -226,7 +228,7 @@ const DashBoardComponent = () => {
 
   return (
     <DashboardLayout>
-      <FirstRow className="mb-4">
+      <FirstRow>
         <Headings>
           <InfoWrapper>
             <ViewName>Patients ({patients?.length ?? 0})</ViewName>

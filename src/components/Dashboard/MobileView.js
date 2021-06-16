@@ -15,7 +15,7 @@ const PatientsWrapper = styled.div`
     position: relative;
     display: flex;
     flex-direction: column;
-    height: calc(100% - 450px);
+    height: calc(100% - 335px);
     overflow: ${(props) => (props?.isInitLoading ? 'hidden' : 'scroll')};
   }
 `;
