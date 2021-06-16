@@ -18,8 +18,8 @@ const Tile = styled.div`
   background-color: #fff;
   @media (max-width: 768px) {
     border: 0;
-    width: 33%;
-    height: 10.25rem;
+    width: 25%;
+    height: 7.25rem;
     padding: 0;
     &:not(:last-of-type) {
       margin-right: 2px;
@@ -76,18 +76,19 @@ const Title = styled.h5`
   @media (max-width: 768px) {
     text-align: center;
     margin: 0.3125rem 0 0 0;
-    font-size: 0.875rem;
+    font-size: 14px;
     line-height: 1.875rem;
+    letter-spacing: 0.05em;
   }
 `;
 const SubTitle = styled.span`
-  display: none;
+  font-weight: 400;
   @media (max-width: 768px) {
+    font-size: 13px;
+    line-height: 1.4;
     display: block;
     text-align: center;
-    color: #657396;
-    font-size: 0.8125rem;
-    line-height: 1.125rem;
+    text-transform: none;
   }
 `;
 
@@ -127,8 +128,9 @@ const CasesCardComponent = (props) => {
             }
             riskType={item?.riskType?.toLowerCase()}
             onClick={() => changesCases(item?.riskType)}>
-            <Title>{item?.riskType}</Title>
-            <SubTitle>Risk</SubTitle>
+            <Title>
+              {item?.riskType} <SubTitle>Risk</SubTitle>
+            </Title>
             <NumberAndGraphWrap>
               <Value type={item?.riskType?.toLowerCase()}>
                 {item.numberOfCases}
