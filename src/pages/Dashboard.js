@@ -29,6 +29,7 @@ import {
   getSearchText,
   getUser,
   getPatientsHasNext,
+  getSpinnerType,
 } from 'selectors';
 
 import { usePatientsRiskData } from '../services/practitioner';
@@ -48,11 +49,19 @@ import { DesktopView } from 'components/Dashboard/DesktopView';
 import { MobileView } from 'components/Dashboard/MobileView';
 import { showCustomSpinner } from 'actions';
 
+const DashboardContainer = styled.div`
+  @media (max-width: 768px) {
+    height: 100%;
+    overflow-y: ${(props) => (props?.isLoading ? 'hidden' : 'scroll')};
+  }
+`;
 const FirstRow = styled.section`
   padding: 0em 4em;
   width: 100%;
+  margin-bottom: 1.5rem;
   @media (max-width: 768px) {
     padding: 0em;
+    margin-bottom: 0;
   }
 `;
 const Headings = styled.div`
@@ -95,6 +104,7 @@ const DashBoardComponent = () => {
   const user = useSelector(getUser);
   const fetchedPatients = useSelector(getSearchResult);
   const hasNext = useSelector(getPatientsHasNext);
+  const spinner = useSelector(getSpinnerType);
   const searchText = useSelector(getSearchText);
   const { data: patientRiskData } = usePatientsRiskData(user.PractitionerID);
   const searchRef = useRef(null);
@@ -226,95 +236,101 @@ const DashBoardComponent = () => {
 
   return (
     <DashboardLayout>
-      <FirstRow className="mb-4">
-        <Headings>
-          <InfoWrapper>
-            <ViewName>Patients ({patients?.length ?? 0})</ViewName>
-            {!isLightVersion && <ViewName>Dashboard</ViewName>}
-            <DateAndTimeWrap>
-              <TimeImage src={time} />
-              <DateAndTime>{getDate()}</DateAndTime>
-            </DateAndTimeWrap>
-          </InfoWrapper>
-          {!isLightVersion && (
-            <CasesCardComponent
-              casesCardData={patientRiskData}
-              changesCases={changesCases}
-              selectedCases={selectedCases}
-            />
-          )}
-          <div className="flex justify-content-space-between">
-            <SearchWrapper>
-              {!isLightVersion && (
-                <CasesHeader>{selectedCases} Cases</CasesHeader>
-              )}
-              <SearchInput
-                customClass="mb-2 mt-0 right"
-                searchText={searchText}
-                requestSearch={makeSearchRequest}
-                placeholder="Search by Name, Email or cellphone number"
-                searchRef={searchRefMobile}
-                clearSearchInput={clearSearchInput}
+      <DashboardContainer isLoading={spinner !== SPINNERS.NONE}>
+        <FirstRow>
+          <Headings>
+            <InfoWrapper>
+              <ViewName>Patients ({patients?.length ?? 0})</ViewName>
+              {!isLightVersion && <ViewName>Dashboard</ViewName>}
+              <DateAndTimeWrap>
+                <TimeImage src={time} />
+                <DateAndTime>{getDate()}</DateAndTime>
+              </DateAndTimeWrap>
+            </InfoWrapper>
+            {!isLightVersion && (
+              <CasesCardComponent
+                casesCardData={patientRiskData}
+                changesCases={changesCases}
+                selectedCases={selectedCases}
               />
-              <div className="headsearch-btn-div">
-                <Button
-                  className="btn btn-download"
-                  disabled={isDownloading}
-                  onClick={exportVitals}>
-                  {isDownloading ? (
-                    <div className="lds-spinner position-absolute">
-                      {[...Array(12).keys()].map((i) => (
-                        <span key={i} />
-                      ))}
-                    </div>
-                  ) : (
-                    <>
-                      <span className="excel-image-wrap">
-                        <img
-                          src={excel}
-                          alt="Covin"
-                          className="logo download-excel-icon"
-                        />
-                        <img src={xicon} alt="Covin" className="logo x-icon" />
-                      </span>
-                      DOWNLOAD ALL (Xls)
-                    </>
-                  )}
-                </Button>
-                {isShowNewButton && (
-                  <LinkButton
-                    className="btn btn-covin"
-                    to={routes.addPatient.path}>
-                    + New Patient
-                  </LinkButton>
+            )}
+            <div className="flex justify-content-space-between">
+              <SearchWrapper>
+                {!isLightVersion && (
+                  <CasesHeader>{selectedCases} Cases</CasesHeader>
                 )}
-              </div>
-            </SearchWrapper>
-          </div>
-        </Headings>
-      </FirstRow>
-      {isMobile ? (
-        <MobileView
-          patients={patients}
-          clearSearchInput={clearSearchInput}
-          hasNext={hasNext}
-          incrementPage={incrementPage}
-          searchText={searchText}
-        />
-      ) : (
-        <DesktopView
-          makeSearchRequest={makeSearchRequest}
-          selectedCases={selectedCases}
-          searchRef={searchRef}
-          clearSearchInput={clearSearchInput}
-          isDownloading={isDownloading}
-          exportVitals={exportVitals}
-          patients={patients}
-          incrementPage={incrementPage}
-          hasNext={hasNext}
-          page={page}
-        />
-      )}
+                <SearchInput
+                  customClass="mb-2 mt-0 right"
+                  searchText={searchText}
+                  requestSearch={makeSearchRequest}
+                  placeholder="Search by Name, Email or cellphone number"
+                  searchRef={searchRefMobile}
+                  clearSearchInput={clearSearchInput}
+                />
+                <div className="headsearch-btn-div">
+                  <Button
+                    className="btn btn-download"
+                    disabled={isDownloading}
+                    onClick={exportVitals}>
+                    {isDownloading ? (
+                      <div className="lds-spinner position-absolute">
+                        {[...Array(12).keys()].map((i) => (
+                          <span key={i} />
+                        ))}
+                      </div>
+                    ) : (
+                      <>
+                        <span className="excel-image-wrap">
+                          <img
+                            src={excel}
+                            alt="Covin"
+                            className="logo download-excel-icon"
+                          />
+                          <img
+                            src={xicon}
+                            alt="Covin"
+                            className="logo x-icon"
+                          />
+                        </span>
+                        DOWNLOAD ALL (Xls)
+                      </>
+                    )}
+                  </Button>
+                  {isShowNewButton && (
+                    <LinkButton
+                      className="btn btn-covin"
+                      to={routes.addPatient.path}>
+                      + New Patient
+                    </LinkButton>
+                  )}
+                </div>
+              </SearchWrapper>
+            </div>
+          </Headings>
+        </FirstRow>
+        {isMobile ? (
+          <MobileView
+            patients={patients}
+            clearSearchInput={clearSearchInput}
+            hasNext={hasNext}
+            incrementPage={incrementPage}
+            searchText={searchText}
+          />
+        ) : (
+          <DesktopView
+            makeSearchRequest={makeSearchRequest}
+            selectedCases={selectedCases}
+            searchRef={searchRef}
+            clearSearchInput={clearSearchInput}
+            isDownloading={isDownloading}
+            exportVitals={exportVitals}
+            patients={patients}
+            incrementPage={incrementPage}
+            hasNext={hasNext}
+            page={page}
+          />
+        )}
+      </DashboardContainer>
     </DashboardLayout>
   );
 };

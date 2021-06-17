@@ -56,7 +56,7 @@ const TopMenu = () => {
                 getIsActive={getIsActive}
               />
             )}
-            <LogoButton />
+            <LogoButton isMobile={true} />
           </div>
           <UserDropdownMenu />
         </>
