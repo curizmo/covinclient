@@ -268,34 +268,36 @@ const DashBoardComponent = () => {
                   clearSearchInput={clearSearchInput}
                 />
                 <div className="headsearch-btn-div">
-                  <Button
-                    className="btn btn-download"
-                    disabled={isDownloading}
-                    onClick={exportVitals}>
-                    {isDownloading ? (
-                      <div className="lds-spinner position-absolute">
-                        {[...Array(12).keys()].map((i) => (
-                          <span key={i} />
-                        ))}
-                      </div>
-                    ) : (
-                      <>
-                        <span className="excel-image-wrap">
-                          <img
-                            src={excel}
-                            alt="Covin"
-                            className="logo download-excel-icon"
-                          />
-                          <img
-                            src={xicon}
-                            alt="Covin"
-                            className="logo x-icon"
-                          />
-                        </span>
-                        DOWNLOAD ALL (Xls)
-                      </>
-                    )}
-                  </Button>
+                  {!isMobile && (
+                    <Button
+                      className="btn btn-download"
+                      disabled={isDownloading}
+                      onClick={exportVitals}>
+                      {isDownloading ? (
+                        <div className="lds-spinner position-absolute">
+                          {[...Array(12).keys()].map((i) => (
+                            <span key={i} />
+                          ))}
+                        </div>
+                      ) : (
+                        <>
+                          <span className="excel-image-wrap">
+                            <img
+                              src={excel}
+                              alt="Covin"
+                              className="logo download-excel-icon"
+                            />
+                            <img
+                              src={xicon}
+                              alt="Covin"
+                              className="logo x-icon"
+                            />
+                          </span>
+                          DOWNLOAD ALL (Xls)
+                        </>
+                      )}
+                    </Button>
+                  )}
                   {isShowNewButton && (
                     <LinkButton
                       className="btn btn-covin"
